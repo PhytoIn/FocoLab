@@ -1,0 +1,1854 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Empilhamento de foco local para fotografia científica. Alinhamento subpixel, quatro métodos de fusão e acabamento reversível, sem enviar imagens."><title>FocoLab · Empilhamento de imagens</title>
+<style>
+:root{color-scheme:light;--bg:#f2f4f6;--panel:#fff;--ink:#2e3440;--muted:#6b7684;--line:#dfe4e9;--accent:#8fb8c9;--accent2:#5a8fa6;--soft:#eaf1f4;--warn:#d9a566;--view:#20262e;--danger:#c07a72;--shadow:0 6px 24px #2e344012}*{box-sizing:border-box}body{margin:0;font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink)}body.dark{color-scheme:dark;--bg:#232a33;--panel:#2c343f;--ink:#e6ebf0;--muted:#a3b1c0;--line:#3d4855;--accent:#7ea7b9;--accent2:#a8c9d8;--soft:#34404d;--warn:#c9a06a;--view:#171c22;--shadow:none}button,input,select{font:inherit}button,select,input[type=number],input[type=text]{border:1px solid var(--line);border-radius:7px;padding:8px 10px;background:var(--panel);color:var(--ink)}button{cursor:pointer;transition:background .15s}button:hover{background:var(--soft)}button:disabled{opacity:.45;cursor:not-allowed}button.primary{background:var(--accent2);border-color:var(--accent);color:white;font-weight:650}body.dark button.primary{color:#10252b}button.primary:hover{background:var(--accent2)}button.danger{color:var(--danger)}button.small{padding:5px 8px;font-size:14px}input[type=range]{width:100%;accent-color:var(--accent)}input[type=checkbox]{accent-color:var(--accent);width:17px;height:17px}input[type=file]{display:none}button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:3px}header{display:flex;gap:24px;align-items:center;justify-content:space-between;padding:18px 26px;background:var(--panel);border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:13px}.mark{display:grid;place-items:center;width:42px;height:42px;border:2px solid var(--accent);color:var(--accent);border-radius:9px;font-size:25px}.brand strong{font-size:23px;letter-spacing:-.8px}.brand small{display:block;color:var(--muted);font-size:13px}.header-actions,.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.privacy{font-size:13px;color:var(--muted)}.steps{display:flex;gap:25px;padding:12px 26px;border-bottom:1px solid var(--line);background:var(--panel);font-size:14px;color:var(--muted);overflow-x:auto}.steps b{font-weight:500;white-space:nowrap}.steps .active{color:var(--accent);font-weight:700}.layout{display:grid;grid-template-columns:310px minmax(0,1fr);gap:18px;padding:18px;max-width:1900px;margin:auto;align-items:start}.panel{border:1px solid var(--line);background:var(--panel);border-radius:11px;box-shadow:var(--shadow)}.sidebar{padding:18px;align-self:start}h1,h2,h3,p{margin:0}h2{font-size:17px;margin-bottom:12px}h3{font-size:15px;margin:0 0 8px}.eyebrow{font-size:12px;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted);margin-bottom:5px}.drop{border:1.5px dashed var(--accent);border-radius:9px;padding:18px 12px;text-align:center;background:var(--soft);cursor:pointer;width:100%}.drop strong{display:block;font-size:15px}.drop span{font-size:13px;color:var(--muted);display:block;margin-top:5px}.drop.drag{outline:3px solid var(--accent);background:var(--panel)}.meta{font-size:13px;color:var(--muted);margin:9px 0}.files{list-style:none;padding:0;margin:12px 0;max-height:240px;overflow:auto}.files li{display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--line);padding:7px 0}.files img{width:46px;height:36px;object-fit:cover;border-radius:4px}.filename{flex:1;min-width:0}.filename strong{font-size:13px;font-weight:500;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.filename small{font-size:12px;color:var(--muted)}.files button{font-size:13px;padding:3px 6px}.section{border-top:1px solid var(--line);padding-top:15px;margin-top:15px}.field{display:block;margin:12px 0;font-size:14px}.field select,.field input[type=number],.field input[type=text]{display:block;width:100%;margin-top:5px}.field .value{float:right;color:var(--accent);font-variant-numeric:tabular-nums}.hint{font-size:13px;color:var(--muted);margin-top:5px}.check{display:flex;align-items:center;gap:8px;font-size:14px;margin:11px 0}details{border-top:1px solid var(--line);margin-top:12px;padding-top:12px}summary{font-size:14px;font-weight:600;cursor:pointer}.main{min-width:0}.toolbar{display:flex;justify-content:space-between;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}.tabs{display:flex;gap:5px;flex-wrap:wrap}.tabs button{font-size:14px}.tabs .selected{background:var(--soft);color:var(--accent);border-color:var(--accent)}.viewport{height:clamp(360px,63vh,790px);position:relative;overflow:hidden;background:var(--view);touch-action:none;border-radius:10px;max-width:calc(clamp(360px,63vh,790px)*16/9);margin:0 auto;box-shadow:var(--shadow)}.viewport canvas{position:absolute;inset:0;width:100%;height:100%;cursor:grab}.phint{font-size:11.5px;line-height:1.45;color:var(--muted,#6b7280);margin:-6px 0 12px;display:block}.empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:35px;pointer-events:none;color:#e0ebf0}.empty-inner{max-width:470px}.empty h2{font-size:26px;font-weight:500;line-height:1.3;margin:18px 0 12px}.empty p{font-size:15px;color:#adc0cd}.empty .symbol{font-size:42px;color:#85ceda}.caption{position:absolute;bottom:14px;left:16px;right:16px;pointer-events:none;display:flex;justify-content:space-between;gap:8px;font-size:13px;color:white}.caption span{background:#101b24d9;padding:4px 9px;border-radius:5px;max-width:80%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.controls{padding:13px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.progress-area{padding:15px 16px;border-top:1px solid var(--line)}progress{width:100%;height:8px;accent-color:var(--accent);display:block;margin-top:8px}.status-row{display:flex;justify-content:space-between;gap:10px;font-size:14px}.status-row span:last-child{color:var(--muted);white-space:nowrap}.notice{border:1px solid #c8913a;background:#fff3dc;color:#5f4115;padding:11px 13px;border-radius:7px;font-size:14px;margin-bottom:14px;white-space:pre-line}.notice.error{border-color:#b94747;background:#fce9e9;color:#792929}.output{margin-top:16px;padding:16px}.output-grid{display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:18px}.output .field{margin-top:0}.finish-row{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:10px}.comparison-bar{padding:13px 16px;border-top:1px solid var(--line);background:var(--soft)}.hidden{display:none!important}footer{font-size:12px;color:var(--muted);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:6px 24px 22px}dialog{max-width:760px;width:calc(100% - 30px);max-height:85vh;border:1px solid var(--line);border-radius:12px;color:var(--ink);background:var(--panel);padding:24px}dialog::backdrop{background:#091824a6}dialog h2{font-size:22px}dialog p,dialog li{margin:10px 0;font-size:15px}dialog table{border-collapse:collapse;width:100%;font-size:14px;margin:12px 0}td,th{padding:8px;border-bottom:1px solid var(--line);text-align:left}dialog .close{float:right}dialog a{color:var(--accent)}.log{max-height:240px;overflow:auto;font-size:13px}.log td,.log th{padding:7px}.tag{font-size:12px;padding:3px 8px;border-radius:4px;background:var(--soft);color:var(--accent)}@media(max-width:1000px){.layout{grid-template-columns:275px minmax(0,1fr);gap:12px;padding:12px}.sidebar{padding:14px}.output-grid{grid-template-columns:1fr}.privacy{display:none}.viewport{height:55vh;max-width:calc(55vh*16/9)}}@media(max-width:720px){header{padding:14px}.brand small{max-width:190px}.header-actions button{font-size:13px;padding:6px}.layout{grid-template-columns:1fr}.sidebar{display:grid;grid-template-columns:1fr;gap:0}.files{max-height:170px}.steps{gap:15px;padding:11px 14px;font-size:13px}.viewport{height:52vh;min-height:320px;max-width:calc(52vh*16/9)}.output-grid{grid-template-columns:1fr}.toolbar{padding:10px}.tabs button{padding:6px 8px;font-size:13px}footer{padding:8px 14px 18px}.controls{padding:10px}}
+body.dragging .drop{outline:2px dashed var(--accent,#3b82f6);outline-offset:3px}
+
+/* Acordeao do painel: uma secao aberta por vez. O cabecalho recolhido mostra o
+   estado atual a' direita, para o usuario ler a configuracao inteira sem abrir nada. */
+.acc{border:1px solid var(--line);border-radius:10px;background:var(--panel);margin-bottom:8px;overflow:hidden}
+.acc>summary{list-style:none;cursor:pointer;padding:13px 15px;display:flex;align-items:center;gap:10px;
+ font-weight:600;font-size:15px;min-height:44px;user-select:none}
+.acc>summary::-webkit-details-marker{display:none}
+.acc>summary::after{content:'';margin-left:auto;width:8px;height:8px;border-right:2px solid var(--muted);
+ border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform .18s}
+.acc[open]>summary::after{transform:rotate(45deg)}
+.acc[open]>summary{border-bottom:1px solid var(--line);background:var(--soft)}
+.acc .accBody{padding:14px 15px 16px}
+.accState{margin-left:auto;font-weight:400;font-size:12.5px;color:var(--muted);
+ font-variant-numeric:tabular-nums;text-align:right}
+.acc>summary::after{margin-left:8px}
+.acc:focus-within>summary{outline:2px solid var(--accent2);outline-offset:-2px}
+/* acoes principais fixas ao pe do painel, fora do acordeao */
+
+.value,input[type=number]{font-variant-numeric:tabular-nums}
+button,select,input[type=number]{min-height:44px}
+input[type=range]{height:44px}
+.recipeCard{border:1px solid var(--line);border-radius:9px;padding:11px 12px;background:var(--soft);margin-top:10px}
+.recipeCard b{display:block;font-size:13.5px;margin-bottom:3px}
+.recipeCard span{display:block;font-size:12.5px;color:var(--muted);line-height:1.45}
+.disabledHint{opacity:.42;pointer-events:none}
+@media (prefers-reduced-motion:reduce){.acc>summary::after{transition:none}}
+.mirror-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px 18px}
+.mirror-grid .field{margin:0}
+.mirror-grid .check{margin:0;align-self:end}
+.brand svg.logo{height:44px;width:auto;display:block}
+.brand{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.brand .tagline{color:var(--muted);font-size:13px}
+@media (max-width:640px){.brand svg.logo{height:34px}.brand .tagline{display:none}}
+.emptyMark{width:132px;height:auto;display:block;margin:0 auto 6px;opacity:.92}
+.brand svg.logo{height:44px;width:auto;display:block}
+.brand{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.brand .tagline{color:var(--muted);font-size:13px}
+@media (max-width:640px){.brand svg.logo{height:34px}.brand .tagline{display:none}}
+.emptyMark{width:132px;height:auto;display:block;margin:0 auto 6px;opacity:.92}
+.licenseBar{grid-column:1/-1;margin:0}
+.layout{align-items:start}
+/* A sanfona da barra lateral e a coluna de resultado sao independentes: a faixa
+   de licenca fica abaixo das duas e acompanha a que for mais alta. */
+/* A barra lateral rola sozinha: expandir uma secao da sanfona nao empurra nem
+   desloca a coluna do resultado, que fica fixa ao lado. */
+.sidebar{position:sticky;top:12px;align-self:start;max-height:calc(100vh - 24px);overflow:auto}
+.main{min-width:0;align-self:start}
+@media (max-width:980px){.sidebar{position:static;max-height:none;overflow:visible}}
+</style></head><body>
+<header><div class="brand"><svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 460" role="img" aria-labelledby="flTitle flDesc">
+  <title id="flTitle">FocoLab</title>
+  <desc id="flDesc">Logotipo do FocoLab: três planos de imagem sobrepostos convergem em um ponto de foco.</desc>
+  
+  <g fill="none" stroke-linejoin="round" stroke-linecap="round">
+    <rect x="74" y="102" width="270" height="270" rx="36"
+          stroke="#B9D1DB" stroke-width="20" transform="rotate(-8 209 237)"/>
+    <rect x="130" y="75" width="270" height="270" rx="36"
+          stroke="#8FB8C9" stroke-width="20" transform="rotate(-8 265 210)"/>
+    <rect x="186" y="48" width="270" height="270" rx="36"
+          stroke="#5A8FA6" stroke-width="22" transform="rotate(-8 321 183)"/>
+  </g>
+  <g fill="#5A8FA6" stroke="#5A8FA6" stroke-width="20" stroke-linecap="round">
+    <line x1="321" y1="103" x2="321" y2="139"/>
+    <line x1="321" y1="227" x2="321" y2="263"/>
+    <line x1="241" y1="183" x2="277" y2="183"/>
+    <line x1="365" y1="183" x2="401" y2="183"/>
+    <circle cx="321" cy="183" r="27" stroke="none"/>
+  </g>
+  <text x="535" y="286" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif"
+        font-size="210" font-weight="650" letter-spacing="-9">
+    <tspan fill="var(--ink)">Foco</tspan><tspan fill="var(--accent2)">Lab</tspan>
+  </text>
+</svg><small class="tagline">Empilhamento de imagens científicas</small></div><div class="header-actions"><button id="theme" title="Alternar tema">◐ Tema</button><button id="help">Guia</button></div></header>
+<nav class="steps" aria-label="Etapas"><b id="step1" class="active">01 · Carregar série</b><b id="step2">02 · Comparar prévias</b><b id="step3">03 · Ajustar</b><b id="step4">04 · Exportar</b></nav>
+<div class="layout"><aside class="panel sidebar"><details class="acc" id="acc_imagens" open><summary>Imagens<span class="accState" id="state_imagens"></span></summary><div class="accBody"><div><div class="eyebrow">Sua série fotográfica</div><h2>Imagens de entrada</h2><button class="drop" id="drop"><strong>+ Adicionar fotografias</strong><span>Solte arquivos ou uma pasta em qualquer ponto da janela<br>JPEG, PNG, WebP e TIFF</span></button><input id="fileInput" type="file" multiple accept="image/jpeg,image/png,image/webp,image/tiff,.tif,.tiff"><div class="row" style="margin-top:8px"><button class="small" id="folderButton">Abrir pasta</button><button class="small" id="newSeries">Nova série</button></div><input id="folderInput" type="file" webkitdirectory multiple><p class="meta" id="fileMeta">Nenhuma imagem carregada.</p><ol class="files" id="files"></ol><p class="hint" id="orderHint">Ordene os planos de foco em uma única direção. O modo Interpolado exige ordem correta e passos aproximadamente regulares. Arraste as miniaturas ou use as setas.</p></div>
+</div></details><details class="acc" id="acc_receita"><summary>Receita<span class="accState" id="state_receita"></span></summary><div class="accBody"><div class="section"><label class="field">Receita<select id="preset"><option value="balanced">Equilibrada</option><option value="detail">Detalhe máximo</option><option value="metallic">Cutícula metálica</option><option value="noisy">Série ruidosa</option><option value="smooth">Relevo contínuo</option><option value="thin">Estruturas finas</option><option value="custom">Personalizada</option></select></label><div class="recipeCard" id="recipeCard"><b id="recipeTitle"></b><span id="recipeText"></span></div><p class="hint">Mudar qualquer controle em <b>Personalizada</b> troca a receita para Personalizada, preservando os valores. O rótulo nunca deixa de corresponder ao que está configurado.</p><div class="recipeCard" style="margin-top:14px"><b>Comparar receitas</b><span>Marque as receitas que quer avaliar. Cada uma gera um resultado em prévia, selecionável no visualizador.</span><div id="compareList" style="margin-top:10px;display:grid;gap:6px"></div><p class="hint" id="compareEstimate" style="margin:10px 0 8px"></p><button id="compareRecipes" style="width:100%">Comparar receitas marcadas</button></div>
+<label class="field">Suavização das transições <output class="value" id="smoothVal">6</output><input id="smooth" type="range" min="0" max="20" value="6" title="Raio em pixels para uma imagem de 2048 pixels; ajustado à resolução."></label><span class="phint">Suaviza máscaras de seleção junto às bordas. Valores menores preservam transições estreitas; valores maiores podem reduzir emendas e também suavizar detalhes.</span><label class="field">Preferência por regiões nítidas <output class="value" id="selectivityVal">12</output><input id="selectivity" type="range" min="4" max="30" value="12"></label><span class="phint">Na fusão ponderada, valores maiores concentram o peso nas regiões mais nítidas. A Pirâmide máxima escolhe o maior sinal por escala. O modo Natural usa o mapa de camadas.</span>
+<label class="check"><input id="align" type="checkbox" checked>Alinhamento automático</label><span class="phint">Corrige deslocamentos entre planos. A busca usa várias resoluções e refinamento subpixel; correções sem melhora suficiente são rejeitadas. Verifique correspondências fracas antes de exportar.</span><label class="check"><input id="scale" type="checkbox" checked>Corrigir variação de escala</label><span class="phint">Compensa mudanças de magnificação entre planos. Deixe ligado quando houver variação de escala; desligue em séries previamente registradas.</span><label class="check"><input id="balance" type="checkbox">Equilibrar exposição</label><span class="phint">Opcional: estima um ganho de luminosidade entre planos vizinhos. Não corrige balanço de branco nem reflexos. Os ganhos ficam registrados.</span><label class="check"><input id="crop" type="checkbox" checked>Recortar a área comum</label><span class="phint">Ligado: corta as bordas sem dado em todas as camadas, garantindo imagem inteira válida. Desligado: preserva o enquadramento completo, com possíveis faixas incompletas nas bordas.</span>
+</div></div></details><details class="acc" id="acc_acabamento"><summary>Acabamento<span class="accState" id="state_acabamento"></span></summary><div class="accBody"><div class="eyebrow" style="margin-top:14px">Acabamento</div><label class="field">Nitidez <output id="sharpenVal" class="value">0.8</output><input id="sharpen" type="range" min="0" max="2" step="0.05" value="0.8"></label><span class="phint">Acabamento separado da fusão. Zero desliga. Aumentar destaca bordas, mas pode realçar ruído e halos; confira a visualização “Acabamento”.</span><label class="field">Raio da nitidez (px) <output id="sharpenRadiusVal" class="value">2</output><input id="sharpenRadius" type="range" min="0.5" max="4" step="0.1" value="2"></label><span class="phint">Aumentar: realça estruturas maiores (contorno do corpo, nervuras da asa), dando impressão de mais contraste. Diminuir: realça só a textura fina (pontuações, cerdas), efeito mais discreto.</span><label class="check"><input id="stretch" type="checkbox" checked>Esticar níveis (ponto preto e branco)</label><span class="phint">Ligado: reposiciona o ponto preto e o branco, aumentando contraste e tornando as cores mais vivas. Desligado: mantém a tonalidade original da fusão.</span><label class="check"><input id="protectHighlights" type="checkbox" checked>Proteger altas luzes</label><span class="phint">Ligado: limita o quanto o esticamento pode estourar o branco — importante com fundo de papel claro. Desligado: contraste um pouco maior, com mais área saturada no fundo.</span><label class="field">Margem do esticamento<input id="stretchDelta" type="number" min="0" max="30" step="1" value="5"></label><span class="phint">Aumentar: corta mais das pontas do histograma — contraste mais forte, mais risco de perder detalhe nas sombras e nas altas luzes. Diminuir: esticamento mais conservador e fiel ao original.</span><label class="field">Limiar do realce <output id="sharpenThresholdVal" class="value">0.4</output><input id="sharpenThreshold" type="range" min="0" max="3" step="0.1" value="0.4"></label><span class="phint">Evita realçar variações fracas da luminância, inclusive ruído. Zero aplica realce a todas as variações.</span><button class="small" id="reapply">Reaplicar acabamento</button><p class="hint">Aplicado depois da fusão. Mudar estes valores não exige refazer o empilhamento.</p></div></details><details class="acc" id="acc_cor"><summary>Cor<span class="accState" id="state_cor"></span></summary><div class="accBody"><label class="check"><input id="colorOn" type="checkbox">Ativar realce de cor</label><span class="phint">Aplicado depois da fusão e reversível. Não refaz o empilhamento.</span><label class="field">Ponto branco do fundo <output id="whitePointVal" class="value">210</output><input id="whitePoint" type="range" min="160" max="245" step="1" value="210"></label><span class="phint">Leva o fundo ao tom alvo e neutraliza dominante de cor, canal a canal. Aumentar: fundo mais claro e limpo. Diminuir: preserva o tom original da iluminação.</span><label class="field">Saturação <output id="chromaGainVal" class="value">1.25</output><input id="chromaGain" type="range" min="1" max="1.8" step="0.05" value="1.25"></label><span class="phint">Reforça apenas onde já existe cor, preservando o fundo neutro. Aumentar: cutícula metálica mais viva. Acima de ~1,5 as cores deixam de ser fiéis.</span><label class="field">Supressão de franja <output id="fringeVal" class="value">0.7</output><input id="fringe" type="range" min="0" max="1" step="0.05" value="0.7"></label><span class="phint">Remove a franja magenta da aberração cromática lateral do estereoscópio, dessaturando-a em direção à cor dos vizinhos. Não repinta nem inventa cor. Aumentar: menos franja. Zero: desliga.</span><button class="small" id="applyColor">Aplicar realce de cor</button></div></details><details class="acc" id="acc_avancado"><summary>Personalizada<span class="accState" id="state_avancado"></span></summary><div class="accBody"><label class="field" id="methodField">Método de fusão<select id="method"><option value="natural">Natural · mapa de camadas</option><option value="detail">Pirâmide ponderada · transições suaves</option><option value="maximum" selected>Pirâmide máxima · detalhes finos</option><option value="interpolated">Interpolado · entre planos vizinhos</option></select></label><span class="phint">Só ajuste aqui se souber o que procura — as receitas já escolhem o método adequado. Comece pelos métodos de pirâmide. Natural e Interpolado permanecem disponíveis para comparação, mas podem produzir manchas quando o mapa de camadas é ambíguo. Confira cerdas, bordas e reflexos nas fotografias originais.</span><p class="hint" id="methodHint">Seleciona regiões em foco e suaviza as transições preservando bordas.</p><label class="check"><input id="rotation" type="checkbox">Corrigir pequena rotação</label><span class="phint">Ligado: o alinhamento também procura rotação. Só ajuda se a câmera girou entre as capturas; caso contrário adiciona busca e risco de reamostrar sem necessidade.</span><label class="field">Busca entre planos (% da largura)<input id="search" type="number" min="0.2" max="15" step="0.2" value="4"></label><span class="phint">Aumentar: tolera deslocamentos maiores entre planos, ao custo de tempo de busca e de mais chance de encontrar um casamento falso. Diminuir: busca mais rápida e segura quando as camadas já estão quase registradas.</span><label class="field">Raio de avaliação do foco <output id="focusRadiusVal" class="value">2</output><input id="focusRadius" type="range" min="1" max="8" value="2"></label><span class="phint">Vizinhança em pixels, referida a 2048 px no lado maior. Ajustado à resolução; independente da suavização das transições.</span>
+<label class="field">Alcance do detalhe<input id="spread" type="number" min="1" max="5" value="1"></label><span class="phint">Distância entre amostras do detector. 1 favorece detalhes estreitos; valores maiores podem ajudar em imagens suaves.</span>
+<label class="field">Limiar de detalhe <output id="focusFloorVal" class="value">0.4</output><input id="focusFloor" type="range" min="0" max="4" step="0.1" value="0.4"></label>
+<label class="field">Separação mínima entre planos<input id="confidenceMin" type="number" min="0" max="0.5" step="0.01" value="0.03"></label><span class="phint">Abaixo desse valor, a camada é estimada com ajuda da vizinhança. Confiança baixa não significa necessariamente erro: planos adjacentes podem estar igualmente nítidos.</span>
+<label class="field">Remover ilhas menores que (px)<input id="islandSize" type="number" min="0" max="30" value="5"></label><span class="phint">Remove pequenas regiões isoladas da seleção confiável. Zero desliga; valores altos podem eliminar cerdas finas.</span>
+<label class="field">Detecção de foco<select id="metric"><option value="sml">Laplaciano modificado (SML)</option><option value="tenengrad">Magnitude Sobel (Tenengrad)</option></select></label><span class="phint"><b>SML</b> responde melhor a detalhe fino como pontuações e cerdas. <b>Tenengrad</b> usa a magnitude do gradiente Sobel. Compare as duas medidas e ajuste a redução de ruído em imagens granuladas.</span><label class="field">Redução de ruído (σ) <output id="sigmaVal" class="value">0.8</output><input id="sigma" type="range" min="0" max="2" step="0.1" value="0.8"></label><span class="phint">Suavização usada apenas para medir o foco. Não desfoca os pixels originais. Aumente se o ruído estiver sendo selecionado como detalhe.</span><label class="field">Suavização do mapa de profundidade <output id="depthSmoothVal" class="value">6</output><input id="depthSmooth" type="range" min="1" max="40" step="1" value="6"></label><span class="phint">Regulariza a estimativa de camadas, com proteção das bordas. No Interpolado, evita saltos locais sem forçar uma superfície contínua entre objetos sobrepostos.</span><label class="field">Ganho mínimo para aceitar alinhamento<input id="alignGain" type="number" min="0" max="0.05" step="0.0001" value="0.0002"></label><span class="phint">Melhora mínima de correlação exigida. Valores altos podem rejeitar deslocamentos sutis reais; valores muito baixos podem aceitar correções instáveis.</span><label class="field">Ganho de detalhe <output id="detailGainVal" class="value">1</output><input id="detailGain" type="range" min="1" max="2" step="0.01" value="1"></label><span class="phint">Acabamento: reforça os detalhes finos da luminância. Neutro em 1; pode ser reaplicado a qualquer método sem refazer a fusão.</span><label class="field">Ganho da base <output id="baseGainVal" class="value">1</output><input id="baseGain" type="range" min="0.7" max="1.2" step="0.01" value="1"></label><span class="phint">Acabamento: controla o componente amplo de luminância. Neutro em 1. Alterações afetam tons e devem ser conferidas com o original.</span><label class="field">Brilho final <output id="brightnessVal" class="value">1</output><input id="brightness" type="range" min="0.8" max="1.3" step="0.01" value="1"></label><span class="phint">Acabamento: multiplicador de luminosidade em luz linear. Neutro em 1; pode ser reaplicado a qualquer método.</span><label class="field">Níveis de detalhe<select id="levels"><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option></select></label><span class="phint">Número de escalas das duas pirâmides. Mais níveis incluem estruturas mais amplas e usam mais memória. Compare de 3 a 5; não existe um valor universal.</span><label class="field">Intensidade multiescala <output id="detailStrengthVal" class="value">1</output><input id="detailStrength" type="range" min="0.2" max="1" step="0.05" value="1"></label><span class="phint">Nas duas pirâmides: 1 usa toda a reconstrução multiescala; valores menores a misturam com a composição espacial ponderada. Não é realce de nitidez.</span><label class="check"><input id="limitHalo" type="checkbox" checked>Limitar excessos de luminosidade</label><label class="check"><input id="multiScale" type="checkbox">Detecção de foco multiescala</label><span class="phint">Mede o foco em quatro escalas e deixa decidir a que melhor separa os planos naquele ponto. <b>Ligado:</b> antenas, cerdas e pernas escuras deixam de perder a disputa para a textura do fundo. <b>Desligado:</b> usa só a escala mais fina, bem mais rápido. Custa cerca de 2,5× a 3× na etapa de detecção — avalie primeiro em 50% da resolução.</span><span class="phint">Restringe os valores da fusão ao intervalo observado nas imagens válidas. Pode reduzir excessos, mas não elimina todos os halos e não substitui a inspeção.</span><label class="field">Memória para os blocos<select id="memory"><option value="192">Econômica · 192 MB</option><option value="384">Equilibrada · 384 MB</option><option value="640" selected>Ampla · 640 MB</option></select></label><span class="phint">Orçamento por bloco, também dividido entre os processos paralelos. <b>Ampla · 640 MB</b> libera 4 processos e foi o mais rápido nos testes com 15 imagens de 8,3 MP. <b>Equilibrada</b> usa 2 processos. <b>Econômica</b> usa 1 — escolha-a se a aba travar ou o processamento falhar por falta de memória.</span><p class="hint">Orçamento aproximado dos cálculos. Decodificação, visualização e histórico usam memória adicional.</p><button id="defaults" class="small">Restaurar ajustes</button><button id="clearAll" class="small danger">Limpar tudo</button></div></details></aside>
+<main class="main"><div id="notice" class="notice hidden" role="alert"></div><section class="panel"><div class="toolbar"><div class="tabs" aria-label="Visualização"><button id="viewResult" class="selected">Resultado</button><button id="viewCompare">Comparar</button><button id="viewRaw">Fusão</button><button id="viewFinish">Acabamento</button><button id="viewDepth">Mapa de camada</button><button id="viewConf">Confiança</button></div><div class="row"><button id="zoomOut" class="small" aria-label="Diminuir zoom">−</button><button id="fit" class="small">Ajustar</button><button id="zoom100" class="small">100%</button><button id="zoomIn" class="small" aria-label="Aumentar zoom">+</button></div></div>
+<div class="viewport" id="viewport"><canvas id="display" tabindex="0" aria-label="Visualizador. Use mais e menos para ampliar, setas para mover e zero para ajustar."></canvas><div class="empty" id="empty"><div class="empty-inner"><svg class="emptyMark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 460" role="img" aria-labelledby="icTitle icDesc"><title id="icTitle">Ícone FocoLab</title><desc id="icDesc">Três planos de imagem sobrepostos convergem em um ponto de foco.</desc><g fill="none" stroke-linejoin="round" stroke-linecap="round"><rect x="74" y="102" width="270" height="270" rx="36"stroke="#B9D1DB" stroke-width="20" transform="rotate(-8 209 237)"/><rect x="130" y="75" width="270" height="270" rx="36"stroke="#8FB8C9" stroke-width="20" transform="rotate(-8 265 210)"/><rect x="186" y="48" width="270" height="270" rx="36"stroke="#5A8FA6" stroke-width="22" transform="rotate(-8 321 183)"/></g><g fill="#5A8FA6" stroke="#5A8FA6" stroke-width="20" stroke-linecap="round"><line x1="321" y1="103" x2="321" y2="139"/><line x1="321" y1="227" x2="321" y2="263"/><line x1="241" y1="183" x2="277" y2="183"/><line x1="365" y1="183" x2="401" y2="183"/><circle cx="321" cy="183" r="27" stroke="none"/></g></svg><h2>Os melhores planos,<br>uma imagem em foco.</h2><p>Carregue fotografias do mesmo espécime em profundidades sucessivas. Compare as prévias e escolha a fusão que preserva melhor os detalhes.</p></div></div><div class="caption"><span id="caption">Prévia aguardando imagens</span><span id="zoomLabel">—</span></div></div>
+<div class="controls"><div class="row"><label for="resultSelect" class="hint">Resultado</label><select id="resultSelect" aria-label="Resultado disponível"><option value="">Nenhum resultado</option></select><select id="originalSelect" aria-label="Imagem original para comparação"><option>Nenhuma imagem</option></select></div></div>
+<div id="compareBar" class="comparison-bar hidden"><div id="comparisonOptions" class="row"><label>Comparar com<select id="compareSource"><option value="original">Fotografia original</option><option value="result">Outro resultado</option></select></label><select id="compareResult" class="hidden" aria-label="Outra fusão para comparação"></select></div><label>Divisão antes / depois<input id="split" type="range" min="0" max="100" value="50"></label><p class="hint">À esquerda: fonte selecionada ou fusão sem acabamento; à direita: resultado. A fotografia original recebe apenas alinhamento e recorte, sem realce ou correção de exposição. Compare resultados da mesma resolução.</p></div>
+<div class="progress-area"><div class="status-row"><span id="status" role="status" aria-live="polite">Carregue pelo menos duas imagens.</span><span id="elapsed"></span></div><progress id="progress" max="100" value="0" aria-label="Progresso do processamento"></progress><p class="phint" id="perfNote" style="margin:6px 0 0"></p></div></section>
+<section class="panel output"><details class="acc" id="acc_ia"><summary>Serviços de IA (opcional)<span class="accState" id="state_ia"></span></summary><div class="accBody"><p class="hint"><b>Este é o único recurso que envia a imagem para fora do seu computador, e o uso é cobrado.</b> Nenhum provedor de imagem oferece camada gratuita. Sem chave configurada, o app apenas monta o prompt para você usar na interface web do provedor, que costuma ter cota gratuita própria.</p><details id="aiConfig"><summary>⚙️ Configuração (provedor, modelo e chave)</summary><div style="padding:12px 2px 4px"><div class="eyebrow">Acesso</div><label class="field">Provedor de IA<select id="aiProvider"><option value="gemini">Google (Gemini)</option><option value="openai">OpenAI</option></select></label><label class="field">Modelo<select id="aiModel"></select></label><span class="phint" id="aiCost"></span><label class="field" style="display:block"><span id="aiKeyLabel">Chave da API</span><input id="aiKey" type="password" autocomplete="off" style="width:100%;display:block;margin-top:6px"></label><span class="phint" id="aiKeyState" style="display:block;margin-top:-6px"></span><span class="phint">Fica salva apenas neste navegador (localStorage) e é enviada somente ao provedor escolhido. Nunca entra no registro de exportação.</span></div></details><div id="aiEditFields"><label class="field">Fundo desejado<select id="aiBackground"><option value="none">Não alterar o fundo</option><option value="white">Branco</option><option value="g10">Cinza 10%</option><option value="g15">Cinza 15%</option><option value="g20">Cinza 20%</option><option value="black">Preto</option><option value="custom">Cor personalizada</option></select></label><span class="phint">Sem escolha, o prompt pede apenas limpeza de sombras, ruído e reflexos.</span><label class="field hidden" id="aiColorField">Cor personalizada<input id="aiBackgroundColor" type="color" value="#d9d9d9"></label></div><label class="field">Prompt gerado<textarea id="aiPromptText" rows="5" readonly style="width:100%;resize:vertical;font:13px/1.5 inherit;border:1px solid var(--line);border-radius:7px;padding:9px;background:var(--soft);color:var(--ink)"></textarea></label><div class="row"><button class="small" id="aiCopy">Copiar prompt</button><button class="small" id="aiRun">Limpar fundo com IA</button></div><p class="hint" id="aiStatus" style="margin-top:10px"></p><pre id="aiReport" class="hidden" style="white-space:pre-wrap;font:13px/1.55 inherit;background:var(--soft);border:1px solid var(--line);border-radius:7px;padding:11px;margin-top:8px"></pre><p class="hint">Na limpeza, o resultado entra como item adicional, <b>nunca substituindo o empilhamento</b>, e o app mede a diferença dentro da área do espécime, avisando se a morfologia foi alterada. Modelos de edição costumam devolver resolução bem menor: adequado para divulgação, não para descrição morfológica. </p></div></details><details class="acc" id="acc_post" open><summary>Acabamento e cor<span class="accState" id="state_post"></span></summary><div class="accBody"><div id="postMirror" class="mirror-grid"></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="small" id="applyPost">Reaplicar na imagem atual</button><span class="phint" style="flex:1;min-width:220px;margin:0">Aplicado depois do empilhamento, inclusive nas prévias. Reaplicar não refaz a fusão — leva poucos segundos.</span></div></div></details><div class="output-grid"><div><label class="field">Prévia<select id="previewSize"><option value="640">640 px · rápida</option><option value="900" selected>900 px</option><option value="1200">1200 px</option><option value="1600">1600 px</option></select></label><button class="primary" id="preview">Gerar prévia</button></div><div><label class="field">Resolução final<select id="resolution"><option value="1" selected>100% · resolução original</option><option value="0.5">50% da largura e altura</option><option value="0.25">25% da largura e altura</option><option value="custom">Personalizada</option></select></label><label class="field hidden" id="customLabel">Largura final (px)<input id="customWidth" type="number" min="128" max="30000" value="2048"></label><button class="primary" id="final">Gerar imagem final</button></div><div><label class="field">Exportação<select id="format"><option value="image/png">PNG · sem perdas</option><option value="image/jpeg">JPEG · qualidade ajustável</option></select></label><label id="qualityLabel" class="field hidden">Qualidade JPEG <output class="value" id="qualityVal">95</output><input id="quality" type="range" min="75" max="100" value="95"></label><button id="download" class="primary">Baixar imagem</button></div></div><div class="finish-row"><p class="hint" id="estimate">A resolução é identificada nos arquivos; não depende do modelo da câmera.</p><button id="cancel" class="danger hidden">Cancelar processamento</button></div><details><summary>Exportação e registro do processamento</summary><label class="field">Nome do arquivo<input id="outputName" type="text" value="imagem_stack"></label><div class="row"><button id="downloadDepth" class="small">Baixar mapa de camada</button><button id="downloadRaw" class="small">Baixar fusão sem acabamento</button><button id="downloadConfidence" class="small">Baixar confiança</button><button id="downloadDepthData" class="small">Camadas exatas (.bin)</button><button id="downloadLog" class="small">Baixar registro (.json)</button><button id="alignmentDetails" class="small">Ver alinhamento</button></div><p class="hint">O mapa indica a camada predominante, não profundidade em micrômetros. Em multiescala, detalhes podem vir de outras camadas.</p></details></section></main><details class="acc licenseBar" id="acc_sobre"><summary>Sobre e licença<span class="accState" id="state_sobre"></span></summary><div class="accBody"><p class="hint"><b>FocoLab</b> — empilhamento de foco para fotografia de espécimes.</p><p class="hint">Copyright © 2026. Este programa é software livre: você pode redistribuí-lo e/ou modificá-lo sob os termos da <b>Licença Pública Geral GNU, versão 3</b> ou, a seu critério, qualquer versão posterior, publicada pela Free Software Foundation.</p><p class="hint">O programa é distribuído na expectativa de ser útil, mas <b>SEM NENHUMA GARANTIA</b>, nem mesmo a garantia implícita de COMERCIALIZAÇÃO ou ADEQUAÇÃO A UMA FINALIDADE ESPECÍFICA. Consulte a Licença Pública Geral GNU para mais detalhes.</p><p class="hint">Por ser um arquivo HTML único e não minificado, <b>o arquivo distribuído já é o código-fonte</b>: a exigência da GPL de disponibilizar a fonte é satisfeita pela própria cópia que você recebeu.</p><p class="hint"><a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">Texto completo da GPL-3.0</a></p><p class="hint">Todo o processamento acontece no seu computador. Nenhuma imagem é enviada a servidor algum.</p></div></details></div>
+<footer><span>FocoLab 1.0 · © 2026 Rodrigo Pereira · FFCLRP–USP</span></footer>
+<dialog id="guideDialog"><button class="close small" data-close>Fechar</button>
+<h2>Guia do FocoLab 1.0</h2>
+<p>O FocoLab combina fotografias do mesmo espécime tiradas em planos de foco sucessivos numa única imagem com o objeto inteiro nítido. Todo o processamento acontece no seu computador; nenhuma imagem sai dele.</p>
+
+<h3>Fluxo de trabalho</h3>
+<p><b>1 · Carregar.</b> Arraste os arquivos para qualquer ponto da janela, ou use o botão. Aceita JPEG, PNG, WebP e TIFF (sem compressão, LZW, Deflate ou PackBits; 8 ou 16 bits). Ordene os planos numa única direção — a lista é reordenável por arrasto.</p>
+<p><b>2 · Escolher a receita.</b> Cada receita declara o que prioriza e o que sacrifica. Marque duas ou mais na lista de comparação para gerar prévias lado a lado e escolher pelo olho.</p>
+<p><b>3 · Ajustar.</b> Acabamento e cor são aplicados depois da fusão e reaplicáveis sem refazer o empilhamento, tanto na prévia quanto na imagem final.</p>
+<p><b>4 · Exportar.</b> PNG sem perdas ou JPEG. O registro do processamento guarda todos os parâmetros usados.</p>
+
+<h3>As receitas</h3>
+<p><b>Equilibrada</b> — pirâmide ponderada, ponto de partida para material desconhecido. <b>Detalhe máximo</b> — pirâmide máxima, para cerdas e esculturação; menos tolerante a ruído. <b>Cutícula metálica</b> — método natural, evita o artefato causado pelo reflexo especular que se desloca entre planos. <b>Série ruidosa</b> — usa Tenengrad e janelas maiores, para ISO alto. <b>Relevo contínuo</b> — interpolado, para superfícies lisas; exige ordem correta e passos regulares. <b>Estruturas finas</b> — liga a detecção multiescala, para antenas e cerdas escuras contra fundo claro. <b>Personalizada</b> — libera todos os controles.</p>
+<p>Mexer em qualquer controle avançado muda a receita para Personalizada, preservando os valores. Controles que o método ativo ignora aparecem esmaecidos.</p>
+
+<h3>Detecção de foco multiescala</h3>
+<p>Numa única escala fina, a textura do fundo pontua mais que uma antena escura e fina, e a antena acaba herdando o plano do fundo. A opção multiescala mede o foco em quatro escalas e deixa decidir a que melhor separa os planos naquele ponto. Custa tempo: avalie primeiro em resolução reduzida.</p>
+
+<h3>Acabamento e cor</h3>
+<p>O <b>acabamento</b> aplica realce de nitidez e, opcionalmente, esticamento de níveis com proteção das altas luzes. O <b>realce de cor</b> tem três etapas: ponto branco automático medido no fundo, saturação seletiva apenas onde já existe cor, e supressão de franja cromática. A franja magenta em bordas de alto contraste é aberração cromática lateral do estereoscópio, presente nas fotografias originais; o FocoLab a dessatura em direção à cor dos vizinhos, sem repintar nem inventar cor.</p>
+
+<h3>Alinhamento</h3>
+<p>Desligado por padrão. Ligue apenas se notar deslocamento entre as camadas na aba Comparar: cada correção reamostra o quadro inteiro e custa nitidez. Nas séries testadas, a correlação de fase em resolução plena não encontrou deslocamento mensurável.</p>
+
+<h3>Desempenho</h3>
+<p>O orçamento de memória define o tamanho do bloco e é dividido entre os processos paralelos. <b>Ampla · 640 MB</b> libera quatro processos e foi o mais rápido nos testes com 15 imagens de 8,3 MP; <b>Econômica</b> usa um processo, para quando faltar memória. A linha de diagnóstico ao fim do processamento mostra blocos, processos, decodificações e aproveitamento do cache.</p>
+
+<h3>Limpeza de fundo por IA (opcional)</h3><p>Este é o <b>único recurso que envia a imagem para fora do seu computador</b>, e o serviço pode ser pago. Sem chave configurada, o app apenas monta o prompt e oferece <b>Copiar prompt</b>, para você usar na interface web do provedor — que costuma ter cota gratuita própria, separada da API.</p><p>Na caixa <b>⚙️ Configuração</b> escolha o provedor, o modelo e cole a chave, guardada apenas neste navegador e nunca incluída no registro de exportação. Só modelos de <b>geração de imagem</b> servem: a tarefa é refazer os pixels do fundo, e modelos que apenas leem imagens não conseguem executá-la.</p><p>Em <b>Fundo desejado</b>, sem escolha o prompt pede apenas a remoção de sombras, ruído e reflexos. Com escolha, pede também fundo uniforme naquele tom, preservando a silhueta, inclusive de partes translúcidas.</p><p>O prompt é escrito em inglês de propósito: os modelos de imagem seguem restrições negativas com mais fidelidade nesse idioma. Ele proíbe explicitamente <b>acrescentar</b> qualquer coisa — detritos, poeira, partículas, textura — porque na prática o modelo chegou a inventar detritos junto ao abdome.</p><p><b>Salvaguardas.</b> O resultado entra como item adicional na lista, nunca substituindo o empilhamento. O app compara a imagem devolvida com a original dentro da área do espécime e avisa em destaque se a morfologia foi alterada. Informa também quantos por cento de pixels foram perdidos: modelos de edição costumam devolver resolução bem menor, o que torna o recurso adequado para divulgação, não para descrição morfológica. O registro de exportação passa a marcar que houve edição generativa, com modelo, prompt e a diferença medida.</p><p>Chamadas diretas do navegador podem ser bloqueadas por CORS, sobretudo com o arquivo aberto localmente. Nesse caso, use Copiar prompt.</p><h3>Precisão e arquivos</h3>
+<p>A entrada é decodificada em 8 bits por canal; a fusão trabalha em Float32 em luz linear; a exportação usa 8 bits por canal. TIFF de 16 bits é reduzido a 8 bits na leitura, limitação do canvas do navegador.</p>
+
+<h3>Mapas e rastreabilidade</h3>
+<p>O mapa de camadas indica qual plano predominou em cada região — é diagnóstico, não profundidade em micrômetros. O mapa de confiança mostra onde a separação entre planos foi clara. Ambos podem ser exportados como material suplementar, junto com o registro de parâmetros.</p>
+
+<h3>Origem e créditos</h3>
+<p>O FocoLab foi desenvolvido tendo o <a href="https://github.com/Vincentdecursay/CombineZP" target="_blank" rel="noopener">CombineZP</a>, de Alan Hadley, como referência funcional e conceitual. Nenhuma linha de código foi copiada — o CombineZP é C++ para Windows e o FocoLab é JavaScript escrito do zero. Do estudo do seu código-fonte vieram quatro decisões de projeto:</p>
+<p><b>Ganhos por nível na reconstrução</b> (<i>Pyramid.cpp</i>, <i>pascend</i>): reforçar o detalhe dentro da pirâmide, nas escalas mais finas, e atenuar a base nas mais grosseiras, em vez de aplicar nitidez de raio único no fim. <b>Esticamento de níveis por histograma combinado</b> (<i>Special1.cpp</i>, <i>contrast</i>): um único histograma somando R, G e B, com o mesmo ganho nos três canais. <b>Regularização do mapa de camadas</b>: o CombineZP nunca usa a seleção crua — remove ilhas, preenche lacunas e filtra antes de compor. <b>Decisão num canal compartilhado</b> (<i>pinw</i>, <i>pwa3</i>): a escolha do quadro vencedor é feita uma vez sobre (R+G+B)/3, e os canais de cor apenas copiam o coeficiente; decidir por canal produz estriamento e franjas.</p>
+<p>A observação mais útil foi estrutural: o macro <i>Do Stack</i> do CombineZP tem quatorze passos, e só o primeiro é fusão. Daí a arquitetura do FocoLab separar fusão, acabamento e cor em etapas independentes e reaplicáveis.</p>
+<p>Os nomes dos métodos aqui não indicam equivalência com os macros do CombineZP.</p>
+
+<h3>Licença</h3>
+<p>FocoLab 1.0 — Copyright © 2026 Rodrigo Pereira, FFCLRP–USP. Software livre sob a <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">Licença Pública Geral GNU versão 3</a> ou posterior, SEM NENHUMA GARANTIA. Por ser um arquivo HTML único e não minificado, este arquivo é ao mesmo tempo o programa e seu código-fonte completo. O CombineZP também é distribuído sob GPL.</p>
+</dialog>
+<dialog id="alignDialog"><button class="close small" data-close>Fechar</button><h2>Registro entre planos</h2><p class="hint">Transformações da referência para cada original, em pixels da resolução de entrada. Inspecione valores baixos de correlação; o diagnóstico é estimado em resolução reduzida.</p><div id="alignmentTable" class="log"></div></dialog>
+<script id="tiffSource" type="text/plain">
+/* Decodificador TIFF minimo, sem dependencias externas.
+   Cobre: little/big endian, tiras e blocos (tiles), 8 e 16 bits por amostra,
+   1/3/4 amostras, paleta, compressoes 1 (nenhuma), 5 (LZW), 8/32946 (Deflate)
+   e 32773 (PackBits), preditor horizontal. Amostras de 16 bits sao reduzidas
+   a 8 porque o canvas nao guarda mais que isso. */
+const TIFF_TAGS={256:'width',257:'height',258:'bits',259:'compression',262:'photometric',273:'stripOffsets',277:'samples',278:'rowsPerStrip',279:'stripCounts',284:'planar',317:'predictor',320:'colorMap',322:'tileWidth',323:'tileHeight',324:'tileOffsets',325:'tileCounts',338:'extraSamples',339:'sampleFormat'};
+const TIFF_SIZES={1:1,2:1,3:2,4:4,5:8,6:1,7:1,8:2,9:4,10:8,11:4,12:8};
+
+function tiffIsTiff(buf){
+ if(buf.byteLength<8)return false;
+ const v=new DataView(buf),b0=v.getUint8(0),b1=v.getUint8(1);
+ if(b0!==b1||(b0!==0x49&&b0!==0x4d))return false;
+ return v.getUint16(2,b0===0x49)===42;
+}
+
+function tiffReadIFD(view,offset,le){
+ const count=view.getUint16(offset,le),out={};
+ for(let i=0;i<count;i++){
+  const p=offset+2+i*12,tag=view.getUint16(p,le),type=view.getUint16(p+2,le),n=view.getUint32(p+4,le);
+  const name=TIFF_TAGS[tag];if(!name)continue;
+  const size=TIFF_SIZES[type]||1,bytes=size*n;
+  let at=bytes<=4?p+8:view.getUint32(p+8,le),vals=[];
+  for(let k=0;k<n;k++){
+   const q=at+k*size;
+   if(q+size>view.byteLength)break;
+   if(type===1||type===7)vals.push(view.getUint8(q));
+   else if(type===2)vals.push(view.getUint8(q));
+   else if(type===3)vals.push(view.getUint16(q,le));
+   else if(type===4)vals.push(view.getUint32(q,le));
+   else if(type===5)vals.push(view.getUint32(q,le)/(view.getUint32(q+4,le)||1));
+   else if(type===6)vals.push(view.getInt8(q));
+   else if(type===8)vals.push(view.getInt16(q,le));
+   else if(type===9)vals.push(view.getInt32(q,le));
+   else vals.push(0);
+  }
+  out[name]=vals.length===1?vals[0]:vals;
+ }
+ return out;
+}
+
+function tiffPackBits(src){
+ const out=[];let i=0;
+ while(i<src.length){
+  const n=src[i]<<24>>24;i++;
+  if(n>=0){for(let k=0;k<=n&&i<src.length;k++)out.push(src[i++]);}
+  else if(n!==-128){const b=src[i++];for(let k=0;k<1-n;k++)out.push(b);}
+ }
+ return Uint8Array.from(out);
+}
+
+function tiffLZW(src){
+ // LZW do TIFF: bits mais significativos primeiro, largura cresce um codigo antes
+ // do limite. Tabela em arrays tipados (prefixo/sufixo) em vez de arrays de arrays:
+ // o ganho medido foi de cerca de 12x sobre a versao ingenua.
+ const MAX=4096,prefix=new Int32Array(MAX),suffix=new Uint8Array(MAX),len=new Int32Array(MAX);
+ for(let i=0;i<256;i++){prefix[i]=-1;suffix[i]=i;len[i]=1;}
+ let next=258,width=9,prev=-1,bitPos=0,outLen=0;
+ let out=new Uint8Array(Math.max(1024,src.length*3));
+ const total=src.length*8,stack=new Uint8Array(MAX);
+ const grow=need=>{if(outLen+need<=out.length)return;let n=new Uint8Array(Math.max(out.length*2,outLen+need));n.set(out);out=n;};
+ const emit=code=>{
+  let n=len[code];grow(n);
+  let c=code,i=n;
+  while(c>=0){stack[--i]=suffix[c];c=prefix[c];}
+  out.set(stack.subarray(0,n),outLen);outLen+=n;
+  return stack[0];
+ };
+ while(bitPos+width<=total){
+  let code=0;
+  for(let k=0;k<width;k++){const b=bitPos+k;code=(code<<1)|((src[b>>3]>>(7-(b&7)))&1);}
+  bitPos+=width;
+  if(code===257)break;
+  if(code===256){next=258;width=9;prev=-1;continue;}
+  let first;
+  if(code<next&&(code<256||len[code]>0)){
+   first=emit(code);
+   if(prev>=0&&next<MAX){prefix[next]=prev;suffix[next]=first;len[next]=len[prev]+1;next++;}
+  }else{
+   if(prev<0)break;
+   if(next<MAX){prefix[next]=prev;suffix[next]=suffix[prev];len[next]=len[prev]+1;
+    // o sufixo correto e' o primeiro byte da sequencia anterior
+    let c=prev;while(prefix[c]>=0)c=prefix[c];suffix[next]=suffix[c];
+    first=suffix[next];emit(next);next++;
+   }else break;
+  }
+  prev=code<next?code:next-1;
+  if(next+1>=(1<<width)&&width<12)width++;
+ }
+ return out.subarray(0,outLen);
+}
+
+async function tiffInflate(src,raw){
+ if(typeof DecompressionStream==='undefined')throw Error('Este navegador não descomprime TIFF Deflate.');
+ const stream=new Blob([src]).stream().pipeThrough(new DecompressionStream(raw?'deflate-raw':'deflate'));
+ return new Uint8Array(await new Response(stream).arrayBuffer());
+}
+
+async function tiffSegment(bytes,compression){
+ if(compression===1)return bytes;
+ if(compression===5)return tiffLZW(bytes);
+ if(compression===32773)return tiffPackBits(bytes);
+ if(compression===8||compression===32946){try{return await tiffInflate(bytes,false);}catch{return await tiffInflate(bytes,true);}}
+ throw Error('Compressão TIFF '+compression+' não suportada. Salve como TIFF sem compressão, LZW ou Deflate.');
+}
+
+function tiffUnpredict(buf,width,samples,bytesPerSample,rows){
+ // Preditor 2: diferenciacao horizontal, desfeita amostra a amostra.
+ const stride=width*samples;
+ if(bytesPerSample===1){
+  for(let r=0;r<rows;r++){const base=r*stride;for(let i=samples;i<stride;i++)buf[base+i]=(buf[base+i]+buf[base+i-samples])&255;}
+ }else{
+  const v=new DataView(buf.buffer,buf.byteOffset,buf.byteLength);
+  for(let r=0;r<rows;r++){const base=r*stride*2;for(let i=samples;i<stride;i++){const p=base+i*2;v.setUint16(p,(v.getUint16(p,true)+v.getUint16(p-samples*2,true))&65535,true);}}
+ }
+}
+
+async function decodeTIFF(buffer){
+ const view=new DataView(buffer),le=view.getUint8(0)===0x49;
+ if(!tiffIsTiff(buffer))throw Error('Arquivo TIFF inválido.');
+ const ifd=tiffReadIFD(view,view.getUint32(4,le),le);
+ const width=ifd.width,height=ifd.height;
+ if(!width||!height)throw Error('TIFF sem dimensões legíveis.');
+ const samples=ifd.samples||1;
+ let bits=ifd.bits;if(Array.isArray(bits))bits=bits[0];bits=bits||8;
+ if(bits!==8&&bits!==16)throw Error('TIFF de '+bits+' bits por amostra não suportado. Converta para 8 ou 16 bits.');
+ if([ifd.sampleFormat].flat().some(v=>v&&v!==1))throw Error('TIFF deve usar amostras inteiras sem sinal.');
+ if(ifd.bits!==undefined&&[ifd.bits].flat().some(v=>v!==bits))throw Error('TIFF com profundidades diferentes entre canais não suportado.');
+ if(![0,1,2,3].includes(ifd.photometric??1))throw Error('Modelo de cor TIFF não suportado; exporte em RGB ou tons de cinza.');
+ if(ifd.planar===2)throw Error('TIFF com planos separados não suportado. Salve com canais intercalados.');
+ const compression=ifd.compression||1,photometric=ifd.photometric===undefined?1:ifd.photometric,predictor=ifd.predictor||1;
+ const bps=bits/8,tiled=ifd.tileWidth!==undefined;
+ const rgba=new Uint8ClampedArray(width*height*4).fill(255);
+ const colorMap=ifd.colorMap?(Array.isArray(ifd.colorMap)?ifd.colorMap:[ifd.colorMap]):null;
+ const arr=v=>v===undefined?[]:(Array.isArray(v)?v:[v]);
+
+ const put=(px,py,src,at)=>{
+  if(px>=width||py>=height)return;
+  const o=(py*width+px)*4;
+  const read=i=>bits===8?src[at+i]:((src[(at+i)*2+1]<<8|src[(at+i)*2])>>8);
+  if(photometric===3&&colorMap){
+   const idx=bits===8?src[at]:(src[at*2+1]<<8|src[at*2]),n=colorMap.length/3;
+   rgba[o]=colorMap[idx]>>8;rgba[o+1]=colorMap[idx+n]>>8;rgba[o+2]=colorMap[idx+2*n]>>8;
+  }else if(samples>=3){
+   rgba[o]=read(0);rgba[o+1]=read(1);rgba[o+2]=read(2);
+   if(samples>=4&&[1,2].includes(Array.isArray(ifd.extraSamples)?ifd.extraSamples[0]:ifd.extraSamples)){rgba[o+3]=read(3);if((Array.isArray(ifd.extraSamples)?ifd.extraSamples[0]:ifd.extraSamples)===1&&rgba[o+3]>0)for(let c=0;c<3;c++)rgba[o+c]=Math.min(255,Math.round(rgba[o+c]*255/rgba[o+3]));}
+  }else{
+   let g=read(0);if(photometric===0)g=255-g;
+   rgba[o]=rgba[o+1]=rgba[o+2]=g;
+  }
+ };
+
+ if(tiled){
+  const tw=ifd.tileWidth,th=ifd.tileHeight,offs=arr(ifd.tileOffsets),counts=arr(ifd.tileCounts);
+  const across=Math.ceil(width/tw);
+  for(let t=0;t<offs.length;t++){
+   const raw=new Uint8Array(buffer,offs[t],counts[t]);
+   let data=await tiffSegment(raw,compression);
+   if(bits===16&&!le){data=data.slice();for(let j=0;j+1<data.length;j+=2){const t=data[j];data[j]=data[j+1];data[j+1]=t;}}
+   if(predictor===2)tiffUnpredict(data,tw,samples,bps,th);
+   const tx=(t%across)*tw,ty=Math.floor(t/across)*th;
+   for(let r=0;r<th;r++)for(let c=0;c<tw;c++)put(tx+c,ty+r,data,(r*tw+c)*samples);
+  }
+ }else{
+  const rowsPerStrip=ifd.rowsPerStrip||height,offs=arr(ifd.stripOffsets),counts=arr(ifd.stripCounts);
+  for(let s=0;s<offs.length;s++){
+   const rows=Math.min(rowsPerStrip,height-s*rowsPerStrip);if(rows<=0)break;
+   const raw=new Uint8Array(buffer,offs[s],counts[s]);
+   let data=await tiffSegment(raw,compression);
+   if(bits===16&&!le){data=data.slice();for(let j=0;j+1<data.length;j+=2){const t=data[j];data[j]=data[j+1];data[j+1]=t;}}
+   if(predictor===2)tiffUnpredict(data,width,samples,bps,rows);
+   for(let r=0;r<rows;r++)for(let c=0;c<width;c++)put(c,s*rowsPerStrip+r,data,(r*width+c)*samples);
+  }
+ }
+ return {width,height,rgba};
+}
+
+async function loadBitmap(file){
+ const name=(file.name||'').toLowerCase();
+ if(!/\.tiff?$/.test(name))return createImageBitmap(file);
+ const buffer=await file.arrayBuffer();
+ const {width,height,rgba}=await decodeTIFF(buffer);
+ return createImageBitmap(new ImageData(rgba,width,height));
+}
+
+</script>
+<script id="workerSource" type="text/plain">
+/* FocoLab 1.0 — numerical routines independently implemented; no CombineZ source copied. */
+'use strict';
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const lut=Float32Array.from({length:256},(_,i)=>{let x=i/255;return x<=.04045?x/12.92:((x+.055)/1.055)**2.4});
+function box(a,w,h,r){
+ r=Math.max(0,Math.round(r)); if(!r)return a.slice();
+ const tmp=new Float32Array(a.length),out=new Float32Array(a.length),d=2*r+1;
+ for(let y=0;y<h;y++){let row=y*w,sum=0;for(let k=-r;k<=r;k++)sum+=a[row+clamp(k,0,w-1)];
+ for(let x=0;x<w;x++){tmp[row+x]=sum/d;sum+=a[row+clamp(x+r+1,0,w-1)]-a[row+clamp(x-r,0,w-1)];}}
+ for(let x=0;x<w;x++){let sum=0;for(let k=-r;k<=r;k++)sum+=tmp[clamp(k,0,h-1)*w+x];
+ for(let y=0;y<h;y++){out[y*w+x]=sum/d;sum+=tmp[clamp(y+r+1,0,h-1)*w+x]-tmp[clamp(y-r,0,h-1)*w+x];}}return out;
+}
+function gauss(a,w,h,sigma){
+ if(sigma<=0)return a.slice();const r=Math.ceil(sigma*3),k=new Float32Array(2*r+1);let sum=0;
+ for(let j=-r;j<=r;j++){k[j+r]=Math.exp(-j*j/(2*sigma*sigma));sum+=k[j+r];}for(let j=0;j<k.length;j++)k[j]/=sum;
+ const t=new Float32Array(a.length),o=new Float32Array(a.length);
+ for(let y=0;y<h;y++)for(let x=0;x<w;x++){let v=0;for(let j=-r;j<=r;j++)v+=a[y*w+clamp(x+j,0,w-1)]*k[j+r];t[y*w+x]=v;}
+ for(let y=0;y<h;y++)for(let x=0;x<w;x++){let v=0;for(let j=-r;j<=r;j++)v+=t[clamp(y+j,0,h-1)*w+x]*k[j+r];o[y*w+x]=v;}return o;
+}
+function sample(a,w,h,x,y){x=clamp(x,0,w-1);y=clamp(y,0,h-1);let ix=Math.floor(x),iy=Math.floor(y),fx=x-ix,fy=y-iy,j=iy*w+ix,jx=iy*w+Math.min(ix+1,w-1),jy=Math.min(iy+1,h-1)*w+ix;
+ return (a[j]*(1-fx)+a[jx]*fx)*(1-fy)+(a[jy]*(1-fx)+a[Math.min(iy+1,h-1)*w+Math.min(ix+1,w-1)]*fx)*fy;}
+function down(a,w,h){
+ // Filtra apenas nas posicoes que sobrevivem a subamostragem. A versao anterior
+ // suavizava a imagem inteira e descartava tres quartos dos pixels calculados.
+ // Mesma matematica, um quarto do trabalho: medido 65,5 ms -> 18,8 ms por MP,
+ // com saida identica bit a bit.
+ const sigma=1,r=Math.ceil(sigma*3),k=new Float32Array(2*r+1);let ks=0;
+ for(let j=-r;j<=r;j++){k[j+r]=Math.exp(-j*j/(2*sigma*sigma));ks+=k[j+r];}
+ for(let j=0;j<k.length;j++)k[j]/=ks;
+ const nw=Math.ceil(w/2),nh=Math.ceil(h/2),tmp=new Float32Array(nw*h);
+ for(let y=0;y<h;y++){const row=y*w,orow=y*nw;
+  for(let x2=0;x2<nw;x2++){const x=2*x2;let v=0;
+   for(let j=-r;j<=r;j++)v+=a[row+clamp(x+j,0,w-1)]*k[j+r];
+   tmp[orow+x2]=v;}}
+ const o=new Float32Array(nw*nh);
+ for(let y2=0;y2<nh;y2++){const y=2*y2,orow=y2*nw;
+  for(let x2=0;x2<nw;x2++){let v=0;
+   for(let j=-r;j<=r;j++)v+=tmp[clamp(y+j,0,h-1)*nw+x2]*k[j+r];
+   o[orow+x2]=v;}}
+ return {a:o,w:nw,h:nh};}
+function up(a,sw,sh,w,h){const o=new Float32Array(w*h);for(let y=0;y<h;y++)for(let x=0;x<w;x++)o[y*w+x]=sample(a,sw,sh,x/2,y/2);return o;}
+function upTo(a,sw,sh,dw,dh){const o=new Float32Array(dw*dh);for(let y=0;y<dh;y++)for(let x=0;x<dw;x++)o[y*dw+x]=sample(a,sw,sh,x/2,y/2);return o;}
+function laplacian(a,w,h,levels){
+ // piramide laplaciana de um canal: cada nivel guarda o detalhe daquela escala e o
+ // ultimo guarda a base (residuo de baixa frequencia)
+ const g=pyramid(a,w,h,levels),L=g.length,out=[];
+ for(let l=0;l<L-1;l++){
+  const cur=g[l],nx=g[l+1],up=upTo(nx.a,nx.w,nx.h,cur.w,cur.h),d=new Float32Array(cur.w*cur.h);
+  for(let j=0;j<d.length;j++)d[j]=cur.a[j]-up[j];
+  out.push(d);
+ }
+ out.push(g[L-1].a);
+ return out;
+}
+function pyramid(a,w,h,levels){let p=[{a,w,h}];while(p.length<levels&&Math.min(w,h)>4){const q=down(a,w,h);p.push(q);({a,w,h}=q);}return p;}
+function linearFrame(rgba,w,h){let p=w*h,channels=[new Float32Array(p),new Float32Array(p),new Float32Array(p)],Y=new Float32Array(p),valid=new Uint8Array(p);
+ for(let j=0;j<p;j++){let i=j*4;for(let c=0;c<3;c++)channels[c][j]=lut[rgba[i+c]];Y[j]=.2126*channels[0][j]+.7152*channels[1][j]+.0722*channels[2][j];valid[j]=rgba[i+3]>250?1:0;}return {channels,Y,valid};}
+function focus(Y,w,h,opt){const a=gauss(Y,w,h,opt.sigma),o=new Float32Array(w*h),d=Math.max(1,opt.spread||1);
+ for(let y=0;y<h;y++)for(let x=0;x<w;x++){const i=y*w+x,left=y*w+Math.max(0,x-d),right=y*w+Math.min(w-1,x+d),top=Math.max(0,y-d)*w+x,bottom=Math.min(h-1,y+d)*w+x;
+ if(opt.metric==='tenengrad'){
+ const xl=Math.max(0,x-d),xr=Math.min(w-1,x+d),yt=Math.max(0,y-d),yb=Math.min(h-1,y+d);
+ const gx=a[yt*w+xr]+2*a[right]+a[yb*w+xr]-a[yt*w+xl]-2*a[left]-a[yb*w+xl];
+ const gy=a[yb*w+xl]+2*a[bottom]+a[yb*w+xr]-a[yt*w+xl]-2*a[top]-a[yt*w+xr];
+ o[i]=Math.hypot(gx,gy)/8;
+ }
+ else o[i]=Math.abs(2*a[i]-a[left]-a[right])+Math.abs(2*a[i]-a[top]-a[bottom]);}
+ return box(o,w,h,opt.focusRadius);
+}
+function focusScores(frames,w,h,opt){
+ // Deteccao multiescala opcional. Numa unica escala fina, a textura do fundo de papel
+ // pontua mais que uma antena escura e fina, entao a antena perde a disputa e herda o
+ // plano do fundo. Medido na serie de 15 imagens: com passo 1 px o vencedor sobre a
+ // antena era o quadro 12, onde ela esta desfocada; com passo de 4 a 16 px passa a ser
+ // o 8/9, onde ela esta realmente nitida.
+ const n=frames.length,p=w*h;
+ if(!opt.multiScale)return frames.map(f=>focus(f.Y,w,h,opt));
+ const base=Math.max(1,opt.spread||1);
+ const steps=[base,base*2,base*4,base*8].filter((v,i,a)=>a.indexOf(v)===i);
+ const out=Array.from({length:n},()=>new Float32Array(p));
+ let baseMean=null;
+ for(let si=0;si<steps.length;si++){
+  const o={...opt,spread:steps[si],focusRadius:Math.max(opt.focusRadius,steps[si]*2)};
+  const per=frames.map(f=>focus(f.Y,w,h,o));
+  const mean=new Float32Array(p);
+  for(let j=0;j<p;j++){let m=0;for(let k=0;k<n;k++)m+=per[k][j];mean[j]=m/n+1e-6;}
+  if(si===0)baseMean=mean;
+  // Normalizacao POR PIXEL entre quadros, nao por um escalar global do bloco: um
+  // escalar global variaria de bloco para bloco e produziria emendas visiveis.
+  // O maximo entre escalas deixa decidir a escala que melhor separa os quadros ali.
+  for(let j=0;j<p;j++)for(let k=0;k<n;k++){const v=per[k][j]/mean[j];if(v>out[k][j])out[k][j]=v;}
+ }
+ // Devolve a magnitude original: multiplicar todos os quadros de um pixel pelo mesmo
+ // escalar nao muda a ordem nem os pesos, mas preserva o significado do piso de foco.
+ for(let k=0;k<n;k++)for(let j=0;j<p;j++)out[k][j]*=baseMean[j];
+ return out;
+}
+function guidedGuide(I,w,h,r){const mI=box(I,w,h,r),II=new Float32Array(I.length);for(let j=0;j<I.length;j++)II[j]=I[j]*I[j];return {mI,cII:box(II,w,h,r)};}
+function guided(p,I,w,h,r,eps,guideStats){
+ const {mI,cII}=guideStats||guidedGuide(I,w,h,r),mp=box(p,w,h,r),IP=new Float32Array(I.length);
+ for(let j=0;j<I.length;j++)IP[j]=I[j]*p[j];
+ const cIP=box(IP,w,h,r),A=new Float32Array(I.length),B=new Float32Array(I.length);
+ for(let j=0;j<I.length;j++){A[j]=(cIP[j]-mI[j]*mp[j])/(Math.max(0,cII[j]-mI[j]*mI[j])+eps);B[j]=mp[j]-A[j]*mI[j];}
+ const ma=box(A,w,h,r),mb=box(B,w,h,r);for(let j=0;j<p.length;j++)p[j]=Math.max(0,ma[j]*I[j]+mb[j]);return p;
+}
+// Independent multiresolution fusion. Shared RGB weights avoid channel-wise colour selection.
+function cleanLabels(labels,reliable,w,h,minSize){
+ if(minSize<=1)return;
+ const seen=new Uint8Array(labels.length),queue=new Int32Array(labels.length);
+ for(let root=0;root<labels.length;root++){
+  if(seen[root]||!reliable[root])continue;
+  let head=0,tail=1,touches=false;queue[0]=root;seen[root]=1;const label=labels[root];
+  while(head<tail){const j=queue[head++],x=j%w,y=Math.floor(j/w);if(x===0||y===0||x===w-1||y===h-1)touches=true;
+   for(const k of [x?j-1:-1,x<w-1?j+1:-1,y?j-w:-1,y<h-1?j+w:-1])if(k>=0&&!seen[k]&&reliable[k]&&labels[k]===label){seen[k]=1;queue[tail++]=k;}
+  }
+  if(tail<minSize&&!touches)for(let k=0;k<tail;k++)reliable[queue[k]]=0;
+ }
+}
+function depthSurface(winner,reliable,guide,w,h,opt){
+ // Finite-support, edge-aware filling: no averaging of distant plane numbers across a strong edge.
+ const p=w*h,r=Math.max(1,opt.depthSmooth),idx=Float32Array.from(winner),trust=Float32Array.from(reliable),num=new Float32Array(p);
+ for(let j=0;j<p;j++)num[j]=idx[j]*trust[j];
+ const sm=box(num,w,h,r),den=box(trust,w,h,r);
+ for(let j=0;j<p;j++)if(!trust[j]&&den[j]>1e-6)idx[j]=sm[j]/den[j];
+ // Bilateral refinement uses a fixed stencil; confident discontinuities remain locked.
+ const out=idx.slice(),step=Math.max(1,Math.round(r/2));
+ for(let y=0;y<h;y++)for(let x=0;x<w;x++){
+  const j=y*w+x;let sum=0,weight=0;
+  for(let dy=-2;dy<=2;dy++)for(let dx=-2;dx<=2;dx++){
+   const xx=clamp(x+dx*step,0,w-1),yy=clamp(y+dy*step,0,h-1),k=yy*w+xx;
+   const dg=guide[k]-guide[j],dz=idx[k]-idx[j];
+   const t=Math.exp(-.35*(dx*dx+dy*dy)-dg*dg/.0018)*(trust[k]||.03)*(trust[j]?Math.exp(-dz*dz/2):1);
+   sum+=idx[k]*t;weight+=t;
+  }
+  if(weight)out[j]=trust[j]?idx[j]*.75+.25*sum/weight:sum/weight;
+ }
+ return out;
+}
+function fuseTile(frames,w,h,opt){
+ const n=frames.length,p=w*h,floor=Math.max(0,opt.focusFloor||0)/255;
+ const scores=focusScores(frames,w,h,opt),mx=new Float32Array(p),guide=new Float32Array(p),winner=new Uint16Array(p),conf=new Uint8Array(p),reliable=new Uint8Array(p),valid=new Uint8Array(p);
+ for(let j=0;j<p;j++){
+  let best=-1,second=0,win=0;
+  for(let k=0;k<n;k++){let v=frames[k].valid[j]?scores[k][j]:-1;if(v>best){second=Math.max(0,best);best=v;win=k;}else second=Math.max(second,v);}
+  winner[j]=win;valid[j]=best>=0?1:0;mx[j]=Math.max(0,best);guide[j]=frames[win].Y[j];
+  const separation=Math.max(0,best-second)/(best+floor+1e-8),strength=clamp((best-floor)/(best+floor+1e-8),0,1);
+  conf[j]=Math.round(255*separation*strength);reliable[j]=best>floor&&separation>opt.confidenceMin?1:0;
+ }
+ cleanLabels(winner,reliable,w,h,opt.islandSize);
+ for(let j=0;j<p;j++)if(!reliable[j])conf[j]=0;
+ const surface=opt.method==='natural'||opt.method==='interpolated'?depthSurface(winner,reliable,guide,w,h,opt):null,sum=new Float32Array(p),guideStats=opt.smooth>0?guidedGuide(guide,w,h,opt.smooth):null;
+ const weights=frames.map((f,k)=>{
+  const a=new Float32Array(p);
+  for(let j=0;j<p;j++){
+   if(!f.valid[j])continue;
+   // Textureless areas use a bounded local depth estimate; where no focus exists, use equal weights.
+   if(mx[j]<=floor)a[j]=1;
+   else if(opt.method==='natural')a[j]=Math.round(surface[j])===k?1:0;
+   else a[j]=Math.exp(opt.selectivity*(Math.max(0,scores[k][j]-floor)-Math.max(0,mx[j]-floor))/(mx[j]+floor+1e-8));
+  }
+  if(opt.smooth>0)guided(a,guide,w,h,opt.smooth,.0005,guideStats);
+  for(let j=0;j<p;j++){a[j]=Math.max(0,a[j])*f.valid[j];sum[j]+=a[j];}return a;
+ });
+ for(let j=0;j<p;j++)if(valid[j]&&sum[j]<1e-12){weights[winner[j]][j]=1;sum[j]=1;}
+ for(let k=0;k<n;k++)for(let j=0;j<p;j++)weights[k][j]/=sum[j]||1;
+ const natural=[new Float32Array(p),new Float32Array(p),new Float32Array(p)],depth=new Float32Array(p);
+ for(let j=0;j<p;j++){let win=0,best=-1;for(let k=0;k<n;k++){if(weights[k][j]>best){win=k;best=weights[k][j];}for(let c=0;c<3;c++)natural[c][j]+=frames[k].channels[c][j]*weights[k][j];}depth[j]=valid[j]?win:-1;}
+ let result=natural;
+ if(opt.method==='interpolated'){
+  result=natural.map(()=>new Float32Array(p));
+  for(let j=0;j<p;j++){
+   const win=winner[j];let z=surface[j];
+   if(reliable[j]&&win>0&&win<n-1){
+    const a=Math.log(scores[win-1][j]+1e-8),b=Math.log(scores[win][j]+1e-8),c=Math.log(scores[win+1][j]+1e-8),curvature=a-2*b+c;
+    if(curvature< -1e-5)z=win+clamp(.5*(a-c)/curvature,-.5,.5);
+   }
+   z=clamp(z,0,n-1);let lo=Math.floor(z),hi=Math.min(n-1,lo+1),t=z-lo;
+   if(!frames[lo].valid[j]||!frames[hi].valid[j]){lo=hi=win;t=0;z=win;}
+   for(let c=0;c<3;c++)result[c][j]=(1-t)*frames[lo].channels[c][j]+t*frames[hi].channels[c][j];
+   depth[j]=valid[j]?z:-1;
+  }
+ }
+ if(opt.method==='detail'||opt.method==='maximum'){
+  const shape=pyramid(natural[0],w,h,opt.levels),L=shape.length;
+  const acc=shape.map(q=>[new Float32Array(q.w*q.h),new Float32Array(q.w*q.h),new Float32Array(q.w*q.h)]),den=shape.map(q=>new Float32Array(q.w*q.h));
+  const best=shape.map(q=>new Float32Array(q.w*q.h));
+  // Pass 1 supplies local maxima used to normalize energy: selective soft weights remain numerically stable.
+  function layers(f){const cp=f.channels.map(a=>pyramid(a,w,h,L)),vp=pyramid(Float32Array.from(f.valid),w,h,L);return {cp,vp};}
+  function band(cp,l,q){return cp.map(ch=>{const z=up(ch[l+1].a,ch[l+1].w,ch[l+1].h,q.w,q.h);for(let j=0;j<z.length;j++)z[j]=ch[l].a[j]-z[j];return z;});}
+  function energy(lap,q){const e=new Float32Array(q.w*q.h);for(let j=0;j<e.length;j++)e[j]=.2126*Math.abs(lap[0][j])+.7152*Math.abs(lap[1][j])+.0722*Math.abs(lap[2][j]);return box(e,q.w,q.h,1);}
+  const layerCache=opt.method==='detail'?frames.map(layers):null;
+  if(layerCache)for(const {cp,vp} of layerCache)for(let l=0;l<L-1;l++){const q=shape[l],e=energy(band(cp,l,q),q);for(let j=0;j<e.length;j++)if(vp[l].a[j]>.999)best[l][j]=Math.max(best[l][j],e[j]);}
+  for(let k=0;k<n;k++){
+   const {cp,vp}=layerCache?layerCache[k]:layers(frames[k]);
+   for(let l=0;l<L-1;l++){
+    const q=shape[l],lap=band(cp,l,q),e=energy(lap,q),nf=floor/(1+l);
+    for(let j=0;j<e.length;j++){
+     if(vp[l].a[j]<.999)continue;
+     if(opt.method==='maximum'){
+      if(e[j]>best[l][j]||den[l][j]===0){best[l][j]=e[j];den[l][j]=1;for(let c=0;c<3;c++)acc[l][c][j]=lap[c][j];}
+     }else{
+      const wt=Math.exp(Math.min(0,opt.selectivity*(e[j]-best[l][j])/(best[l][j]+nf+1e-8)));
+      den[l][j]+=wt;for(let c=0;c<3;c++)acc[l][c][j]+=lap[c][j]*wt;
+     }
+    }
+   }
+  }
+  result=natural.map((a,c)=>{
+   const np=pyramid(a,w,h,L);let out=np[L-1].a;
+   for(let l=L-2;l>=0;l--){const q=shape[l],u=up(np[l+1].a,np[l+1].w,np[l+1].h,q.w,q.h);out=up(out,np[l+1].w,np[l+1].h,q.w,q.h);
+    for(let j=0;j<out.length;j++){
+     const fallback=np[l].a[j]-u[j],detail=den[l][j]?acc[l][c][j]/den[l][j]:fallback;
+     const signal=opt.method==='maximum'?best[l][j]:Math.max(best[l][j],0),noise=floor/(l+1),reliability=signal/(signal+noise+1e-8);
+     out[j]+=fallback+(detail-fallback)*reliability;
+    }
+   }
+   for(let j=0;j<p;j++)out[j]=a[j]+opt.detailStrength*(out[j]-a[j]);return out;
+  });
+ }
+ const rgba=new Uint8ClampedArray(p*4);
+ for(let j=0;j<p;j++){
+  for(let c=0;c<3;c++){
+   let v=result[c][j];
+   if(opt.limitHalo&&valid[j]){let lo=1,hi=0;for(let k=0;k<n;k++)if(frames[k].valid[j]){lo=Math.min(lo,frames[k].channels[c][j]);hi=Math.max(hi,frames[k].channels[c][j]);}v=clamp(v,lo,hi);}
+   v=clamp(Number.isFinite(v)?v:0,0,1);rgba[j*4+c]=Math.round(255*(v<=.0031308?12.92*v:1.055*v**(1/2.4)-.055));
+  }
+  rgba[j*4+3]=valid[j]?255:0;
+ }
+ return {rgba,depth,conf};
+}
+
+// Affine similarity maps reference coordinates to source coordinates: [a,b,tx,ty].
+const identity=()=>[1,0,0,0];
+function compose(T,U){return [T[0]*U[0]-T[1]*U[1],T[1]*U[0]+T[0]*U[1],T[0]*U[2]-T[1]*U[3]+T[2],T[1]*U[2]+T[0]*U[3]+T[3]];}
+function invert(T){let d=T[0]*T[0]+T[1]*T[1],a=T[0]/d,b=-T[1]/d;return [a,b,-a*T[2]+b*T[3],-b*T[2]-a*T[3]];}
+function transform(T,x,y){return [T[0]*x-T[1]*y+T[2],T[1]*x+T[0]*y+T[3]];}
+function fitPair(ref,src,w,h,opt){
+ // Coarse-to-fine normalized correlation. Parameters are retained in full descriptor coordinates.
+ const build=a=>{const list=[{a:gauss(a,w,h,.8),w,h}];while(list.at(-1).w>180&&list.at(-1).h>100){const q=list.at(-1);list.push(down(q.a,q.w,q.h));}return list.reverse();};
+ const rp=build(ref),sp=build(src);let p=[0,0,0,0],finalScore=null;
+ const bound=opt.maxShift*w/opt.originalWidth;
+ for(let level=0;level<rp.length;level++){
+  const a=rp[level],b=sp[level],sx=a.w/w,sy=a.h/h,step=Math.max(1,Math.floor(Math.sqrt(a.w*a.h/10000))),points=[];
+  for(let y=5;y<a.h-5;y+=step)for(let x=5;x<a.w-5;x+=step)points.push([x,y,a.a[y*a.w+x]]);
+  function score(q){let aa=Math.exp(q[2])*Math.cos(q[3]),bb=Math.exp(q[2])*Math.sin(q[3]),sa=0,sb=0,saa=0,sbb=0,sab=0,count=0;
+   for(const [x,y,va] of points){const fx=x/sx-w/2,fy=y/sy-h/2,xx=(aa*fx-bb*fy+w/2+q[0])*sx,yy=(bb*fx+aa*fy+h/2+q[1])*sy;
+    if(xx<2||yy<2||xx>b.w-3||yy>b.h-3)continue;const vb=sample(b.a,b.w,b.h,xx,yy);sa+=va;sb+=vb;saa+=va*va;sbb+=vb*vb;sab+=va*vb;count++;
+   }
+   if(count<Math.max(25,.7*points.length))return -1;
+   const va=saa-sa*sa/count,vb=sbb-sb*sb/count;if(va<1e-9||vb<1e-9)return 0;
+   return (sab-sa*sb/count)/Math.sqrt(va*vb);
+  }
+  let best=score(p);
+  const increments=level===0?[4,2,1,.5]:[1,.5,.2,.08,.03];
+  for(const d of increments)for(let rep=0;rep<32;rep++){
+   let changed=false;const ds=[d/sx,d/sy,opt.scale?d/a.w*.5:0,opt.rotation?d/a.w*.4:0];
+   for(let axis=0;axis<4;axis++)if(ds[axis]){let chosen=p,bs=best;for(const sign of [-1,1]){
+    const q=p.slice();q[axis]+=sign*ds[axis];if(Math.abs(q[0])>bound||Math.abs(q[1])>bound||Math.abs(q[2])>.04||Math.abs(q[3])>.035)continue;
+    const s=score(q);if(s>bs+1e-10){bs=s;chosen=q;}
+   }if(chosen!==p){p=chosen;best=bs;changed=true;}}
+   if(!changed)break;
+  }
+  finalScore=score;
+ }
+ const before=finalScore([0,0,0,0]),after=finalScore(p),sc=Math.exp(p[2]),a=sc*Math.cos(p[3]),b=sc*Math.sin(p[3]);
+ const accepted=after>.75&&after-before>(opt.alignGain??.0002);
+ return {T:accepted?[a,b,w/2+p[0]-a*w/2+b*h/2,h/2+p[1]-b*w/2-a*h/2]:identity(),before,after,accepted,shift:p.slice(0,2),scale:sc,angle:p[3],reason:accepted?'correction':after<.75?'weak-match':'negligible-gain'};
+}
+function exposureRatio(ref,src,w,h,T){
+ const ratios=[],a=gauss(ref,w,h,2),b=gauss(src,w,h,2);
+ const step=Math.max(2,Math.floor(Math.sqrt(w*h/8000)));
+ for(let y=5;y<h-5;y+=step)for(let x=5;x<w-5;x+=step){const [xx,yy]=transform(T,x,y);if(xx<3||yy<3||xx>w-4||yy>h-4)continue;const u=a[y*w+x],v=sample(b,w,h,xx,yy);if(u>.02&&v>.02&&u<.85&&v<.85)ratios.push(u/v);}
+ ratios.sort((a,b)=>a-b);return ratios.length>=50?clamp(ratios[Math.floor(ratios.length/2)],.5,2):1;
+}
+
+function commonCrop(Ts,w,h){
+ let rect=[2,2,w-2,h-2];
+ function penalty(r){let [l,t,right,bottom]=r,total=0;for(let [x,y] of [[l,t],[right-1,t],[l,bottom-1],[right-1,bottom-1]])for(let T of Ts){let q=transform(T,x,y);total+=Math.max(0,1-q[0])**2+Math.max(0,q[0]-(w-2.001))**2+Math.max(0,1-q[1])**2+Math.max(0,q[1]-(h-2.001))**2;}return total;}
+ for(let iter=0;iter<w+h;iter++){let cost=penalty(rect);if(cost<1e-9)break;let best=cost,next=null;for(let k=0;k<4;k++){let candidate=rect.slice();candidate[k]+=k<2?1:-1;if(candidate[2]-candidate[0]<32||candidate[3]-candidate[1]<32)continue;let value=penalty(candidate);if(value<best){best=value;next=candidate;}}if(!next)throw Error('Não foi possível encontrar uma área comum segura. Verifique o alinhamento.');rect=next;}
+ return {x:rect[0],y:rect[1],w:rect[2]-rect[0],h:rect[3]-rect[1]};
+}
+function haloFor(opt){
+ const focus=Math.ceil(3*opt.sigma)+(opt.spread||1)+opt.focusRadius+2*opt.smooth;
+ if(opt.method==='detail'||opt.method==='maximum')return focus+8*(2**(opt.levels-1)-1)+16;
+ return focus+3*(opt.depthSmooth||0)+(opt.islandSize||0)+16;
+}
+
+/* Browser orchestration. Files remain on the user's computer. */
+let waitAck=null;
+async function ack(){return new Promise(resolve=>{waitAck=resolve;});}
+const notify=(value,stage)=>postMessage({type:'progress',value,stage});
+const bitmapCache=new Map();let bitmapCacheLimit=0,bitmapDecodes=0,bitmapCacheHits=0;
+let bandY0=0,bandCache=new Map(),bandRows=null,useBand=true,poolFiles=null;
+/* Recorta e guarda a faixa horizontal de linhas [rows.from, rows.to) para todas as
+   origens. A margem cobre a moldura do bloco e o deslocamento maximo do alinhamento. */
+async function setupBand(plan,filesList,rows){
+ bandRows=null;
+ if(!rows||!plan)return;
+ const {crop,core,halo,scale,inputScale,W,H,maxShift}=plan;
+ const pixelScale=scale/inputScale;
+ const yTop=crop.y+rows.from*core-halo, yBot=crop.y+rows.to*core+halo;
+ const margin=Math.ceil(64+(maxShift||0)*scale);
+ const sw=Math.round(W*inputScale), sh=Math.round(H*inputScale);
+ const sy0=Math.max(0,Math.floor(yTop/pixelScale)-margin);
+ const sy1=Math.min(sh,Math.ceil(yBot/pixelScale)+margin);
+ if(sy1-sy0>=sh)return;                 // faixa cobre tudo: nao ha o que economizar
+ await prepareBand(filesList,sy0,sy1,sw);
+ bandRows=rows;
+}
+/* Cache por FAIXA. Antes o cache guardava a imagem INTEIRA, e uma origem de 8,3 MP
+   ocupa 33 MB em bitmap; com o orcamento dividido entre as vias so' cabia uma, e
+   cada bloco redecodificava as demais. Medido pelo proprio app: 2524 decodificacoes
+   com 4 processos e 7% de aproveitamento, cerca de 40% do tempo total.
+   Guardando so' a faixa horizontal que a via vai processar, as 15 origens cabem, e
+   cada via decodifica cada arquivo uma unica vez. */
+async function prepareBand(files,sy0,sy1,sw){
+ releaseBand();bandY0=sy0;
+ const h=Math.max(1,sy1-sy0);
+ for(let i=0;i<files.length;i++){
+  const bmp=await createImageBitmap(await toBitmapSource(files[i]),0,sy0,sw,h);
+  bitmapDecodes++;bandCache.set(files[i],bmp);
+ }
+}
+function releaseBand(){for(const b of bandCache.values())b.close();bandCache.clear();}
+async function acquireBitmap(file){
+ if(useBand&&bandCache.has(file)){bitmapCacheHits++;return {bmp:bandCache.get(file),oy:bandY0,release(){}};}
+ if(bitmapCache.has(file)){bitmapCacheHits++;return {bmp:bitmapCache.get(file),oy:0,release(){}};}
+ const bmp=await loadBitmap(file);bitmapDecodes++;
+ // Pin a bounded subset, instead of an LRU that would thrash on sequential stacks.
+ if(bitmapCache.size<bitmapCacheLimit){bitmapCache.set(file,bmp);return {bmp,oy:0,release(){}};}
+ return {bmp,oy:0,release(){bmp.close();}};
+}
+function releaseBitmapCache(){for(const bmp of bitmapCache.values())bmp.close();bitmapCache.clear();releaseBand();}
+// TIFF ja' vem convertido em PNG pelo preparo; os demais formatos vao direto
+async function toBitmapSource(file){return file;}
+async function descriptor(file,w,h){const bmp=await loadBitmap(file),c=new OffscreenCanvas(w,h),ctx=c.getContext('2d',{willReadFrequently:true});try{ctx.drawImage(bmp,0,0,w,h);}finally{bmp.close();}const d=ctx.getImageData(0,0,w,h).data,Y=new Float32Array(w*h);for(let i=0;i<Y.length;i++)Y[i]=.2126*lut[d[i*4]]+.7152*lut[d[i*4+1]]+.0722*lut[d[i*4+2]];return Y;}
+async function alignedTile(file,T,scale,region,inputScale=1){
+ const {bmp,oy,release}=await acquireBitmap(file),c=new OffscreenCanvas(region.w,region.h),ctx=c.getContext('2d',{willReadFrequently:true}),I=invert(T);
+ const pixelScale=scale/inputScale;
+ try{ctx.imageSmoothingEnabled=!(Math.abs(pixelScale*I[0]-1)<1e-10&&Math.abs(I[1])<1e-10&&Math.abs(scale*I[2]-Math.round(scale*I[2]))<1e-10&&Math.abs(scale*I[3]-Math.round(scale*I[3]))<1e-10);ctx.imageSmoothingQuality='high';ctx.setTransform(pixelScale*I[0],pixelScale*I[1],-pixelScale*I[1],pixelScale*I[0],scale*I[2]-region.x,scale*I[3]-region.y);ctx.drawImage(bmp,0,oy||0);}finally{release();}
+ const data=ctx.getImageData(0,0,region.w,region.h).data;const f=linearFrame(data,region.w,region.h),rw=region.w,rh=region.h;
+ const known=f.valid.slice();
+ function copy(j,k){if(!known[j]&&known[k]){for(let c=0;c<3;c++)f.channels[c][j]=f.channels[c][k];f.Y[j]=f.Y[k];known[j]=1;}}
+ for(let y=0;y<rh;y++)for(let x=1;x<rw;x++)copy(y*rw+x,y*rw+x-1);
+ for(let y=0;y<rh;y++)for(let x=rw-2;x>=0;x--)copy(y*rw+x,y*rw+x+1);
+ for(let y=1;y<rh;y++)for(let x=0;x<rw;x++)copy(y*rw+x,(y-1)*rw+x);
+ for(let y=rh-2;y>=0;y--)for(let x=0;x<rw;x++)copy(y*rw+x,(y+1)*rw+x);
+ return f;
+}
+async function run(job){
+ const {files,W,H,opt}=job,n=files.length,ref=Math.floor(n/2),start=performance.now(),source=files,alignmentSource=job.alignmentFiles||files,inputScale=job.inputScale||1;let Ts=job.alignment?.Ts,diagnostics=job.alignment?.diagnostics||[];
+ const cacheBudget=Math.min(192,opt.memory/2)*1024*1024;
+ bitmapCacheLimit=Math.min(n,Math.max(0,Math.floor(cacheBudget/(W*H*inputScale*inputScale*4))));bitmapDecodes=0;bitmapCacheHits=0;
+ // TIFFs são normalizados para PNG uma vez na importação, em um worker dedicado.
+ // O worker recebe essa cópia já pronta; assim trocar método, gerar prévia ou
+ // imagem final não volta a decodificar os TIFFs.
+ if(!Ts){Ts=Array.from({length:n},identity);
+  if(opt.align||opt.balance){let dw=Math.round(W*Math.min(1,1024/Math.max(W,H))),dh=Math.round(H*dw/W),desc=[];
+   for(let i=0;i<n;i++){notify(2+8*i/n,`Preparando alinhamento ${i+1} de ${n}`);desc.push(await descriptor(alignmentSource[i],dw,dh));}
+   for(let dir of [1,-1])for(let i=ref+dir;i>=0&&i<n;i+=dir){let prev=i-dir,fit=opt.align?fitPair(desc[prev],desc[i],dw,dh,{...opt,originalWidth:W}):{T:identity(),before:1,after:1,accepted:false,reason:'disabled'};Ts[i]=compose(fit.T,Ts[prev]);const gain=opt.balance?exposureRatio(desc[prev],desc[i],dw,dh,fit.T):1;diagnostics.push({image:i,reference:prev,...fit,exposureRatio:gain});notify(10+10*diagnostics.length/Math.max(1,n-1),`Alinhando ${(job.names||[])[i]||files[i].name||'imagem '+(i+1)}`);}
+   const factor=W/dw;Ts=Ts.map(T=>[T[0],T[1],T[2]*factor,T[3]*factor]);
+  }
+ }
+ const exposureGains=Array(n).fill(1);for(const d of diagnostics)exposureGains[d.image]=clamp(exposureGains[d.reference]*(d.exposureRatio||1),.25,4);
+ postMessage({type:'alignment',Ts,diagnostics,ref});
+ const scale=job.target/W,sw=Math.round(W*scale),sh=Math.round(H*scale),ST=Ts.map(T=>[T[0],T[1],T[2]*scale,T[3]*scale]);
+ const crop=opt.crop&&Ts.some(T=>T.some((v,i)=>Math.abs(v-identity()[i])>1e-9))?commonCrop(ST,sw,sh):{x:0,y:0,w:sw,h:sh};
+ // Parameters are stated at a 2048 px long edge; adapt physical support to output resolution.
+ const factor=Math.max(sw,sh)/2048,eff={...opt,sigma:opt.sigma*factor,spread:Math.max(1,Math.round(opt.spread*factor)),islandSize:Math.max(0,Math.round(opt.islandSize*factor*factor)),focusRadius:Math.max(1,Math.round(opt.focusRadius*factor)),smooth:Math.max(0,Math.round(opt.smooth*factor)),depthSmooth:Math.max(1,Math.round(opt.depthSmooth*factor))};
+ let halo=haloFor(eff),grid=2**(eff.levels-1),budget=opt.memory*1024*1024,bytesPerPixel=n*(opt.method==='detail'?40:32)+250;
+ let core=Math.floor((Math.sqrt(Math.max(1,budget)/bytesPerPixel)-2*halo)/grid)*grid;core=clamp(core,32,640);if((core+2*halo+2*grid)**2*bytesPerPixel>budget*1.25)throw Error('Memória insuficiente para estes níveis e número de imagens. Reduza os níveis de detalhe, a resolução ou aumente o orçamento.');
+ const nx=Math.ceil(crop.w/core),ny=Math.ceil(crop.h/core),total=nx*ny;
+ postMessage({type:'begin',width:crop.w,height:crop.h,crop,scale,tiles:total,core,halo,eff});
+ const ctx={source,Ts,scale,eff,exposureGains,crop,core,halo,grid,nx,ny,total,n,inputScale,opt};
+ if(job.planOnly){
+  // Modo pool: o preparo (alinhamento, recorte, grade) e' inerentemente sequencial
+  // e roda uma vez so'. Os blocos, que sao independentes, vao para os Workers do pool.
+  releaseBitmapCache();
+  postMessage({type:'plan',plan:{Ts,scale,eff,exposureGains,crop,core,halo,grid,nx,ny,total,n,inputScale,W,H,maxShift:opt.maxShift||0},
+               seconds:(performance.now()-start)/1000,diagnostics,ref});
+  return;
+ }
+ for(let idx=0;idx<total;idx++){const out=await processTile(idx,ctx);
+  const ready=ack();postMessage({type:'tile',...out},[out.rgba.buffer,out.depth.buffer,out.conf.buffer]);await ready;}
+ const performanceStats0={bitmapDecodes,bitmapCacheHits,bitmapCacheFrames:bitmapCache.size,bitmapCacheBudgetMiB:cacheBudget/1048576};
+ releaseBitmapCache();postMessage({type:'done',seconds:(performance.now()-start)/1000,Ts,diagnostics,crop,scale,eff,ref,exposureGains,performanceStats:performanceStats0});
+}
+/* Processa UM bloco. Extraido do laco para que o mesmo codigo sirva ao caminho de
+   worker unico e ao pool paralelo -- nao ha duas implementacoes para divergirem. */
+async function processTile(idx,c){
+ const {source,Ts,scale,eff,exposureGains,crop,core,halo,grid,nx,total,n,inputScale,opt}=c;
+ const ty=Math.floor(idx/nx),tx=idx%nx;
+ {
+  let x=tx*core,y=ty*core,cw=Math.min(core,crop.w-x),ch=Math.min(core,crop.h-y),gx=crop.x+x,gy=crop.y+y;
+  let rx=Math.floor((gx-halo)/grid)*grid,ry=Math.floor((gy-halo)/grid)*grid,rw=Math.ceil((gx+cw+halo-rx)/grid)*grid,rh=Math.ceil((gy+ch+halo-ry)/grid)*grid,region={x:rx,y:ry,w:rw,h:rh};
+  let frames=[];for(let i=0;i<n;i++){notify(20+77*(idx+(i/n)*.65)/total,`Bloco ${idx+1}/${total} · imagem ${i+1}/${n}`);const f=await alignedTile(source[i],Ts[i],scale,region,inputScale),gain=exposureGains[i];
+   if(opt.balance&&gain!==1)for(let j=0;j<f.Y.length;j++){for(let c=0;c<3;c++)f.channels[c][j]=clamp(f.channels[c][j]*gain,0,1);f.Y[j]=.2126*f.channels[0][j]+.7152*f.channels[1][j]+.0722*f.channels[2][j];}frames.push(f);}
+  notify(20+77*(idx+.7)/total,`Combinando bloco ${idx+1}/${total}`);
+  let out=fuseTile(frames,rw,rh,eff);frames=null;
+  let rgba=new Uint8ClampedArray(cw*ch*4),depth=new Float32Array(cw*ch),conf=new Uint8Array(cw*ch),ox=gx-rx,oy=gy-ry;
+  for(let row=0;row<ch;row++){let from=(oy+row)*rw+ox,to=row*cw;rgba.set(out.rgba.subarray(from*4,(from+cw)*4),to*4);depth.set(out.depth.subarray(from,from+cw),to);conf.set(out.conf.subarray(from,from+cw),to);}out=null;
+  return {x,y,width:cw,height:ch,rgba,depth,conf};
+ }
+}
+let tileCtx=null;
+self.onmessage=e=>{
+ const d=e.data;
+ if(d.type==='ack'){if(waitAck){waitAck();waitAck=null;}return;}
+ if(d.type==='run')return void run(d.job).catch(error=>{releaseBitmapCache();postMessage({type:'error',message:error.message||String(error)});});
+ if(d.type==='reband'){
+  (async()=>{try{await setupBand(tileCtx,poolFiles,d.rows);}catch(err){}
+   postMessage({type:'contextReady'});})();
+  return;
+ }
+ if(d.type==='context'){
+  // Cada Worker do pool recebe o plano uma unica vez, junto com as fontes das imagens.
+  tileCtx={...d.plan,source:d.files,opt:d.opt};
+  bitmapCacheLimit=d.bitmapCacheLimit|0;bitmapDecodes=0;bitmapCacheHits=0;
+  poolFiles=d.files;
+  (async()=>{
+   try{await setupBand(d.plan,d.files,d.rows);}
+   catch(err){/* sem faixa, cai no caminho antigo de imagem inteira */}
+   postMessage({type:'contextReady'});
+  })();
+  return;
+ }
+ if(d.type==='tileRequest'){
+  // Um bloco roubado de outra via cai fora da faixa em cache: naquele caso o cache
+  // de faixa e' ignorado e a imagem inteira e' decodificada.
+  const row=Math.floor(d.index/tileCtx.nx);
+  useBand=!bandRows||(row>=bandRows.from&&row<bandRows.to);
+  processTile(d.index,tileCtx).then(out=>{
+   postMessage({type:'tileResult',index:d.index,decodes:bitmapDecodes,cacheHits:bitmapCacheHits,...out},[out.rgba.buffer,out.depth.buffer,out.conf.buffer]);
+  }).catch(error=>postMessage({type:'error',message:error.message||String(error)}));
+  return;
+ }
+ if(d.type==='release'){releaseBitmapCache();tileCtx=null;return;}
+};
+
+</script>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+new Function($('tiffSource').textContent+'\nself.decodeTIFF=decodeTIFF;self.loadBitmap=loadBitmap;self.tiffIsTiff=tiffIsTiff;')();
+const defaults={colorOn:false,whitePoint:210,chromaGain:1.25,fringe:.7,multiScale:false,method:'maximum',smooth:3,selectivity:12,align:true,scale:true,crop:true,balance:false,rotation:false,search:4,metric:'sml',sigma:.6,spread:1,focusRadius:2,focusFloor:.4,confidenceMin:.03,islandSize:5,levels:4,detailStrength:1,limitHalo:true,depthSmooth:4,alignGain:.0002,detailGain:1,baseGain:1,brightness:1,sharpen:0,sharpenRadius:1,sharpenThreshold:.4,stretch:false,stretchDelta:5,protectHighlights:true,memory:640,previewSize:900,resolution:'1',quality:95};
+const APP_VERSION='1.1';
+const POST_KEYS=['sharpen','sharpenRadius','sharpenThreshold','detailGain','baseGain','brightness','stretch','stretchDelta','protectHighlights','colorOn','whitePoint','chromaGain','fringe'];
+const OUTPUT_KEYS=['memory','previewSize','resolution','quality'];
+const FUSION_KEYS=Object.keys(defaults).filter(k=>!POST_KEYS.includes(k)&&!OUTPUT_KEYS.includes(k));
+const cloneRecord=value=>value==null?value:JSON.parse(JSON.stringify(value));
+const resultUID=()=>globalThis.crypto?.randomUUID?.()||Date.now().toString(36)+'-'+Math.random().toString(36).slice(2);
+let finishWorker=null,finishReject=null,aiOperation=null;
+let files=[],results=[],selected=null,pending=null,worker=null,alignment=null,alignKey='',busy=false,loading=false,view='result',sourceCanvas=null,sourceKey='',sourceToken=0,zoom=1,panX=0,panY=0,split=.5,dirty=false,seq=0,queue=[],timer=null,startTime=0;
+const canvas=$('display'),ctx=canvas.getContext('2d'),viewport=$('viewport'),pointers=new Map();let gesture=null;
+const methodNames={natural:'Natural · mapa',detail:'Pirâmide ponderada',maximum:'Pirâmide máxima',interpolated:'Interpolado'};
+function options(){const o={};for(const key of Object.keys(defaults)){let el=$(key);o[key]=el.type==='checkbox'?el.checked:el.type==='range'||el.type==='number'?Number(el.value):el.value;}o.smooth=Number(o.smooth);for(const k of ['spread','focusFloor','confidenceMin','islandSize','sharpenThreshold'])o[k]=Number(o[k]);o.depthSmooth=Number(o.depthSmooth);o.detailGain=Number(o.detailGain);o.baseGain=Number(o.baseGain);o.brightness=Number(o.brightness);o.alignGain=Number(o.alignGain);o.sharpen=Number(o.sharpen);o.sharpenRadius=Number(o.sharpenRadius);o.stretchDelta=Number(o.stretchDelta);o.selectivity=Number(o.selectivity);o.sigma=Number(o.sigma);o.levels=Number(o.levels);o.detailStrength=Number(o.detailStrength);o.memory=Number(o.memory);o.focusRadius=Number(o.focusRadius);o.maxShift=(files[0]?.w||2048)*Number(o.search)/100;return o;}
+function applySettings(values){for(const [k,v] of Object.entries({...defaults,...values})){const e=$(k);if(!e)continue;if(e.type==='checkbox')e.checked=!!v;else e.value=String(v);}updateLabels();}
+function persist(){try{localStorage.setItem('focolab.settings.v2',JSON.stringify(options()));}catch{}}
+function updateLabels(){for(const k of ['smooth','selectivity','sigma','detailStrength','quality','sharpen','sharpenRadius','depthSmooth','detailGain','baseGain','brightness','focusRadius','focusFloor','sharpenThreshold'])$(k+'Val').value=$(k).value;$('customLabel').classList.toggle('hidden',$('resolution').value!=='custom');$('qualityLabel').classList.toggle('hidden',$('format').value!=='image/jpeg');$('methodHint').textContent={natural:'Mapa de camadas regularizado; transições guiadas pelas bordas. Inspecione cruzamentos.',detail:'Média de detalhes por escala com pesos de foco e rejeição de respostas fracas.',maximum:'Seleciona os detalhes de maior energia em cada escala. Inspecione ruído, halos e reflexos.',interpolated:'Estima o pico de foco entre planos adjacentes. Exige ordem correta e passos aproximadamente regulares.'}[$('method').value];estimate();}
+/* Reversible post-fusion enhancement. */
+function boxBlur1D(src,dst,w,h,radius,vertical){
+ const span=2*radius+1,inv=1/span;
+ for(let line=0;line<(vertical?w:h);line++){
+  const step=vertical?w:1,base=vertical?line:line*w,len=vertical?h:w;
+  let sum=0;
+  for(let i=-radius;i<=radius;i++)sum+=src[base+clamp(i,0,len-1)*step];
+  for(let i=0;i<len;i++){
+   dst[base+i*step]=sum*inv;
+   sum+=src[base+clamp(i+radius+1,0,len-1)*step]-src[base+clamp(i-radius,0,len-1)*step];
+  }
+ }
+}
+function blurPlane(plane,w,h,sigma){
+ // tres passagens de caixa aproximam uma gaussiana com erro pequeno e custo linear
+ const radius=Math.max(1,Math.round(sigma*1.13)),tmp=new Float32Array(plane.length);
+ for(let pass=0;pass<3;pass++){boxBlur1D(plane,tmp,w,h,radius,false);boxBlur1D(tmp,plane,w,h,radius,true);}
+ return plane;
+}
+function levelsParams(data,w,h,delta,protect){
+ // Ponto preto e branco a partir de um histograma unico somando R, G e B, como no
+ // CombineZP. O mesmo ganho vai nos tres canais: alem do contraste, isso aumenta a
+ // distancia entre canais, o que aparece como cor mais viva.
+ const hist=new Float64Array(256);let count=0;
+ for(let j=0;j<w*h;j++){
+  if(!data[j*4+3])continue;
+  hist[data[j*4]]++;hist[data[j*4+1]]++;hist[data[j*4+2]]++;count+=3;
+ }
+ if(!count)return {lo:0,factor:1};
+ const floor=count/3000+10;
+ let lo=0;for(let i=0;i<256;i++){if(hist[i]>floor){lo=i;break;}}
+ let hi=255;for(let i=255;i>=0;i--){if(hist[i]>0){hi=i;break;}}
+ lo+=delta/2;hi-=(delta+1)/2;
+ if(lo>delta)lo=delta;
+ if(protect){
+  // Nao deixa o esticamento estourar mais que meio por cento alem do que ja estava
+  // estourado. Sem isto, um fundo branco de papel satura grande parte do quadro.
+  const budget=hist[255]+.005*count;
+  let acc=0,safe=hi;
+  for(let i=255;i>=0;i--){acc+=hist[i];if(acc>budget){safe=i;break;}}
+  hi=Math.max(hi,safe);
+ }
+ if(hi<=lo)return {lo:0,factor:1};
+ return {lo,factor:255/(hi-lo)};
+}
+function applyLevels(data,w,h,p){
+ for(let j=0;j<w*h;j++){
+  if(!data[j*4+3])continue;
+  for(let c=0;c<3;c++)data[j*4+c]=clamp((data[j*4+c]-p.lo)*p.factor,0,255);
+ }
+}
+// All enhancement is reversible and runs after fusion, with common luminance gains in linear light.
+function finishPixels(data,w,h,opt,params){
+ const n=w*h,toLinear=v=>{v/=255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4;},toSrgb=v=>255*(v<=.0031308?12.92*v:1.055*v**(1/2.4)-.055);
+ const active=opt.sharpen>0||opt.detailGain!==1||opt.baseGain!==1||opt.brightness!==1||opt.stretch;
+ if(!active)return null;
+ const rgb=[new Float32Array(n),new Float32Array(n),new Float32Array(n)],Y=new Float32Array(n),valid=new Float32Array(n);
+ for(let j=0;j<n;j++){valid[j]=data[4*j+3]>250?1:0;for(let c=0;c<3;c++)rgb[c][j]=toLinear(data[4*j+c]);Y[j]=.2126*rgb[0][j]+.7152*rgb[1][j]+.0722*rgb[2][j];}
+ const scale=opt.outputScale||Math.max(w,h)/2048;
+ function blur(a,s){const v=Float32Array.from(a,(x,i)=>x*valid[i]),mask=valid.slice();blurPlane(v,w,h,s);blurPlane(mask,w,h,s);for(let j=0;j<n;j++)v[j]=mask[j]>1e-5?v[j]/mask[j]:a[j];return v;}
+ let target=Y.slice();
+ if(opt.detailGain!==1||opt.baseGain!==1){
+  const small=blur(Y,Math.max(.5,1.2*scale)),large=blur(Y,Math.max(.5,6*scale));
+  for(let j=0;j<n;j++)target[j]=large[j]*opt.baseGain+(small[j]-large[j])+(Y[j]-small[j])*opt.detailGain;
+ }
+ if(opt.sharpen>0){const smooth=blur(target,Math.max(.5,opt.sharpenRadius*scale));for(let j=0;j<n;j++){
+  const detail=target[j]-smooth[j],threshold=(opt.sharpenThreshold||0)/255;
+  const shrink=Math.abs(detail)<=threshold?0:Math.sign(detail)*(Math.abs(detail)-threshold);
+  target[j]+=opt.sharpen*shrink;
+ }}
+ for(let j=0;j<n;j++)if(valid[j]){
+  const t=Math.max(0,target[j]*(opt.brightness||1)),max=Math.max(rgb[0][j],rgb[1][j],rgb[2][j]);
+  // Bound a common multiplier, rather than clipping channels independently.
+  const gain=Y[j]>1e-8?Math.min(t/Y[j],max>0?1/max:1):1;
+  for(let c=0;c<3;c++)data[4*j+c]=Math.round(toSrgb(clamp(rgb[c][j]*gain,0,1)));
+ }
+ let p=params;if(opt.stretch&&!p)p=levelsParams(data,w,h,opt.stretchDelta,opt.protectHighlights);
+ if(opt.stretch&&p)applyLevels(data,w,h,p);
+ return p||null;
+}
+async function finishResult(r,opt){
+ if(r.ai)throw Error('Selecione o empilhamento de origem para ajustar acabamento e cor.');
+ const w=r.canvas.width,h=r.canvas.height,cx=r.canvas.getContext('2d',{willReadFrequently:true});
+ if(!r.fused)r.fused=cx.getImageData(0,0,w,h);
+ const config={sharpen:opt.sharpen,sharpenRadius:opt.sharpenRadius,sharpenThreshold:opt.sharpenThreshold,detailGain:opt.detailGain,baseGain:opt.baseGain,brightness:opt.brightness,stretch:opt.stretch,stretchDelta:opt.stretchDelta,protectHighlights:opt.protectHighlights,outputScale:Math.max(r.W,r.H)*r.scale/2048};
+ const cg=colorOptions(opt),postSettings=Object.fromEntries(POST_KEYS.map(k=>[k,opt[k]]));
+ const data=new Uint8ClampedArray(r.fused.data);
+ let result={data,levels:null};
+ if(config.sharpen||config.stretch||config.detailGain!==1||config.baseGain!==1||config.brightness!==1){
+  const source='const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));\n'+[boxBlur1D,blurPlane,levelsParams,applyLevels,finishPixels].map(f=>f.toString()).join('\n')+'\nself.onmessage=e=>{try{let {data,w,h,opt}=e.data;let levels=finishPixels(data,w,h,opt);self.postMessage({data,levels},[data.buffer]);}catch(e){self.postMessage({error:e.message});}};';
+  const url=URL.createObjectURL(new Blob([source],{type:'text/javascript'})),fw=new Worker(url);URL.revokeObjectURL(url);finishWorker=fw;
+  result=await new Promise((resolve,reject)=>{finishReject=reject;fw.onmessage=e=>e.data.error?reject(Error(e.data.error)):resolve(e.data);fw.onerror=e=>reject(Error(e.message));fw.postMessage({data,w,h,opt:config},[data.buffer]);}).finally(()=>{fw.terminate();if(finishWorker===fw){finishWorker=null;finishReject=null;}});
+ }
+ applyColorGrade(result.data,w,h,cg);
+ cx.putImageData(new ImageData(result.data,w,h),0,0);
+ r.levels=result.levels;r.finish=config;r.color=cg;r.postSettings=postSettings;
+ r.finishRevision=(r.finishRevision||0)+1;r.finishAppliedAt=new Date().toISOString();
+ r.baseSnapshot=null;r.fusedCanvas=null;
+}
+async function reapplyFinish(){return reapplyPost();}
+
+/* ---------- Receitas ----------
+   Nomeadas pelo resultado, nao pelo algoritmo. Cada uma declara o metodo que usa,
+   o que prioriza e o que sacrifica. Substituem o par "Ponto de partida" + "Metodo",
+   em que dois dos tres presets sobrescreviam o metodo em silencio. */
+const RECIPES={
+ balanced:{nome:'Equilibrada',metodo:'Pirâmide ponderada',
+  prioriza:'Bom detalhe com poucos artefatos. Ponto de partida para material desconhecido.',
+  sacrifica:'Não é a melhor em nenhum extremo.',
+  set:{method:'detail',spread:2,sigma:.8,focusRadius:2,focusFloor:.8,smooth:6,selectivity:12,
+       levels:'4',metric:'sml',multiScale:false,detailStrength:1,detailGain:1,baseGain:1,brightness:1}},
+ detail:{nome:'Detalhe máximo',metodo:'Pirâmide máxima',
+  prioriza:'Cerdas, pontuações e esculturação da cutícula.',
+  sacrifica:'Tolerância a ruído e a auréola nas bordas.',
+  set:{method:'maximum',spread:1,sigma:.5,focusRadius:1,focusFloor:.4,smooth:2,selectivity:20,
+       levels:'4',metric:'sml',multiScale:false,detailStrength:1,detailGain:1,baseGain:1,brightness:1}},
+ metallic:{nome:'Cutícula metálica',metodo:'Natural',
+  prioriza:'Ausência de artefato onde o reflexo especular se desloca entre planos.',
+  sacrifica:'Detalhe fino; o resultado sai mais macio.',
+  set:{method:'natural',spread:2,sigma:1,focusRadius:3,focusFloor:1,smooth:10,islandSize:24,
+       depthSmooth:8,metric:'sml',multiScale:false}},
+ noisy:{nome:'Série ruidosa',metodo:'Pirâmide ponderada com Tenengrad',
+  prioriza:'Robustez à granulação de ISO alto.',
+  sacrifica:'Textura mais fina, que é confundida com ruído.',
+  set:{method:'detail',metric:'tenengrad',spread:3,sigma:1.2,focusRadius:3,focusFloor:1.2,
+       smooth:8,selectivity:8,levels:'4',multiScale:false,detailStrength:1}},
+ smooth:{nome:'Relevo contínuo',metodo:'Interpolado',
+  prioriza:'Superfícies lisas, sem misturar contribuição desfocada de todos os planos.',
+  sacrifica:'Exige ordem correta e passos regulares entre os planos.',
+  set:{method:'interpolated',spread:2,sigma:.8,focusRadius:2,focusFloor:.8,islandSize:24,
+       depthSmooth:6,metric:'sml',multiScale:false}},
+ thin:{nome:'Estruturas finas',metodo:'Pirâmide ponderada com foco multiescala',
+  prioriza:'Antenas, cerdas e pernas escuras contra fundo claro.',
+  sacrifica:'Tempo: mede o foco em quatro escalas em vez de uma.',
+  set:{method:'detail',spread:1,sigma:.8,focusRadius:2,focusFloor:.8,smooth:6,selectivity:12,
+       levels:'4',metric:'sml',multiScale:true,detailStrength:1}},
+ custom:{nome:'Personalizada',metodo:'escolhido por você',
+  prioriza:'Controle total sobre cada parâmetro.',
+  sacrifica:'Nenhuma orientação; os ajustes são por sua conta.',set:null}
+};
+let recipeLock=false;
+const COMPARABLE=['balanced','detail','metallic','noisy','smooth','thin'];
+const COMPARE_MAX=5;
+function buildCompareList(){
+ const box=$('compareList');if(!box||box.childElementCount)return;
+ for(const key of COMPARABLE){
+  const l=document.createElement('label');l.className='check';
+  l.innerHTML=`<input type="checkbox" data-recipe="${key}">${RECIPES[key].nome}`;
+  box.append(l);
+ }
+ box.addEventListener('change',updateCompareEstimate);
+}
+function comparePicks(){
+ return [...document.querySelectorAll('#compareList input:checked')].map(i=>i.dataset.recipe);
+}
+function updateCompareEstimate(){
+ const picks=comparePicks(),btn=$('compareRecipes'),est=$('compareEstimate');
+ if(picks.length>COMPARE_MAX){
+  const last=[...document.querySelectorAll('#compareList input:checked')].pop();
+  if(last)last.checked=false;
+  warn(`Compare no máximo ${COMPARE_MAX} receitas por vez.`,true);
+  return updateCompareEstimate();
+ }
+ btn.disabled=busy||picks.length<2||!files.length;
+ btn.textContent=picks.length?`Comparar ${picks.length} receita${picks.length>1?'s':''} marcada${picks.length>1?'s':''}`
+                             :'Comparar receitas marcadas';
+ // Estimativa calibrada: usa o tempo real da ultima previa quando existir; antes
+ // disso, um custo relativo por metodo medido na serie de referencia.
+ const rel={natural:1,interpolated:.6,detail:2.8,maximum:2};
+ const unit=lastPreviewSeconds||0;
+ if(!picks.length){est.textContent='Marque pelo menos duas receitas.';return;}
+ if(!unit){est.textContent=`${picks.length} prévias serão geradas, uma por receita.`;return;}
+ const total=picks.reduce((a,k)=>a+unit*(rel[RECIPES[k].set.method]||1),0);
+ est.textContent=`${picks.length} prévias · cerca de ${Math.round(total)} s no total.`;
+}
+function compareRecipes(){
+ const picks=comparePicks();
+ if(picks.length<2){warn('Marque pelo menos duas receitas para comparar.',true);return;}
+ startRecipeQueue(picks);
+}
+function detectRecipe(atual=options()){
+ for(const [k,r] of Object.entries(RECIPES)){
+  if(!r.set)continue;
+  if(Object.entries(r.set).filter(([campo])=>FUSION_KEYS.includes(campo)).every(([campo,v])=>String(atual[campo])===String(v)))return k;
+ }
+ return 'custom';
+}
+function syncRecipeFromSettings(){
+ recipeLock=true;$('preset').value=detectRecipe();recipeLock=false;
+ showRecipe();
+}
+function showRecipe(){
+ const r=RECIPES[$('preset').value]||RECIPES.custom;
+ $('recipeTitle').textContent=r.nome+' · '+r.metodo;
+ $('recipeText').innerHTML='<b>Prioriza:</b> '+r.prioriza+'<br><b>Abre mão de:</b> '+r.sacrifica;
+}
+function applyRecipe(){
+ const key=$('preset').value,r=RECIPES[key];
+ showRecipe();
+ if(!r||!r.set)return;
+ recipeLock=true;
+ applySettings({...options(),...r.set});
+ recipeLock=false;
+ markMethodRelevance();refreshStates();persist();
+}
+function toCustom(){
+ if(recipeLock)return;
+ if($('preset').value!=='custom'){$('preset').value='custom';showRecipe();}
+}
+/* Controles que o metodo ativo ignora ficam visivelmente desabilitados. Antes eram
+   apenas ignorados em silencio -- ajustar a Seletividade no modo Natural nao produzia
+   efeito algum e nada na interface indicava isso. */
+const IRRELEVANT={
+ natural:['selectivity','levels','detailStrength','detailGain','baseGain','brightness'],
+ detail:['depthSmooth','islandSize'],
+ maximum:['depthSmooth','islandSize','detailStrength'],
+ interpolated:['selectivity','levels','detailStrength','detailGain','baseGain','brightness','smooth']
+};
+function markMethodRelevance(){
+ const off=IRRELEVANT[$('method').value]||[];
+ for(const k of Object.keys(defaults)){
+  const el=$(k);if(!el)continue;
+  const box=el.closest('label')||el.parentElement;
+  if(box)box.classList.toggle('disabledHint',off.includes(k));
+ }
+}
+/* ---------- Acordeao: uma secao aberta por vez ---------- */
+function refreshStates(){try{syncMirror();}catch{}
+
+ const set=(id,txt)=>{const e=$('state_'+id);if(e)e.textContent=txt;};
+ set('imagens',files.length?files.length+(files.length===1?' imagem':' imagens'):'nenhuma');
+ set('receita',(RECIPES[$('preset').value]||RECIPES.custom).nome);
+ set('acabamento',Number($('sharpen').value)>0?'nitidez '+$('sharpen').value:'sem realce');
+ set('cor',$('colorOn').checked?'ativo':'desligado');
+ set('avancado',$('method').value);
+ set('ia',(AI_PROVIDERS[$('aiProvider')?.value]||AI_PROVIDERS.gemini).rotulo);
+ set('sobre','GPL-3.0');
+}
+function setupAccordion(){
+ const all=[...document.querySelectorAll('details.acc')];
+ for(const d of all)d.addEventListener('toggle',()=>{
+  if(!d.open)return;
+  for(const o of all)if(o!==d&&o.open)o.open=false;
+ });
+}
+/* ---------- Realce de cor ----------
+   Tres operacoes deterministicas. Medido comparando o empilhamento com a versao
+   processada por um modelo generativo: fundo 150 -> 204, saturacao 95 -> 122 e
+   8,3% -> 0% de pixels magenta. As duas primeiras sao ajuste; a terceira, no modelo
+   generativo, foi REPINTURA. Aqui a franja e' apenas dessaturada, sem inventar cor. */
+function colorStats(data,w,h){
+ // amostra o fundo pelos pixels mais claros e pouco cromaticos
+ const n=w*h,lum=new Float32Array(n);
+ for(let j=0;j<n;j++){const o=j*4;lum[j]=.2126*data[o]+.7152*data[o+1]+.0722*data[o+2];}
+ const sorted=Float32Array.from(lum).sort();
+ const thr=sorted[Math.floor(n*.98)];
+ let r=0,g=0,b=0,c=0;
+ for(let j=0;j<n;j++){
+  const o=j*4;if(!data[o+3]||lum[j]<thr)continue;
+  const mx=Math.max(data[o],data[o+1],data[o+2]),mn=Math.min(data[o],data[o+1],data[o+2]);
+  if(mx-mn>40)continue;
+  r+=data[o];g+=data[o+1];b+=data[o+2];c++;
+ }
+ return c?{r:r/c,g:g/c,b:b/c}:null;
+}
+function applyColorGrade(data,w,h,opt){
+ const n=w*h;
+ if(opt.whitePoint>0){
+  const bg=colorStats(data,w,h);
+  if(bg){
+   // ganho por canal: balanco de branco e ponto branco numa operacao so'
+   const gr=opt.whitePoint/Math.max(1,bg.r),gg=opt.whitePoint/Math.max(1,bg.g),gb=opt.whitePoint/Math.max(1,bg.b);
+   for(let j=0;j<n;j++){const o=j*4;if(!data[o+3])continue;
+    data[o]=clamp(data[o]*gr,0,255);data[o+1]=clamp(data[o+1]*gg,0,255);data[o+2]=clamp(data[o+2]*gb,0,255);}
+  }
+ }
+ if(opt.fringe>0){
+  // Franja magenta da aberracao cromatica lateral: pixels em que o verde fica
+  // abaixo da media de vermelho e azul. Puxa o verde de volta em direcao a essa
+  // media, o que dessatura a franja sem alterar cores legitimamente magentas
+  // pouco saturadas nem tocar em qualquer outro matiz.
+  for(let j=0;j<n;j++){
+   const o=j*4;if(!data[o+3])continue;
+   const R=data[o],G=data[o+1],B=data[o+2],rb=(R+B)/2;
+   const excess=rb-G;
+   if(excess<=12)continue;
+   const chroma=Math.max(R,G,B)-Math.min(R,G,B);
+   if(chroma<25)continue;
+   data[o+1]=clamp(G+excess*opt.fringe,0,255);
+  }
+ }
+ if(opt.chromaGain!==1){
+  // saturacao seletiva: so' onde ja existe croma, preservando o fundo neutro
+  for(let j=0;j<n;j++){
+   const o=j*4;if(!data[o+3])continue;
+   const R=data[o],G=data[o+1],B=data[o+2];
+   const Y=.2126*R+.7152*G+.0722*B,chroma=Math.max(R,G,B)-Math.min(R,G,B);
+   if(chroma<14)continue;
+   const k=opt.chromaGain;
+   data[o]=clamp(Y+(R-Y)*k,0,255);data[o+1]=clamp(Y+(G-Y)*k,0,255);data[o+2]=clamp(Y+(B-Y)*k,0,255);
+  }
+ }
+}
+function colorOptions(o=options()){
+ return {whitePoint:o.colorOn?Number(o.whitePoint):0,
+         chromaGain:o.colorOn?Number(o.chromaGain):1,
+         fringe:o.colorOn?Number(o.fringe):0};
+}
+async function reapplyColor(){return reapplyPost();}
+
+/* Espelho dos controles de pos-empilhamento junto a' geracao e exportacao.
+   Os controles vivem em um lugar so' no DOM; aqui sao clonados e mantidos em
+   sincronia nos dois sentidos. Duplicar a marcacao daria dois elementos com o
+   mesmo papel e uma fonte de verdade ambigua na primeira divergencia. */
+const MIRRORED=['sharpen','stretch','colorOn','whitePoint','chromaGain','fringe'];
+function buildMirror(){
+ const host=$('postMirror');if(!host||host.childElementCount)return;
+ for(const id of MIRRORED){
+  const src=$(id);if(!src)continue;
+  const srcLabel=src.closest('label');
+  const texto=srcLabel?srcLabel.textContent.replace(/[\d.,]+$/,'').trim():id;
+  const wrap=document.createElement('label');
+  wrap.className=src.type==='checkbox'?'check':'field';
+  const el=document.createElement('input');
+  el.type=src.type;el.id=id+'_m';
+  for(const a of ['min','max','step'])if(src.hasAttribute(a))el.setAttribute(a,src.getAttribute(a));
+  if(src.type==='checkbox'){el.checked=src.checked;wrap.append(el,document.createTextNode(' '+texto));}
+  else{
+   el.value=src.value;
+   const out=document.createElement('output');out.className='value';out.id=id+'_mVal';out.value=src.value;
+   wrap.append(document.createTextNode(texto+' '),out,el);
+  }
+  host.append(wrap);
+  const push=()=>{
+   if(src.type==='checkbox')src.checked=el.checked;else src.value=el.value;
+   src.dispatchEvent(new Event('input',{bubbles:true}));
+   src.dispatchEvent(new Event('change',{bubbles:true}));
+   syncMirror();
+  };
+  el.addEventListener('input',push);el.addEventListener('change',push);
+ }
+ syncMirror();
+}
+function syncMirror(){
+ for(const id of MIRRORED){
+  const src=$(id),el=$(id+'_m');if(!src||!el)continue;
+  if(src.type==='checkbox')el.checked=src.checked;
+  else{el.value=src.value;const o=$(id+'_mVal');if(o)o.value=src.value;}
+  el.disabled=busy;
+ }
+ const st=$('state_post');
+ if(st)st.textContent=($('colorOn').checked?'cor ativa · ':'')+
+  (Number($('sharpen').value)>0?'nitidez '+$('sharpen').value:'sem realce');
+}
+async function reapplyPost(){
+ if(!selected||busy)return;
+ if(selected.ai){$('status').textContent='Selecione o empilhamento de origem para ajustar acabamento e cor.';return;}
+ const r=selected,opt=options();
+ busy=true;controls();$('status').textContent='Reaplicando acabamento e cor…';
+ try{
+  await finishResult(r,opt);r.saved=false;dirty=true;
+  sourceCanvas=null;sourceKey='';sourceToken++;
+  resultOptions();loadSource();draw();
+  $('status').textContent='Acabamento e cor reaplicados.';
+ }catch(e){if(e.message!=='cancelled')warn(e.message,true);}
+ finally{busy=false;controls();syncMirror();}
+}
+
+/* ---------- Serviços de IA (opcional) ----------
+   Apenas modelos de GERACAO DE IMAGEM servem aqui: a tarefa e' refazer os pixels do
+   fundo. Modelos que so' leem imagem (como Claude) nao tem como executa-la.
+   Nenhum provedor de imagem tem camada gratuita: verificado na pagina de precos do
+   Google, todos os modelos de imagem estao como "Not available" no nivel gratuito. */
+const AI_PROVIDERS={
+ gemini:{rotulo:'Google (Gemini)',papel:'edit',
+  keyLabel:'Chave da API Google AI (AIza…)',keyPlaceholder:'AIza…',
+  modelos:['gemini-2.5-flash-image','gemini-3.1-flash-image','gemini-3.1-flash-lite-image'],
+  padrao:'gemini-2.5-flash-image',
+  custo:'cerca de US$ 0,04 por imagem (2.5 Flash Image); não há camada gratuita'},
+ openai:{rotulo:'OpenAI',papel:'edit',
+  keyLabel:'Chave da API OpenAI (sk-…)',keyPlaceholder:'sk-…',
+  modelos:['gpt-image-1'],padrao:'gpt-image-1',
+  custo:'cobrado por imagem conforme o tamanho; não há camada gratuita'}
+};
+const BG_CHOICES={
+ none:{rotulo:'Não alterar o fundo',instrucao:null},
+ white:{rotulo:'Branco',instrucao:'a uniform pure white'},
+ g10:{rotulo:'Cinza 10%',instrucao:'a uniform neutral 10% grey (approximately #E6E6E6)'},
+ g15:{rotulo:'Cinza 15%',instrucao:'a uniform neutral 15% grey (approximately #D9D9D9)'},
+ g20:{rotulo:'Cinza 20%',instrucao:'a uniform neutral 20% grey (approximately #CCCCCC)'},
+ black:{rotulo:'Preto',instrucao:'a uniform pure black'},
+ custom:{rotulo:'Cor personalizada',instrucao:null}
+};
+function aiProvider(){return AI_PROVIDERS[$('aiProvider').value]||AI_PROVIDERS.gemini;}
+function aiPrompt(){
+ const modo=$('aiBackground').value,esc=BG_CHOICES[modo]||BG_CHOICES.none;
+ let alvo=esc.instrucao;
+ if(modo==='custom')alvo=`the uniform colour ${$('aiBackgroundColor').value}`;
+ // Prompt em ingles: os modelos de imagem sao treinados majoritariamente em ingles
+ // e seguem restricoes negativas com mais fidelidade nesse idioma.
+ // As tres primeiras linhas atacam o problema observado na pratica: o modelo
+ // inventou detritos junto ao abdome. Proibir explicitamente ACRESCENTAR e' mais
+ // eficaz que apenas pedir para nao alterar.
+ const base=[
+  'Edit this scientific specimen photograph. This is a photograph of a real biological specimen used for scientific documentation, so absolute fidelity to the original is required.',
+  'ONLY remove cast shadows, sensor noise and background reflections that lie on the background surface.',
+  'DO NOT add anything that is not already present. Do not invent, paint or hallucinate debris, dust, particles, fibres, specks, scratches, texture or any new object anywhere in the image, especially near the specimen outline and around the abdomen.',
+  'DO NOT remove, alter, redraw, complete, sharpen or reposition any part of the specimen: body, legs, antennae, wings, eyes, ovipositor, setae and cuticular sculpture must remain byte-for-byte identical.',
+  'DO NOT create new wing venation and do not modify existing venation.',
+  'DO NOT change colours, textures, metallic iridescence, contrast or outlines of the specimen.',
+  'Keep any dirt or particles that are already lying ON the specimen exactly as they are.',
+  'Edit the background region only. Leave every pixel of the specimen untouched.',
+  'Preserve the original resolution, framing and aspect ratio. Return the full image, not a crop.'
+ ];
+ if(alvo)base.splice(2,0,`Replace the background with ${alvo}, keeping the specimen silhouette and its edges intact, including translucent parts such as wings, without adding any texture or marks to the new background.`);
+ return base.join(' ');
+}
+function refreshAI(){
+ const prov=aiProvider(),edita=prov.papel==='edit';
+ const sel=$('aiModel');
+ if(sel.dataset.prov!==$('aiProvider').value){
+  sel.dataset.prov=$('aiProvider').value;
+  sel.replaceChildren(...prov.modelos.map(m=>new Option(m,m)));
+  sel.value=prov.padrao;
+ }
+ $('aiKeyLabel').textContent=prov.keyLabel;
+ $('aiKey').placeholder=prov.keyPlaceholder;
+ $('aiCost').textContent=prov.custo;
+ $('aiColorField').classList.toggle('hidden',$('aiBackground').value!=='custom');
+ $('aiEditFields').classList.toggle('hidden',!edita);
+ $('aiPromptText').value=aiPrompt();
+ const temChave=!!$('aiKey').value.trim();
+ $('aiRun').textContent='Limpar fundo com IA';
+ $('aiRun').disabled=busy||!selected||!temChave;
+ $('aiKeyState').textContent=temChave?'chave salva neste navegador':'sem chave · use Copiar prompt';
+}
+function persistAI(){
+ try{localStorage.setItem('focolab.ai',JSON.stringify({
+  prov:$('aiProvider').value,key:$('aiKey').value,model:$('aiModel').value,
+  bg:$('aiBackground').value,color:$('aiBackgroundColor').value}));}catch{}
+}
+function restoreAI(){
+ try{
+  const d=JSON.parse(localStorage.getItem('focolab.ai')||'{}');
+  if(d.prov&&AI_PROVIDERS[d.prov])$('aiProvider').value=d.prov;
+  refreshAI();
+  if(d.key)$('aiKey').value=d.key;
+  if(d.model)$('aiModel').value=d.model;
+  if(d.bg&&BG_CHOICES[d.bg])$('aiBackground').value=d.bg;
+  if(d.color)$('aiBackgroundColor').value=d.color;
+ }catch{}
+}
+async function copyAIPrompt(){
+ const t=$('aiPromptText').value;
+ try{await navigator.clipboard.writeText(t);$('aiStatus').textContent='Prompt copiado.';}
+ catch{$('aiPromptText').select();$('aiStatus').textContent='Selecione e copie o texto acima.';}
+}
+/* Salvaguarda central: mede a diferenca DENTRO do especime. Modelos generativos
+   redesenham estruturas com naturalidade, e sem medir nao ha como saber se a
+   morfologia foi preservada. */
+function specimenMask(data,w,h){
+ let r=0,g=0,b=0,n=0;
+ const amostra=(x,y)=>{const o=(y*w+x)*4;r+=data[o];g+=data[o+1];b+=data[o+2];n++;};
+ for(let x=0;x<w;x+=4){amostra(x,0);amostra(x,h-1);}
+ for(let y=0;y<h;y+=4){amostra(0,y);amostra(w-1,y);}
+ r/=n;g/=n;b/=n;
+ const m=new Uint8Array(w*h);let count=0;
+ for(let j=0;j<w*h;j++){
+  const o=j*4,d=Math.abs(data[o]-r)+Math.abs(data[o+1]-g)+Math.abs(data[o+2]-b);
+  if(d>60){m[j]=1;count++;}
+ }
+ return {mask:m,count};
+}
+function compareInsideMask(orig,edit,w,h){
+ const {mask,count}=specimenMask(orig,w,h);
+ if(!count)return null;
+ let soma=0,piores=0;
+ for(let j=0;j<w*h;j++){
+  if(!mask[j])continue;
+  const o=j*4;
+  const d=(Math.abs(orig[o]-edit[o])+Math.abs(orig[o+1]-edit[o+1])+Math.abs(orig[o+2]-edit[o+2]))/3;
+  soma+=d; if(d>25)piores++;
+ }
+ return {media:soma/count,alterados:100*piores/count,area:100*count/(w*h)};
+}
+async function canvasBase64(canvas){
+ const blob=await new Promise((res,rej)=>canvas.toBlob(b=>b?res(b):rej(Error('Falha ao codificar a imagem.')),'image/png'));
+ return {blob,b64:await new Promise((res,rej)=>{const fr=new FileReader();
+  fr.onload=()=>res(String(fr.result).split(',')[1]);
+  fr.onerror=()=>rej(Error('Falha ao ler a imagem.'));fr.readAsDataURL(blob);})};
+}
+async function jsonOrThrow(resp){
+ if(!resp.ok){
+  let m='';try{const e=await resp.json();m=e?.error?.message||'';}catch{}
+  throw Error(`O serviço respondeu ${resp.status}. ${m}`.trim());
+ }
+ return resp.json();
+}
+async function callEditProvider(id,chave,modelo,b64,blob,prompt,signal){
+ if(id==='openai'){
+  const fd=new FormData();
+  fd.append('model',modelo);fd.append('prompt',prompt);
+  fd.append('image',new File([blob],'imagem.png',{type:'image/png'}));
+  const r=await fetch('https://api.openai.com/v1/images/edits',
+   {method:'POST',headers:{Authorization:'Bearer '+chave},body:fd,signal});
+  const d=await jsonOrThrow(r);
+  const out=d?.data?.[0]?.b64_json;
+  if(!out)throw Error('O serviço não devolveu imagem.');
+  return {dataUrl:`data:image/png;base64,${out}`,returnedModel:d.model||null};
+ }
+ // padrao: Google Gemini
+ const url=`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(modelo)}:generateContent?key=${encodeURIComponent(chave)}`;
+ const r=await fetch(url,{method:'POST',signal,headers:{'Content-Type':'application/json'},
+  body:JSON.stringify({contents:[{parts:[{inline_data:{mime_type:'image/png',data:b64}},{text:prompt}]}]})});
+ const d=await jsonOrThrow(r);
+ const parte=(d?.candidates?.[0]?.content?.parts||[]).find(p=>p.inlineData||p.inline_data);
+ if(!parte)throw Error('O serviço não devolveu imagem. Confirme que o modelo edita imagens.');
+ const info=parte.inlineData||parte.inline_data;
+ return {dataUrl:`data:${info.mimeType||info.mime_type||'image/png'};base64,${info.data}`,returnedModel:d.modelVersion||null};
+}
+function showAIReport(r){
+ const dif=r.ai.diferenca,perda=r.ai.pixelLossPercent;
+ const aviso=dif?(dif.media>6
+  ? ` ATENÇÃO: diferença média ${dif.media.toFixed(1)} de 255; ${dif.alterados.toFixed(1)}% dos pixels da máscara acima do limiar.`
+  : ` Baixa diferença média detectada (${dif.media.toFixed(1)} de 255); a preservação morfológica não é garantida.`)
+  :' Não foi possível avaliar a diferença dentro do espécime.';
+ $('aiStatus').textContent=`Imagem devolvida em ${r.ai.entregue}`+(perda>0?` — ${perda}% menos pixels que a imagem enviada.`:'.')+aviso;
+ if(dif&&dif.media>6)warn('Diferenças detectadas na região estimada do espécime. Confira as estruturas antes de usar a imagem.',true);
+}
+async function runAIClean(){
+ if(!selected||busy)return;
+ const id=$('aiProvider').value,prov=aiProvider();
+ const chave=$('aiKey').value.trim(),modelo=$('aiModel').value.trim()||prov.padrao;
+ if(!chave){warn('Informe a chave da API ou use Copiar prompt.',true);return;}
+ if(!confirm(`A imagem será enviada para ${prov.rotulo}, fora do seu computador. O serviço pode ser pago. Continuar?`))return;
+ const request={provedor:id,modelo,fundo:$('aiBackground').value,backgroundColor:$('aiBackground').value==='custom'?$('aiBackgroundColor').value:null,prompt:aiPrompt(),requestedAt:new Date().toISOString()};
+ const op={controller:new AbortController()};aiOperation=op;busy=true;controls();
+ warn('');$('aiReport').classList.add('hidden');$('aiReport').textContent='';$('aiStatus').textContent='Enviando imagem…';
+ let bmp;
+ try{
+  const base=snapshotForAI(selected),canvas=base.canvas,w=canvas.width,h=canvas.height;
+  const {blob,b64}=await canvasBase64(canvas);
+  if(aiOperation!==op)return;
+  const reply=await callEditProvider(id,chave,modelo,b64,blob,request.prompt,op.controller.signal);
+  if(aiOperation!==op)return;
+  bmp=await createImageBitmap(await (await fetch(reply.dataUrl,{signal:op.controller.signal})).blob());
+  if(aiOperation!==op)return;
+  $('aiStatus').textContent='Comparando com a imagem anterior à IA…';
+  const cmp=document.createElement('canvas');cmp.width=w;cmp.height=h;
+  const cx=cmp.getContext('2d',{willReadFrequently:true});cx.drawImage(bmp,0,0,w,h);
+  const editado=cx.getImageData(0,0,w,h),original=canvas.getContext('2d',{willReadFrequently:true}).getImageData(0,0,w,h);
+  const dif=compareInsideMask(original.data,editado.data,w,h);
+  const novo={...base,id:String(++seq),uid:resultUID(),createdAt:new Date().toISOString(),canvas:cmp,aiSource:base,baseSnapshot:null,
+   fusedCanvas:null,depthCanvas:null,confCanvas:null,saved:false,
+   ai:{...request,returnedModel:reply.returnedModel,completedAt:new Date().toISOString(),
+    sourceId:base.id,sourceUID:base.uid,sourceRevision:base.finishRevision,
+    entregue:`${bmp.width}×${bmp.height}`,original:`${w}×${h}`,
+    sentSize:{width:w,height:h},returnedSize:{width:bmp.width,height:bmp.height},
+    pixelLossPercent:Math.round(100*(1-(bmp.width*bmp.height)/(w*h))),diferenca:dif}};
+  results.push(novo);while(results.length>8)results.shift();dirty=true;useResult(novo);
+ }catch(e){
+  if(aiOperation===op){$('aiStatus').textContent='';if(e.name!=='AbortError')warn('Serviço de IA: '+e.message+' (chamadas diretas do navegador podem ser bloqueadas por CORS; nesse caso use Copiar prompt.)',true);}
+ }finally{
+  bmp?.close();if(aiOperation===op){aiOperation=null;busy=false;controls();refreshAI();}
+ }
+}
+
+function warn(message,error=false){$('notice').textContent=message;$('notice').className='notice'+(error?' error':'')+(message?'':' hidden');}
+function targetWidth(final){if(!files.length)return 0;let W=files[0].w,H=files[0].h;if(!final)return Math.max(1,Math.round(W*Math.min(1,Number($('previewSize').value)/Math.max(W,H))));let v=$('resolution').value;return v==='custom'?Math.round(Math.max(1,Math.min(W,Number($('customWidth').value)||W))):Math.round(W*Number(v));}
+function estimate(){if(!files.length)return;let W=files[0].w,H=files[0].h,mp=W*H/1e6,n=files.length,tw=targetWidth(true),th=Math.round(H*tw/W);let text=`${n} imagens · ${mp.toFixed(1)} MP cada · final ${tw} × ${th} px antes do recorte.`;if(n*mp>120)text+=' Série de alta resolução: use a prévia e mantenha esta aba aberta.';const last=results.findLast(r=>r.kind==='preview'&&r.opt.method===$('method').value);if(last)text+=` Prévia medida: ${last.seconds.toFixed(1)} s. O tempo final também depende dos blocos e da decodificação.`;$('estimate').textContent=text;}
+function validate(){return files.length>=2&&files.length<65535&&files.every(f=>f.w===files[0].w&&f.h===files[0].h);}
+function controls(){
+ for(const id of ['preview','final'])$(id).disabled=busy||loading||!validate()||!window.Worker||!window.OffscreenCanvas||!window.createImageBitmap;
+ for(const id of ['download','downloadDepth','downloadLog','downloadRaw','downloadConfidence','downloadDepthData'])$(id).disabled=busy||!selected;
+ for(const id of ['reapply','applyColor','applyPost'])$(id).disabled=busy||!selected||!!selected.ai;
+ try{refreshAI();}catch{}
+ for(const id of ['drop','folderButton','newSeries','clearAll','defaults','fileInput','folderInput'])$(id).disabled=busy||loading;
+ updateCompareEstimate();document.querySelectorAll('.sidebar input:not([type=file]),.sidebar select').forEach(e=>e.disabled=busy);
+ $('resultSelect').disabled=busy&&!aiOperation;
+ $('cancel').classList.toggle('hidden',!busy);$('alignmentDetails').disabled=!selected;syncMirror();
+}
+
+function renderFiles(){const list=$('files');list.replaceChildren();files.forEach((f,i)=>{let li=document.createElement('li');li.draggable=true;li.addEventListener('dragstart',e=>{internalDrag=true;e.dataTransfer.setData('text/plain',String(i));});li.addEventListener('dragend',()=>{internalDrag=false;});li.addEventListener('dragover',e=>e.preventDefault());li.addEventListener('drop',e=>{internalDrag=false;e.preventDefault();e.stopPropagation();let from=Number(e.dataTransfer.getData('text/plain'));if(Number.isInteger(from)&&from>=0&&from<files.length)moveFile(from,i);});let img=document.createElement('img');img.src=f.thumb;img.alt='';let text=document.createElement('div');text.className='filename';let name=document.createElement('strong');name.textContent=f.file.name;name.title=f.file.name;let dims=document.createElement('small');dims.textContent=`${i+1} · ${f.w} × ${f.h}`;text.append(name,dims);li.append(img,text);for(const [label,title,action,disabled] of [['↑','Mover para cima',()=>moveFile(i,i-1),i===0],['↓','Mover para baixo',()=>moveFile(i,i+1),i===files.length-1],['×','Remover imagem',()=>removeFile(i),false]]){let b=document.createElement('button');b.textContent=label;b.title=title;b.setAttribute('aria-label',title+' '+f.file.name);b.disabled=busy||disabled;b.onclick=action;li.append(b);}list.append(li);});
+ $('fileMeta').textContent=files.length?`${files.length} imagens · ${(files.reduce((a,f)=>a+f.file.size,0)/1048576).toFixed(1)} MB em arquivos${files.some(f=>f.source!==f.file)?' · '+(files.reduce((a,f)=>a+(f.source!==f.file?f.source.size:0),0)/1048576).toFixed(1)+' MB de cache TIFF':''}`:'Nenhuma imagem carregada.';
+ for(const id of ['originalSelect']){const sel=$(id),old=sel.value;sel.replaceChildren();files.forEach((f,i)=>{let o=document.createElement('option');o.value=i;o.textContent=`${i+1} · ${f.file.name}`;sel.append(o);});if(Number(old)<files.length)sel.value=old;}
+ if(files.length&&!validate()&&files.length>=2)warn('As imagens têm dimensões diferentes. Remova os arquivos discordantes antes de processar.',true);estimate();controls();}
+function abandon(){return !dirty||confirm('Há resultados ainda não baixados. Descartar as imagens geradas?');}
+function clearResults(){results=[];selected=null;alignment=null;alignKey='';dirty=false;sourceCanvas=null;sourceKey='';sourceToken++;$('empty').classList.remove('hidden');$('resultSelect').replaceChildren(new Option('Nenhum resultado',''));draw();}
+/* Pool de Workers para decodificacao de TIFF.
+   Cada arquivo e' independente e o pico de memoria e' de um arquivo por vez, entao
+   esta e' a fase paralelizavel sem o conflito de memoria que a fusao por blocos tem.
+   Medido: ~1,5 s por imagem de 8,3 MP; 15 arquivos custavam ~22 s em serie.
+   O numero de Workers e' derivado do hardware, com teto de 4 -- acima disso a
+   decodificacao passa a competir por largura de banda de memoria em vez de ganhar. */
+function poolSize(){
+ const cores=navigator.hardwareConcurrency||4;
+ return Math.max(1,Math.min(4,cores-1));
+}
+async function runPool(items,worker,onProgress){
+ const results=new Array(items.length);
+ let next=0,done=0,failed=null;
+ const lanes=Math.min(poolSize(),items.length);
+ await Promise.all(Array.from({length:lanes},async()=>{
+  while(true){
+   const i=next++;
+   if(i>=items.length||failed)return;
+   try{results[i]=await worker(items[i],i);}
+   catch(e){if(!failed)failed=e;return;}
+   done++;if(onProgress)onProgress(done,items.length);
+  }
+ }));
+ if(failed)throw failed;
+ return results;
+}
+async function prepareTiff(file){
+ const code=$('tiffSource').textContent+`\nself.onmessage=async e=>{try{
+  const {width,height,rgba}=await decodeTIFF(await e.data.arrayBuffer());
+  if(width<32||height<32)throw Error('Imagem muito pequena.');
+  const c=new OffscreenCanvas(width,height);c.getContext('2d').putImageData(new ImageData(rgba,width,height),0,0);
+  const source=await c.convertToBlob({type:'image/png'});self.postMessage({source});
+ }catch(error){self.postMessage({error:error.message||String(error)});}};`;
+ const url=URL.createObjectURL(new Blob([code],{type:'text/javascript'}));let fw;
+ try{fw=new Worker(url);}finally{URL.revokeObjectURL(url);}
+ try{return await new Promise((resolve,reject)=>{fw.onmessage=e=>e.data.error?reject(Error(e.data.error)):resolve(e.data.source);fw.onerror=e=>reject(Error(e.message||'Falha na importação TIFF.'));fw.postMessage(file);});}
+ finally{fw.terminate();}
+}
+function canvasBlob(canvas,type='image/png'){return new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(Error('Falha ao preparar a imagem.')),type));}
+async function addFiles(input){
+ if(busy||loading)return;
+ const incoming=[...input].filter(f=>!files.some(x=>x.file.name===f.name&&x.file.size===f.size&&x.file.lastModified===f.lastModified));
+ if(!incoming.length)return;if(results.length&&!abandon())return;
+ loading=true;controls();warn('');if(results.length)clearResults();const rejected=[];
+ // Prepara os TIFF em paralelo antes do laco sequencial. Os demais formatos o
+ // navegador decodifica nativamente e nao passam por aqui.
+ const tiffPrepared=new Map();
+ const pendingTiffs=incoming.filter(f=>/\.tiff?$/i.test(f.name));
+ if(pendingTiffs.length){
+  try{
+   $('status').textContent=`Preparando ${pendingTiffs.length} TIFF em ${Math.min(poolSize(),pendingTiffs.length)} processos…`;
+   const out=await runPool(pendingTiffs,f=>prepareTiff(f),(d,t)=>{
+    $('status').textContent=`Preparando TIFF ${d}/${t}…`;});
+   pendingTiffs.forEach((f,i)=>tiffPrepared.set(f,out[i]));
+  }catch(e){warn('Falha ao preparar TIFF: '+e.message,true);}
+ }
+ try{for(let i=0;i<incoming.length;i++){
+  const f=incoming[i];let bmp;
+  if(files.some(x=>x.file.name===f.name&&x.file.size===f.size&&x.file.lastModified===f.lastModified))continue;
+  if(!/\.(jpe?g|png|webp|tiff?)$/i.test(f.name)){rejected.push(f.name);continue;}
+  try{
+   const isTiff=/\.tiff?$/i.test(f.name);
+   $('status').textContent=`Carregando imagem ${i+1}/${incoming.length} · ${f.name}`;
+   const source=isTiff?(tiffPrepared.get(f)||await prepareTiff(f)):f;
+   bmp=await loadBitmap(source);if(bmp.width<32||bmp.height<32)throw Error('Imagem muito pequena.');
+   const previewScale=Math.min(1,2048/Math.max(bmp.width,bmp.height)),pc=document.createElement('canvas');pc.width=Math.round(bmp.width*previewScale);pc.height=Math.round(bmp.height*previewScale);pc.getContext('2d').drawImage(bmp,0,0,pc.width,pc.height);
+   const previewSource=previewScale<1?await canvasBlob(pc):source;
+   const alignmentScale=Math.min(1,1024/Math.max(bmp.width,bmp.height)),ac=document.createElement('canvas');ac.width=Math.round(bmp.width*alignmentScale);ac.height=Math.round(bmp.height*alignmentScale);ac.getContext('2d').drawImage(bmp,0,0,ac.width,ac.height);
+   const alignmentSource=alignmentScale<1?await canvasBlob(ac):source;
+   const c=document.createElement('canvas'),s=Math.min(1,120/Math.max(bmp.width,bmp.height));c.width=Math.round(bmp.width*s);c.height=Math.round(bmp.height*s);
+   c.getContext('2d').drawImage(bmp,0,0,c.width,c.height);
+   files.push({file:f,source,previewSource,previewScale,alignmentSource,w:bmp.width,h:bmp.height,thumb:c.toDataURL('image/jpeg',.7)});
+  }catch(error){rejected.push(f.name+' ('+(error.message||'falha na leitura')+')');}finally{bmp?.close();}
+ }}finally{loading=false;files.sort((a,b)=>a.file.name.localeCompare(b.file.name,'pt-BR',{numeric:true}));alignment=null;alignKey='';renderFiles();}
+ if(rejected.length)warn('Arquivos recusados: '+rejected.join(', ')+'. Use JPEG, PNG, WebP ou TIFF compatível.',true);
+ const tiffs=files.filter(f=>/\.tiff?$/i.test(f.file.name)).length;
+ if(tiffs&&!rejected.length)warn(`${tiffs} TIFF(s) preparado(s) uma única vez nesta série. A cópia PNG em memória será reutilizada em todos os métodos. Amostras de 16 bits continuam convertidas para 8 bits; os originais não são alterados.`);
+ if(files.length){$('outputName').value=files[0].file.name.replace(/\.[^.]+$/,'')+'_stack';$('status').textContent='Série carregada. Gere uma prévia ou compare os métodos.';$('step2').classList.add('active');}
+ else $('status').textContent='Nenhuma imagem válida foi carregada.';
+}
+function moveFile(i,j){if(busy||loading||j<0||j>=files.length||i===j)return;if(results.length&&!abandon())return;clearResults();let f=files.splice(i,1)[0];files.splice(j,0,f);renderFiles();}
+function removeFile(i){if(busy||loading)return;if(results.length&&!abandon())return;clearResults();files.splice(i,1);renderFiles();}
+function resultRecipeName(r){return r.recipeName||(RECIPES[r.recipe]||RECIPES.custom).nome;}
+function resultLabel(r){return `#${r.id} · ${resultRecipeName(r)} · ${r.kind==='preview'?'Prévia':'Final'}${r.ai?' · IA':''} · ${r.canvas.width} × ${r.canvas.height} px`;}
+function resultOptions(){const el=$('resultSelect');el.replaceChildren();for(const r of results)el.append(new Option(resultLabel(r),r.id));if(selected)el.value=selected.id;updateComparisonResults();}
+function restoreResultSettings(r){
+ const base=r.ai?r.aiSource:r;if(!base)return;
+ const current=options(),values={...current};
+ for(const k of FUSION_KEYS)if(k in base.opt)values[k]=base.opt[k];
+ for(const k of POST_KEYS)values[k]=base.postSettings?.[k]??base.opt[k];
+ recipeLock=true;applySettings(values);$('preset').value=base.recipe||'custom';recipeLock=false;
+ showRecipe();markMethodRelevance();refreshStates();persist();
+}
+function useResult(r){const previous=selected;selected=r;restoreResultSettings(r);sourceCanvas=null;sourceKey='';sourceToken++;resultOptions();if(!previous||!zoom||previous.canvas.width!==r.canvas.width||previous.canvas.height!==r.canvas.height)fitView();controls();loadSource();draw();
+ if(r.ai){$('status').textContent='Resultado de IA. Selecione o empilhamento de origem para ajustar acabamento e cor.';showAIReport(r);}
+ else{$('aiStatus').textContent='';$('aiReport').classList.add('hidden');if(!busy)$('status').textContent='Empilhamento selecionado · '+resultRecipeName(r)+'.';}
+}
+/* An immutable pre-AI image version stays reachable even after list eviction.
+   The raw fusion/maps are shared read-only; only the finished canvas is copied. */
+function snapshotForAI(r){
+ if(r.ai){if(!r.aiSource)throw Error('A imagem anterior à IA não está disponível. Selecione o empilhamento de origem.');return r.aiSource;}
+ if(r.baseSnapshot)return r.baseSnapshot;
+ const c=document.createElement('canvas');c.width=r.canvas.width;c.height=r.canvas.height;c.getContext('2d').putImageData(r.canvas.getContext('2d').getImageData(0,0,c.width,c.height),0,0);
+ const snap={...r,canvas:c,baseSnapshot:null,fusedCanvas:null,depthCanvas:null,confCanvas:null};
+ for(const k of ['opt','finish','color','postSettings','levels','files','effective','requestedOutput'])snap[k]=cloneRecord(r[k]);
+ r.baseSnapshot=snap;return snap;
+}
+function finishedCanvas(r){return r.ai?r.aiSource.canvas:r.canvas;}
+
+function alignmentSignature(o){return JSON.stringify([files.map(f=>[f.file.name,f.file.size,f.file.lastModified]),o.align,o.scale,o.rotation,o.search,o.alignGain,o.balance]);}
+let lastPreviewSeconds=0,recipeQueue=[];
+function startRecipeQueue(keys){
+ if(busy||loading)return;
+ recipeQueue=keys.slice();
+ nextRecipe();
+}
+function nextRecipe(){
+ if(!recipeQueue.length)return;
+ const key=recipeQueue.shift(),r=RECIPES[key];
+ recipeLock=true;$('preset').value=key;applySettings({...options(),...r.set});recipeLock=false;
+ showRecipe();markMethodRelevance();refreshStates();
+ start('preview',false,key);
+}
+async function start(kind,both=false,recipeKey=null){if(!validate()||busy||loading)return;warn('');
+ try{$('aiStatus').textContent='';$('aiReport').classList.add('hidden');$('aiReport').textContent='';}catch{}
+ for(const el of document.querySelectorAll('.sidebar input[type=number]'))if(!el.disabled&&!el.closest('.hidden')&&(!el.value||!Number.isFinite(Number(el.value))||(el.min!==''&&Number(el.value)<Number(el.min))||(el.max!==''&&Number(el.value)>Number(el.max))||((el.step||'1')==='1'&&!Number.isInteger(Number(el.value))))){warn('Confira o valor de '+(el.closest('label')?.textContent.trim()||el.id)+'.',true);el.reportValidity();return;}
+ persist();let o=options();if(!Number.isFinite(o.maxShift)||o.maxShift<=0){warn('Informe uma faixa de busca válida.',true);return;}
+ const requestedRecipe=recipeKey||$('preset').value||'custom',definition=RECIPES[requestedRecipe];
+ const recipe=definition?.set&&Object.entries(definition.set).filter(([k])=>FUSION_KEYS.includes(k)).some(([k,v])=>String(o[k])!==String(v))?'custom':requestedRecipe;
+ queue=[{kind,method:o.method,recipe,recipeName:(RECIPES[recipe]||RECIPES.custom).nome,opt:cloneRecord(o),target:targetWidth(kind==='final'),requestedOutput:{kind,resolution:o.resolution,customWidth:Number($('customWidth').value),previewSize:o.previewSize}}];nextJob();}
+function nextJob(){if(!queue.length){busy=false;controls();estimate();updateCompareEstimate();return;}let job=queue.shift(),o={...job.opt,method:job.method},preview=job.kind==='preview';busy=true;controls();renderFiles();const key=alignmentSignature(o);if(key!==alignKey){alignment=null;alignKey=key;}startTime=performance.now();clearInterval(timer);timer=setInterval(()=>{$('elapsed').textContent=((performance.now()-startTime)/1000).toFixed(0)+' s';},1000);
+ const source=$('tiffSource').textContent+'\n'+$('workerSource').textContent,url=URL.createObjectURL(new Blob([source],{type:'text/javascript'}));try{worker=new Worker(url);}catch(e){URL.revokeObjectURL(url);fail(e.message);return;}URL.revokeObjectURL(url);pending={id:String(++seq),kind:job.kind,opt:o,recipe:job.recipe||'custom',recipeName:job.recipeName,uid:resultUID(),createdAt:new Date().toISOString(),requestedOutput:job.requestedOutput,canvas:null,depth:null,conf:null,saved:false,files:files.map(f=>({name:f.file.name,size:f.file.size,lastModified:f.file.lastModified})),W:files[0].w,H:files[0].h};
+ worker.onmessage=async e=>{try{const d=e.data;if(d.type==='progress'){$('progress').value=d.value;$('status').textContent=d.stage;}
+ else if(d.type==='alignment'){alignment={Ts:d.Ts,diagnostics:d.diagnostics,ref:d.ref};}
+ else if(d.type==='begin'){pending.canvas=document.createElement('canvas');pending.canvas.width=d.width;pending.canvas.height=d.height;pending.depth=new Float32Array(d.width*d.height);pending.conf=new Uint8Array(d.width*d.height);pending.crop=d.crop;pending.scale=d.scale;pending.tiles=d.tiles;pending.effective=d.eff;pending.context=pending.canvas.getContext('2d',{willReadFrequently:true});}
+ else if(d.type==='tile'){pending.context.putImageData(new ImageData(d.rgba,d.width,d.height),d.x,d.y);for(let row=0;row<d.height;row++){let to=(d.y+row)*pending.canvas.width+d.x;pending.depth.set(d.depth.subarray(row*d.width,(row+1)*d.width),to);pending.conf.set(d.conf.subarray(row*d.width,(row+1)*d.width),to);}worker.postMessage({type:'ack'});}
+ else if(d.type==='done'){await handleDone(d,o,job);}
+ else if(d.type==='plan'){worker?.terminate();worker=null;await runTilePool(d,o,job);}
+ else if(d.type==='error')fail(d.message);}catch(e){if(e.message!=='cancelled')fail(e.message);}};worker.onerror=e=>fail(e.message||'Não foi possível iniciar o processamento.');
+ // Paralelizacao dos blocos: o preparo (alinhamento, recorte, grade) e' sequencial
+ // por natureza e roda uma vez; os blocos sao independentes e vao para um pool.
+ // O orcamento de memoria e' DIVIDIDO pelas vias, senao n Workers usariam n vezes
+ // a memoria e o navegador ficaria sem. Isso encolhe o bloco, o que aumenta o custo
+ // relativo da moldura de sobreposicao -- por isso o teto de vias e' baixo.
+ const memMB=effectiveMemory(o);
+ // Cada via precisa de um minimo viavel: abaixo disso o bloco fica menor que a
+ // propria moldura e o worker recusa o trabalho. Preferimos menos vias com memoria
+ // suficiente a mais vias que falham.
+ tileLanes=Math.max(1,Math.min(poolSize(),Math.floor(memMB/160)));
+ const jobFiles=files.map(f=>preview?f.previewSource:f.source);
+ const jobOpt={...o,memory:tileLanes>1?Math.max(160,Math.floor(memMB/tileLanes)):memMB};
+ poolJob={files:jobFiles,opt:jobOpt,preview};
+ worker.postMessage({type:'run',job:{files:jobFiles,alignmentFiles:files.map(f=>f.alignmentSource),names:files.map(f=>f.file.name),inputScale:preview?files[0].previewScale:1,W:files[0].w,H:files[0].h,opt:jobOpt,target:job.target,alignment,planOnly:tileLanes>1}});
+}
+/* O tratamento de conclusao e' o mesmo para o caminho de worker unico e para o
+   pool; extraido para nao existirem duas versoes que possam divergir. */
+async function handleDone(d,o,job){if(!pending)return;clearInterval(timer);lastPreviewSeconds=pending.kind==='preview'?(performance.now()-startTime)/1000:lastPreviewSeconds;Object.assign(pending,d);delete pending.type;pending.context=null;worker?.terminate();worker=null;$('status').textContent='Aplicando acabamento…';const completed=pending;await finishResult(completed,o);if(pending!==completed)return;completed.completedAt=new Date().toISOString();results.push(completed);while(results.length>8)results.shift();dirty=true;useResult(pending);pending=null;worker?.terminate();worker=null;$('progress').value=100;$('status').textContent=`${job.kind==='preview'?'Prévia':'Imagem final'} pronta · ${methodNames[o.method]}`;$('elapsed').textContent=d.seconds.toFixed(1)+' s';
+ const ps=d.performanceStats||{};
+ if(ps.tiles){
+  const mem=effectiveMemory(o);
+  const total=(ps.bitmapDecodes|0)+(ps.bitmapCacheHits|0);
+  const aprov=total?Math.round(100*(ps.bitmapCacheHits|0)/total):0;
+  $('perfNote').textContent=`${ps.tiles} blocos · ${ps.lanes||1} processo(s) · ${mem} MB`
+   +` · ${ps.bitmapDecodes|0} decodificações de imagem, ${aprov}% de aproveitamento do cache`;
+ }$('step3').classList.add('active');$('step4').classList.add('active');let weak=d.diagnostics.filter(q=>q.after<.9);if(weak.length)warn(`${weak.length} correspondência(s) com baixa correlação. Verifique o alinhamento e os contornos antes de exportar.`);if(queue.length)nextJob();else{busy=false;controls();renderFiles();estimate();updateCompareEstimate();if(recipeQueue.length)nextRecipe();}}
+let tileLanes=1,poolJob=null,tileWorkers=[];
+/* Deteccao de memoria disponivel.
+   Nao existe uma API unica e confiavel para isso no navegador:
+   - navigator.deviceMemory da' a RAM do aparelho arredondada (0,25/0,5/1/2/4/8 GB),
+     existe no Chrome e derivados, nao no Firefox nem no Safari;
+   - performance.memory.jsHeapSizeLimit da' o teto do heap do JavaScript, so' no
+     Chrome, e nao e' padronizado;
+   - performance.measureUserAgentSpecificMemory() e' o metodo correto e preciso,
+     mas exige isolamento de origem cruzada (cabecalhos COOP/COEP), impossivel
+     para um arquivo HTML unico aberto localmente.
+   Usamos os dois primeiros quando existem e caimos num padrao conservador quando
+   nao existem. E' estimativa, nao medicao exata -- por isso o teto e o piso. */
+function effectiveMemory(o){
+ const v=Number(o.memory);
+ return Number.isFinite(v)&&v>=128?v:384;      // nunca deixa um valor invalido chegar ao worker
+}
+function poolCacheLimit(lanes,o){
+ if(!files.length)return 0;
+ const scale=poolJob&&poolJob.preview?files[0].previewScale:1;
+ const bytes=files[0].w*files[0].h*scale*scale*4;
+ const budget=Math.min(192,effectiveMemory(o)/2)*1048576/Math.max(1,lanes);
+ return Math.max(1,Math.min(files.length,Math.floor(budget/bytes)));
+}
+function terminatePool(){for(const w of tileWorkers){try{w.postMessage({type:'release'});}catch{}w.terminate();}tileWorkers=[];}
+/* Distribui os blocos entre vias paralelas. O plano (transformacoes, recorte, grade)
+   ja veio pronto do worker de preparo; cada via recebe uma copia dele uma unica vez
+   e depois so' pede blocos por indice. Os resultados chegam fora de ordem e sao
+   montados pelas coordenadas que cada um carrega. */
+async function runTilePool(planMsg,o,job){
+ const {plan}=planMsg,total=plan.total;
+ const lanes=Math.max(1,Math.min(tileLanes,total));
+ const source=$('tiffSource').textContent+'\n'+$('workerSource').textContent;
+ const url=URL.createObjectURL(new Blob([source],{type:'text/javascript'}));
+ let done=0,failed=null,next=0;const laneStats=new Map();
+ const t0=performance.now();
+ try{
+  tileWorkers=Array.from({length:lanes},()=>new Worker(url));
+ }finally{URL.revokeObjectURL(url);}
+ // Particionamento por FAIXAS: cada via fica com um intervalo contiguo de linhas
+ // de blocos, para que possa manter em cache apenas aquela faixa das imagens de
+ // origem. Dentro da faixa os blocos continuam saindo de uma fila, o que preserva
+ // o balanceamento quando uma faixa custa mais que outra.
+ const rowsPerLane=Math.ceil(plan.ny/lanes);
+ const laneRows=Array.from({length:lanes},(_,i)=>({
+  from:Math.min(plan.ny,i*rowsPerLane),to:Math.min(plan.ny,(i+1)*rowsPerLane)}));
+ const laneQueue=laneRows.map(r=>{
+  const list=[];
+  for(let row=r.from;row<r.to;row++)for(let col=0;col<plan.nx;col++)list.push(row*plan.nx+col);
+  return list;});
+ const run=(w,lane)=>new Promise(resolve=>{
+  const pump=()=>{
+   if(failed){resolve();return;}
+   let index=laneQueue[lane].shift();
+   if(index===undefined){
+    // Terminada a propria faixa, assume metade das linhas que restam a' via mais
+    // atrasada e reprepara o cache para aquelas linhas. Roubar bloco a bloco
+    // obrigava a decodificar imagens inteiras e custava mais do que economizava.
+    let big=-1,size=0;
+    laneQueue.forEach((q,i)=>{if(q.length>size){size=q.length;big=i;}});
+    if(big<0||!size){resolve();return;}
+    const rows=[...new Set(laneQueue[big].map(t=>Math.floor(t/plan.nx)))].sort((a,b)=>a-b);
+    const take=rows.slice(Math.ceil(rows.length/2));
+    if(!take.length){index=laneQueue[big].pop();w.postMessage({type:'tileRequest',index});return;}
+    const from=take[0],to=take[take.length-1]+1;
+    laneQueue[lane]=laneQueue[big].filter(t=>Math.floor(t/plan.nx)>=from);
+    laneQueue[big]=laneQueue[big].filter(t=>Math.floor(t/plan.nx)<from);
+    w.postMessage({type:'reband',rows:{from,to}});   // a via responde contextReady
+    return;
+   }
+   w.postMessage({type:'tileRequest',index});
+  };
+  w.onerror=e=>{if(!failed)failed=Error(e.message||'Falha em um processo paralelo.');resolve();};
+  w.onmessage=e=>{
+   const d=e.data;
+   if(d.type==='contextReady')return pump();
+   if(d.type==='error'){if(!failed)failed=Error(d.message);return resolve();}
+   if(d.type==='tileResult'){laneStats.set(w,{decodes:d.decodes|0,cacheHits:d.cacheHits|0});
+    if(pending&&pending.context){
+     pending.context.putImageData(new ImageData(d.rgba,d.width,d.height),d.x,d.y);
+     for(let row=0;row<d.height;row++){
+      const to=(d.y+row)*pending.canvas.width+d.x;
+      pending.depth.set(d.depth.subarray(row*d.width,(row+1)*d.width),to);
+      pending.conf.set(d.conf.subarray(row*d.width,(row+1)*d.width),to);
+     }
+    }
+    done++;
+    $('progress').value=20+77*done/total;
+    $('status').textContent=`Bloco ${done}/${total} · ${lanes} processo${lanes>1?'s':''} em paralelo`;
+    return pump();
+   }
+  };
+  /* Cada via recebe sua fatia do orcamento de cache de bitmaps. Sem isso cada bloco
+     redecodificaria todas as imagens de origem: o caminho de worker unico tinha esse
+     cache e a versao paralela o havia perdido por descuido meu. */
+  w.postMessage({type:'context',plan,files:poolJob.files,opt:o,rows:laneRows[lane],bitmapCacheLimit:poolCacheLimit(lanes,o)});
+ });
+ await Promise.all(tileWorkers.map((w,i)=>run(w,i)));
+ terminatePool();
+ if(failed)throw failed;
+ // o 'done' que o resto do app espera, agora montado aqui
+ const seconds=planMsg.seconds+(performance.now()-t0)/1000;
+ await handleDone({type:'done',seconds,Ts:plan.Ts,diagnostics:planMsg.diagnostics,crop:plan.crop,
+  scale:plan.scale,eff:plan.eff,ref:planMsg.ref,exposureGains:plan.exposureGains,
+  performanceStats:{lanes,tiles:total,
+   bitmapDecodes:[...laneStats.values()].reduce((a,v)=>a+v.decodes,0),
+   bitmapCacheHits:[...laneStats.values()].reduce((a,v)=>a+v.cacheHits,0)}},o,job);
+}
+function fail(message){terminatePool();self.lastFailMsg=message;worker?.terminate();worker=null;pending=null;queue=[];recipeQueue=[];busy=false;clearInterval(timer);warn('Processamento interrompido: '+message+' Se houver falta de memória, use resolução final menor e o modo econômico.',true);$('status').textContent='Ajuste as opções e tente novamente.';controls();renderFiles();}
+function cancel(){if(aiOperation){aiOperation.controller.abort();aiOperation=null;$('aiStatus').textContent='Limpeza por IA cancelada.';}terminatePool();finishWorker?.terminate();finishReject?.(Error('cancelled'));finishWorker=null;finishReject=null;worker?.terminate();worker=null;queue=[];recipeQueue=[];pending=null;busy=false;clearInterval(timer);$('status').textContent='Processamento cancelado. As imagens e os resultados anteriores foram mantidos.';controls();renderFiles();}
+function currentSourceIndex(){return Number($('originalSelect').value)||0;}
+async function loadSource(){if(!selected||!files.length)return;let r=selected,index=currentSourceIndex(),key=r.id+':'+index;if(key===sourceKey&&sourceCanvas)return;sourceCanvas=null;sourceKey='';const token=++sourceToken;try{const item=files[index],preview=r.kind==='preview',inputScale=preview?item.previewScale:1;let bmp=await loadBitmap(preview?item.previewSource:item.source);if(token!==sourceToken||r!==selected){bmp.close();return;}let c=document.createElement('canvas');c.width=r.canvas.width;c.height=r.canvas.height;let cx=c.getContext('2d',{willReadFrequently:true}),T=r.Ts[index],d=T[0]**2+T[1]**2,a=T[0]/d,b=-T[1]/d,tx=-a*T[2]+b*T[3],ty=-b*T[2]-a*T[3],s=r.scale,pixelScale=s/inputScale;cx.imageSmoothingEnabled=!(Math.abs(pixelScale*a-1)<1e-10&&Math.abs(b)<1e-10&&Math.abs(s*tx-Math.round(s*tx))<1e-10&&Math.abs(s*ty-Math.round(s*ty))<1e-10);cx.imageSmoothingQuality='high';cx.setTransform(pixelScale*a,pixelScale*b,-pixelScale*b,pixelScale*a,s*tx-r.crop.x,s*ty-r.crop.y);cx.drawImage(bmp,0,0);bmp.close();sourceCanvas=c;sourceKey=key;draw();}catch(e){warn('Não foi possível preparar a camada de comparação: '+e.message,true);}}
+function resize(){const rect=viewport.getBoundingClientRect(),dpr=window.devicePixelRatio||1;canvas.width=Math.round(rect.width*dpr);canvas.height=Math.round(rect.height*dpr);draw();}
+function fitView(){if(!selected)return;let rect=viewport.getBoundingClientRect();zoom=Math.min(rect.width/selected.canvas.width,rect.height/selected.canvas.height)*.94;panX=(rect.width-selected.canvas.width*zoom)/2;panY=(rect.height-selected.canvas.height*zoom)/2;draw();}
+function setZoom(z,cx=viewport.clientWidth/2,cy=viewport.clientHeight/2){z=Math.max(.03,Math.min(16,z));let ix=(cx-panX)/zoom,iy=(cy-panY)/zoom;zoom=z;panX=cx-ix*z;panY=cy-iy*z;draw();}
+function mapCanvas(r,type){const key=type==='depth'?'depthCanvas':'confCanvas';if(r[key])return r[key];let c=document.createElement('canvas');c.width=r.canvas.width;c.height=r.canvas.height;let data=new ImageData(c.width,c.height),n=r.files.length;for(let j=0;j<r.depth.length;j++){let colors;if(type==='conf')colors=[r.conf[j],r.conf[j],r.conf[j]];else if(r.depth[j]<0)colors=[0,0,0];else{let h=r.depth[j]/Math.max(1,n-1)*.78,a=h*6,i=Math.floor(a),f=a-i,q=1-f;colors=[[1,f,0],[q,1,0],[0,1,f],[0,q,1],[f,0,1],[1,0,q]][i%6].map(x=>Math.round((.15+x*.85)*255));}data.data.set([...colors,255],j*4);}c.getContext('2d').putImageData(data,0,0);r[key]=c;return c;}
+function draw(){let dpr=window.devicePixelRatio||1,w=canvas.width/dpr,h=canvas.height/dpr;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);if(!selected){$('caption').textContent='Prévia aguardando imagens';$('zoomLabel').textContent='—';return;}$('empty').classList.add('hidden');let img=view==='raw'?rawCanvas(selected):view==='depth'?mapCanvas(selected,'depth'):view==='conf'?mapCanvas(selected,'conf'):view==='finish'?finishedCanvas(selected):selected.canvas;ctx.imageSmoothingEnabled=zoom<2;ctx.drawImage(img,panX,panY,img.width*zoom,img.height*zoom);
+ if(view==='compare'||view==='finish'){ ctx.save();ctx.beginPath();ctx.rect(0,0,w*split,h);ctx.clip();const left=view==='finish'?rawCanvas(selected):($('compareSource').value==='result'?comparisonResult()?.canvas:sourceCanvas);if(left)ctx.drawImage(left,panX,panY,img.width*zoom,img.height*zoom);ctx.restore();ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(w*split,0);ctx.lineTo(w*split,h);ctx.stroke();}
+ $('caption').textContent=(view==='depth'?'Camada predominante':view==='conf'?'Confiança · claro = maior separação entre planos':view==='finish'?'Fusão sem acabamento | Acabamento':view==='raw'?'Fusão sem acabamento':view==='compare'?($('compareSource').value==='result'?'Outra fusão | Resultado':'Original alinhado, sem acabamento | Resultado'):resultRecipeName(selected)+' · '+methodNames[selected.opt.method]+(selected.ai?' · IA':''))+' · '+img.width+' × '+img.height+' px';$('zoomLabel').textContent=Math.round(zoom*100)+'%';}
+function setView(v){view=v;for(const [id,type] of [['viewResult','result'],['viewCompare','compare'],['viewDepth','depth'],['viewConf','conf'],['viewRaw','raw'],['viewFinish','finish']])$(id).classList.toggle('selected',v===type);$('compareBar').classList.toggle('hidden',v!=='compare'&&v!=='finish');$('comparisonOptions').classList.toggle('hidden',v!=='compare');loadSource();draw();}
+function point(e){let r=viewport.getBoundingClientRect();return {x:e.clientX-r.left,y:e.clientY-r.top};}
+function imagePoint(p){return {x:(p.x-panX)/zoom,y:(p.y-panY)/zoom};}
+function downloadBlob(blob,name){if(!blob){warn('O navegador não conseguiu gerar o arquivo. Reduza a resolução e tente novamente.',true);return;}let url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),10000);}
+/* Versioned provenance shared by embedded metadata and the JSON export.
+   All values come from the result; API keys are never stored on results. */
+function processingRecord(r,content='result',format='image/png',quality=null){
+ const base=r.ai?r.aiSource:r,isImage=content==='result',src=isImage?r:base;
+ const hasAI=isImage&&!!r.ai,hasFinish=isImage;
+ const labels={result:hasAI?'Imagem editada por IA':'Empilhamento com acabamento',raw:'Fusão sem acabamento',depth:'Mapa de camada',confidence:'Mapa de confiança',depthData:'Camadas exatas'};
+ return cloneRecord({schema:'FocoLabProcessing',schemaVersion:1,application:'FocoLab',version:APP_VERSION,
+  exported:new Date().toISOString(),result:{id:src.id,uid:src.uid,created:src.createdAt,completed:src.ai?.completedAt||src.completedAt||null},
+  content:{type:content,label:labels[content],generative:hasAI},kind:base.kind,
+  recipe:{id:base.recipe,name:resultRecipeName(base)},method:base.opt.method,
+  files:base.files,input:{width:base.W,height:base.H,count:base.files.length},
+  output:{width:src.canvas.width,height:src.canvas.height,scale:base.scale,crop:base.crop,requested:base.requestedOutput},
+  options:Object.fromEntries(FUSION_KEYS.map(k=>[k,base.opt[k]])),effectiveOptions:base.effective,
+  finishingApplied:hasFinish?base.finish:null,levelsApplied:hasFinish?base.levels:null,
+  colorApplied:hasFinish?base.color:null,postSettings:hasFinish?base.postSettings:null,
+  finishingRevision:hasFinish?base.finishRevision:null,finishingAppliedAt:hasFinish?base.finishAppliedAt:null,
+  sourceStack:{id:base.id,uid:base.uid,created:base.createdAt},
+  generativeEdit:hasAI?{provider:r.ai.provedor,model:r.ai.modelo,returnedModel:r.ai.returnedModel,
+   background:r.ai.fundo,backgroundColor:r.ai.backgroundColor,prompt:r.ai.prompt,
+   requestedAt:r.ai.requestedAt,completedAt:r.ai.completedAt,
+   source:{id:base.id,uid:base.uid,finishingRevision:base.finishRevision,finishingAppliedAt:base.finishAppliedAt},
+   sentSize:r.ai.sentSize,returnedSize:r.ai.returnedSize,exportedSize:{width:r.canvas.width,height:r.canvas.height},
+   resizedToSource:r.ai.returnedSize.width!==r.canvas.width||r.ai.returnedSize.height!==r.canvas.height,
+   pixelLossPercent:r.ai.pixelLossPercent,specimenDifference:r.ai.diferenca,
+   assessment:'Heuristic colour-based mask and average pixel difference; does not establish morphological preservation.'}:null,
+  referenceIndex:base.ref,transforms:base.Ts,alignmentDiagnostics:base.diagnostics,
+  transformConvention:'[a,b,tx,ty]; sourceX=a*referenceX-b*referenceY+tx; sourceY=b*referenceX+a*referenceY+ty; original pixels',
+  performanceStats:base.performanceStats,exposureGains:base.exposureGains,seconds:base.seconds,
+  depthEncoding:'PNG: 0 = invalid; 1 + round(254 * zeroBasedLayerIndex / (N-1)). Float32 little-endian: exact source index, invalid=-1. Not metric depth. Pyramid details can originate from different frames per scale.',
+  encoding:{format,quality:format==='image/jpeg'?quality:null},
+  notes:hasAI?'Generative background editing applied after focus stacking and finishing.':'No generative processing in the exported content.'});
+}
+function metadataSummary(record){return `${record.application} ${record.version}; ${record.recipe.name}; ${record.method}; ${record.content.label}; ${record.output.width} × ${record.output.height} px; resultado ${record.result.id}.`;}
+const metaUTF8=text=>new TextEncoder().encode(text);
+function joinBytes(parts){const out=new Uint8Array(parts.reduce((n,p)=>n+p.length,0));let offset=0;for(const p of parts){out.set(p,offset);offset+=p.length;}return out;}
+function uint32BE(n){const b=new Uint8Array(4);new DataView(b.buffer).setUint32(0,n,false);return b;}
+function crc32(bytes){let crc=0xffffffff;for(const b of bytes){crc^=b;for(let k=0;k<8;k++)crc=(crc>>>1)^((crc&1)?0xedb88320:0);}return (crc^0xffffffff)>>>0;}
+function pngTextChunk(keyword,text){
+ const data=joinBytes([metaUTF8(keyword),new Uint8Array(5),metaUTF8(text)]),body=joinBytes([metaUTF8('iTXt'),data]);
+ if(data.length>0x7fffffff)throw Error('Metadados excedem o limite do PNG.');
+ return joinBytes([uint32BE(data.length),body,uint32BE(crc32(body))]);
+}
+function pngWithMetadata(bytes,record){
+ const sig=[137,80,78,71,13,10,26,10];if(!sig.every((b,i)=>bytes[i]===b))throw Error('A imagem codificada não é PNG.');
+ let offset=8;const view=new DataView(bytes.buffer,bytes.byteOffset,bytes.byteLength);
+ while(offset+12<=bytes.length){
+  const size=view.getUint32(offset,false),end=offset+12+size;if(end>bytes.length)break;
+  if(bytes[offset+4]===73&&bytes[offset+5]===69&&bytes[offset+6]===78&&bytes[offset+7]===68){
+   return new Blob([bytes.subarray(0,offset),pngTextChunk('Software',`FocoLab ${APP_VERSION}`),pngTextChunk('Description',metadataSummary(record)),pngTextChunk('FocoLabProcessing',JSON.stringify(record)),bytes.subarray(offset)],{type:'image/png'});
+  }offset=end;
+ }throw Error('Estrutura PNG inválida; metadados não gravados.');
+}
+// MD5 is required by Adobe Extended XMP solely as a packet identifier.
+function xmpMD5(input){
+ const size=Math.ceil((input.length+9)/64)*64,data=new Uint8Array(size);data.set(input);data[input.length]=128;
+ const dv=new DataView(data.buffer);dv.setUint32(size-8,(input.length*8)>>>0,true);dv.setUint32(size-4,Math.floor(input.length/0x20000000),true);
+ const shifts=[7,12,17,22,5,9,14,20,4,11,16,23,6,10,15,21],K=Array.from({length:64},(_,i)=>Math.floor(Math.abs(Math.sin(i+1))*4294967296)|0);
+ let a0=0x67452301|0,b0=0xefcdab89|0,c0=0x98badcfe|0,d0=0x10325476|0;
+ for(let offset=0;offset<size;offset+=64){let a=a0,b=b0,c=c0,d=d0;
+  for(let i=0;i<64;i++){
+   let f,g;if(i<16){f=(b&c)|(~b&d);g=i;}else if(i<32){f=(d&b)|(~d&c);g=(5*i+1)%16;}else if(i<48){f=b^c^d;g=(3*i+5)%16;}else{f=c^(b|~d);g=(7*i)%16;}
+   const x=(a+f+K[i]+dv.getInt32(offset+4*g,true))|0,n=shifts[4*Math.floor(i/16)+i%4],rot=(x<<n)|(x>>>(32-n));
+   a=d;d=c;c=b;b=(b+rot)|0;
+  }a0=(a0+a)|0;b0=(b0+b)|0;c0=(c0+c)|0;d0=(d0+d)|0;
+ }
+ const out=new Uint8Array(16),v=new DataView(out.buffer);[a0,b0,c0,d0].forEach((n,i)=>v.setInt32(i*4,n,true));
+ return [...out].map(n=>n.toString(16).padStart(2,'0')).join('').toUpperCase();
+}
+function xmlText(value){return String(value).replace(/[<>&"']/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&apos;'}[c]));}
+function xmpPacket(body){return `<x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="FocoLab ${APP_VERSION}"><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:Description rdf:about="" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xmp="http://ns.adobe.com/xap/1.0/" xmlns:xmpNote="http://ns.adobe.com/xmp/note/" xmlns:focolab="urn:focolab:processing:1.0/">${body}</rdf:Description></rdf:RDF></x:xmpmeta>`;}
+function jpegAPP1(payload){
+ if(payload.length>65533)throw Error('Segmento XMP excede o limite JPEG.');
+ const len=payload.length+2;return joinBytes([new Uint8Array([255,225,len>>>8,len&255]),payload]);
+}
+function jpegWithMetadata(bytes,record){
+ if(bytes[0]!==255||bytes[1]!==216)throw Error('A imagem codificada não é JPEG.');
+ const prefix=metaUTF8('http://ns.adobe.com/xap/1.0/\0');
+ const summary=`<xmp:CreatorTool>FocoLab ${APP_VERSION}</xmp:CreatorTool><dc:description><rdf:Alt><rdf:li xml:lang="x-default">${xmlText(metadataSummary(record))}</rdf:li></rdf:Alt></dc:description>`;
+ const fields=`<focolab:SchemaVersion>1</focolab:SchemaVersion><focolab:ProcessingRecord>${xmlText(JSON.stringify(record))}</focolab:ProcessingRecord>`;
+ const full=metaUTF8(xmpPacket(summary+fields));let segments;
+ if(prefix.length+full.length<=65533)segments=[jpegAPP1(joinBytes([prefix,full]))];
+ else{
+  // Extended XMP: the complete custom property is split without truncation.
+  const ext=metaUTF8(xmpPacket(fields));if(ext.length>0xffffffff)throw Error('Registro XMP grande demais.');
+  const guid=xmpMD5(ext),header=joinBytes([metaUTF8('http://ns.adobe.com/xmp/extension/\0'),metaUTF8(guid),uint32BE(ext.length)]);
+  segments=[jpegAPP1(joinBytes([prefix,metaUTF8(xmpPacket(summary+`<xmpNote:HasExtendedXMP>${guid}</xmpNote:HasExtendedXMP>`))]))];
+  const step=65533-header.length-4;
+  for(let offset=0;offset<ext.length;offset+=step)segments.push(jpegAPP1(joinBytes([header,uint32BE(offset),ext.subarray(offset,offset+step)])));
+ }
+ // Keep the encoder's APP0/JFIF header first and the compressed image untouched.
+ let insert=2;
+ while(insert+4<=bytes.length&&bytes[insert]===255&&bytes[insert+1]===224){const length=(bytes[insert+2]<<8)|bytes[insert+3];if(length<2||insert+2+length>bytes.length)throw Error('Cabeçalho JPEG inválido.');insert+=2+length;}
+ return new Blob([bytes.subarray(0,insert),...segments,bytes.subarray(insert)],{type:'image/jpeg'});
+}
+async function embedProcessingMetadata(blob,record){
+ const bytes=new Uint8Array(await blob.arrayBuffer());
+ if(blob.type==='image/png')return pngWithMetadata(bytes,record);
+ if(blob.type==='image/jpeg')return jpegWithMetadata(bytes,record);
+ throw Error('Formato sem suporte aos metadados de processamento.');
+}
+function slugRecipe(r){return resultRecipeName(r).normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');}
+function baseName(r=selected,content='result'){
+ const base=$('outputName').value.trim().replace(/[\\/:*?"<>|]/g,'_')||'imagem_stack';if(!r)return base;
+ const src=content==='result'?r:(r.ai?r.aiSource:r);
+ return `${base}_${slugRecipe(src)}_${src.kind==='preview'?'previa':'final'}${content==='result'&&src.ai?'_ia':''}_${src.canvas.width}x${src.canvas.height}_r${String(src.id).padStart(3,'0')}`;
+}
+function canvasBlob(c,type,quality){return new Promise((resolve,reject)=>c.toBlob(b=>b?resolve(b):reject(Error('Não foi possível codificar a imagem.')),type,quality));}
+async function exportCanvasContent(content){
+ if(!selected||busy)return;
+ const r=selected,type=content==='result'?$('format').value:'image/png',quality=Number($('quality').value)/100;
+ const suffix={result:'',raw:'_fusao_sem_acabamento',depth:'_camadas',confidence:'_confianca'}[content];
+ const name=baseName(r,content)+suffix+(type==='image/jpeg'?'.jpg':'.png');
+ const record=processingRecord(r,content,type,type==='image/jpeg'?quality:null),revision=r.finishRevision;
+ try{
+  const c=content==='raw'?rawCanvas(r):content==='depth'?depthExportCanvas(r):content==='confidence'?mapCanvas(r,'conf'):r.canvas;
+  // toBlob captures these pixels now; completion never consults selected/controls.
+  const encoded=canvasBlob(c,type,quality);
+  const blob=await embedProcessingMetadata(await encoded,record);downloadBlob(blob,name);
+  if(content==='result'&&r.finishRevision===revision){r.saved=true;dirty=results.some(result=>!result.saved);}
+ }catch(e){warn('Falha na exportação: '+e.message+' O arquivo não foi salvo sem seus metadados.',true);}
+}
+function exportImage(){return exportCanvasContent('result');}
+function depthExportCanvas(r){
+ const c=document.createElement('canvas');c.width=r.canvas.width;c.height=r.canvas.height;const im=new ImageData(c.width,c.height),n=r.files.length;
+ for(let j=0;j<r.depth.length;j++){const v=r.depth[j]<0?0:1+Math.round(254*r.depth[j]/Math.max(1,n-1));im.data.set([v,v,v,255],j*4);}
+ c.getContext('2d').putImageData(im,0,0);return c;
+}
+function exportDepth(){return exportCanvasContent('depth');}
+function exportLog(){if(!selected||busy)return;const r=selected,type=$('format').value,quality=Number($('quality').value)/100,log=processingRecord(r,'result',type,type==='image/jpeg'?quality:null);downloadBlob(new Blob([JSON.stringify(log,null,2)],{type:'application/json'}),baseName(r)+'_registro.json');}
+function exportDepthData(){
+ if(!selected||busy)return;const r=selected,b=new ArrayBuffer(r.depth.length*4),v=new DataView(b);
+ r.depth.forEach((z,i)=>v.setFloat32(i*4,z,true));const name=baseName(r,'depthData')+'_camadas_f32le';
+ downloadBlob(new Blob([b],{type:'application/octet-stream'}),name+'.bin');
+ // Preserve the raw Float32 format; provenance for this auxiliary binary is a sidecar.
+ downloadBlob(new Blob([JSON.stringify(processingRecord(r,'depthData','application/octet-stream'),null,2)],{type:'application/json'}),name+'_registro.json');
+}
+
+function showAlignment(){if(!selected)return;let table=document.createElement('table'),head=document.createElement('tr');for(let s of ['Imagem','Δx / Δy (px)','Escala','Correlação']){let th=document.createElement('th');th.textContent=s;head.append(th);}table.append(head);selected.Ts.forEach((T,i)=>{let row=document.createElement('tr'),d=selected.diagnostics.find(d=>d.image===i),cx=selected.W/2,cy=selected.H/2,dx=T[0]*cx-T[1]*cy+T[2]-cx,dy=T[1]*cx+T[0]*cy+T[3]-cy;for(let v of [selected.files[i].name,dx.toFixed(2)+' / '+dy.toFixed(2),Math.hypot(T[0],T[1]).toFixed(5),d?d.after.toFixed(3)+(d.accepted?'':' · sem correção'):i===selected.ref?'Referência':'Desligado']){let td=document.createElement('td');td.textContent=v;row.append(td);}table.append(row);});$('alignmentTable').replaceChildren(table);$('alignDialog').showModal();}
+function rawCanvas(r){if(r.fusedCanvas)return r.fusedCanvas;const c=document.createElement('canvas');c.width=r.canvas.width;c.height=r.canvas.height;c.getContext('2d').putImageData(r.fused,0,0);r.fusedCanvas=c;return c;}
+function comparisonResult(){return results.find(r=>r.id===$('compareResult').value);}
+function updateComparisonResults(){const sel=$('compareResult'),old=sel.value;sel.replaceChildren();for(const r of results)if(r!==selected&&selected&&r.canvas.width===selected.canvas.width&&r.canvas.height===selected.canvas.height&&JSON.stringify(r.crop)===JSON.stringify(selected.crop))sel.add(new Option(resultLabel(r),r.id));if([...sel.options].some(o=>o.value===old))sel.value=old;const other=$('compareSource').querySelector('option[value=result]');other.disabled=!sel.options.length;if(!sel.options.length&&$('compareSource').value==='result'){$('compareSource').value='original';$('compareResult').classList.add('hidden');$('originalSelect').classList.remove('hidden');}}
+$('compareSource').onchange=()=>{$('compareResult').classList.toggle('hidden',$('compareSource').value!=='result');$('originalSelect').classList.toggle('hidden',$('compareSource').value==='result');draw();};
+$('compareResult').onchange=draw;
+$('downloadRaw').onclick=()=>exportCanvasContent('raw');
+$('downloadConfidence').onclick=()=>exportCanvasContent('confidence');
+$('downloadDepthData').onclick=exportDepthData;
+$('preset').onchange=applyRecipe;
+for(const k of Object.keys(defaults))$(k)?.addEventListener('change',()=>{if(FUSION_KEYS.includes(k))toCustom();updateLabels();markMethodRelevance();refreshStates();persist();});for(const k of ['smooth','selectivity','sigma','detailStrength','quality','sharpen','sharpenRadius','depthSmooth','detailGain','baseGain','brightness','focusRadius','focusFloor','sharpenThreshold','whitePoint','chromaGain','fringe'])$(k).addEventListener('input',updateLabels);$('customWidth').addEventListener('input',estimate);$('format').onchange=updateLabels;
+$('applyColor').onclick=reapplyColor;$('aiCopy').onclick=copyAIPrompt;$('aiRun').onclick=runAIClean;for(const id of ['aiProvider','aiBackground','aiBackgroundColor','aiKey','aiModel'])for(const ev of ['input','change'])$(id).addEventListener(ev,()=>{refreshAI();persistAI();});$('applyPost').onclick=reapplyPost;$('compareRecipes').onclick=compareRecipes;
+setupAccordion();syncRecipeFromSettings();buildCompareList();updateCompareEstimate();buildMirror();restoreAI();refreshAI();markMethodRelevance();refreshStates();
+$('drop').onclick=()=>$('fileInput').click();$('folderButton').onclick=()=>$('folderInput').click();for(const id of ['fileInput','folderInput'])$(id).onchange=e=>{addFiles(e.target.files);e.target.value='';};
+async function entryFiles(entry){if(entry.isFile)return new Promise(resolve=>entry.file(f=>resolve([f]),()=>resolve([])));if(entry.isDirectory){const reader=entry.createReader();let out=[];while(true){let entries=await new Promise(resolve=>reader.readEntries(resolve,()=>resolve([])));if(!entries.length)break;for(const ent of entries)out.push(...await entryFiles(ent));}return out;}return [];}
+// Arrastar e soltar em qualquer ponto da janela. Sem a guarda no documento, soltar
+// fora do alvo faria o navegador abrir o arquivo e descartar a sessao inteira.
+let internalDrag=false,dragDepth=0;
+const markDrag=on=>{$('drop').classList.toggle('drag',on);document.body.classList.toggle('dragging',on);};
+async function entryFilesSafe(ent){
+ // entry.file() pode nunca chamar callback nenhum em contextos restritos; sem um
+ // limite de tempo o await ficaria pendurado e nada seria carregado, em silencio.
+ return Promise.race([entryFiles(ent),new Promise(r=>setTimeout(()=>r([]),4000))]);
+}
+async function handleDrop(e){
+ if(busy||loading){warn('Aguarde o processamento terminar antes de carregar novas imagens.',true);return;}
+ const dt=e.dataTransfer;
+ if(!dt)return;
+ // dataTransfer e' invalidado assim que o handler retorna, entao a lista simples
+ // precisa ser copiada AGORA, antes de qualquer await.
+ const direct=[...(dt.files||[])];
+ let entries=[];
+ try{entries=[...(dt.items||[])].map(i=>i.webkitGetAsEntry?.()).filter(Boolean);}catch{}
+ let list=[];
+ for(const ent of entries){try{list.push(...await entryFilesSafe(ent));}catch{}}
+ // Reserva: se a travessia por entradas nao rendeu nada -- acontece com pastas
+ // vazias e em contextos onde a FileSystem API e' bloqueada, como algumas
+ // configuracoes de file:// -- usa a lista simples capturada acima.
+ if(!list.length)list=direct;
+ if(!list.length){warn('Não foi possível ler os arquivos arrastados. Use o botão "Adicionar fotografias".',true);return;}
+ addFiles(list);
+}
+document.addEventListener('dragenter',e=>{if(internalDrag)return;e.preventDefault();dragDepth++;markDrag(true);},true);
+document.addEventListener('dragover',e=>{if(internalDrag)return;e.preventDefault();try{e.dataTransfer.dropEffect='copy';}catch{}},true);
+document.addEventListener('dragleave',e=>{if(internalDrag)return;dragDepth=Math.max(0,dragDepth-1);if(!dragDepth)markDrag(false);},true);
+document.addEventListener('drop',e=>{if(internalDrag)return;e.preventDefault();e.stopPropagation();dragDepth=0;markDrag(false);handleDrop(e);},true);
+document.addEventListener('dragend',()=>{internalDrag=false;dragDepth=0;markDrag(false);},true);
+$('newSeries').onclick=()=>{if(!abandon())return;files=[];clearResults();renderFiles();warn('');$('status').textContent='Carregue uma nova série.';};$('clearAll').onclick=()=>{if(!abandon())return;files=[];clearResults();applySettings(defaults);syncRecipeFromSettings();refreshStates();persist();renderFiles();warn('');};$('defaults').onclick=()=>{applySettings(defaults);syncRecipeFromSettings();refreshStates();persist();};
+$('reapply').onclick=reapplyFinish;$('preview').onclick=()=>start('preview');$('final').onclick=()=>start('final');$('cancel').onclick=cancel;$('resultSelect').onchange=()=>{let r=results.find(r=>r.id===$('resultSelect').value);if(r)useResult(r);};$('originalSelect').onchange=()=>loadSource();
+for(const [id,v] of [['viewResult','result'],['viewCompare','compare'],['viewDepth','depth'],['viewConf','conf'],['viewRaw','raw'],['viewFinish','finish']])$(id).onclick=()=>setView(v);$('split').oninput=()=>{split=Number($('split').value)/100;draw();};$('fit').onclick=fitView;$('zoom100').onclick=()=>setZoom(1);$('zoomIn').onclick=()=>setZoom(zoom*1.25);$('zoomOut').onclick=()=>setZoom(zoom/1.25);
+canvas.addEventListener('wheel',e=>{e.preventDefault();let p=point(e);setZoom(zoom*Math.exp(-e.deltaY*.0015),p.x,p.y);},{passive:false});canvas.onpointerdown=e=>{canvas.focus();canvas.setPointerCapture(e.pointerId);let p=point(e);pointers.set(e.pointerId,p);if(pointers.size===2){let [a,b]=[...pointers.values()];gesture={distance:Math.hypot(a.x-b.x,a.y-b.y),zoom};return;}gesture={start:p,panX,panY};};
+canvas.onpointermove=e=>{if(!pointers.has(e.pointerId))return;let p=point(e),old=pointers.get(e.pointerId);pointers.set(e.pointerId,p);if(pointers.size===2){let [a,b]=[...pointers.values()],dist=Math.hypot(a.x-b.x,a.y-b.y);if(gesture?.distance)setZoom(gesture.zoom*dist/gesture.distance,(a.x+b.x)/2,(a.y+b.y)/2);return;}panX+=p.x-old.x;panY+=p.y-old.y;draw();};
+function pointerEnd(e){pointers.delete(e.pointerId);gesture=null;}canvas.onpointerup=pointerEnd;canvas.onpointercancel=pointerEnd;canvas.onlostpointercapture=pointerEnd;canvas.onkeydown=e=>{if(['+','=','-','0','ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))e.preventDefault();if(e.key==='+'||e.key==='=')setZoom(zoom*1.2);if(e.key==='-')setZoom(zoom/1.2);if(e.key==='0')fitView();if(e.key==='ArrowLeft')panX+=30;if(e.key==='ArrowRight')panX-=30;if(e.key==='ArrowUp')panY+=30;if(e.key==='ArrowDown')panY-=30;draw();};
+$('download').onclick=exportImage;$('downloadDepth').onclick=exportDepth;$('downloadLog').onclick=exportLog;$('alignmentDetails').onclick=showAlignment;$('help').onclick=()=>$('guideDialog').showModal();document.querySelectorAll('[data-close]').forEach(e=>e.onclick=()=>e.closest('dialog').close());$('theme').onclick=()=>{document.body.classList.toggle('dark');try{localStorage.setItem('focolab.theme',document.body.classList.contains('dark')?'dark':'light');}catch{}};
+try{applySettings(JSON.parse(localStorage.getItem('focolab.settings.v2')||'{}'));syncRecipeFromSettings();refreshStates();let theme=localStorage.getItem('focolab.theme');document.body.classList.toggle('dark',theme?theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches);}catch{applySettings(defaults);}new ResizeObserver(resize).observe(viewport);window.addEventListener('beforeunload',e=>{if(dirty||busy){e.preventDefault();e.returnValue='';}});renderFiles();controls();
+if(!window.Worker||!window.OffscreenCanvas||!window.createImageBitmap)warn('Este navegador não oferece os recursos necessários. Abra o arquivo no Chrome ou Edge atualizado.',true);
+
+</script>
+</body></html>
