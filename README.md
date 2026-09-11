@@ -10,7 +10,7 @@ Feito para material de estereoscópio: séries de 8 a 20 fotografias do mesmo es
 
 ## Instalação
 
-Não há instalação. Baixe `FocoLab.html` e abra no navegador.
+Não há instalação. Baixe `index.html` e abra no navegador.
 
 Todo o processamento acontece no seu computador. Nenhuma imagem é enviada a servidor algum. O arquivo funciona offline, inclusive aberto diretamente do disco (`file://`).
 
