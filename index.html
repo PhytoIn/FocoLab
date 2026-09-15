@@ -79,7 +79,7 @@ input[type=range]{height:44px}
 <div class="layout"><aside class="panel sidebar"><details class="acc" id="acc_imagens" open><summary>Imagens<span class="accState" id="state_imagens"></span></summary><div class="accBody"><div><div class="eyebrow">Sua série fotográfica</div><h2>Imagens de entrada</h2><button class="drop" id="drop"><strong>+ Adicionar fotografias</strong><span>Solte arquivos ou uma pasta em qualquer ponto da janela<br>JPEG, PNG, WebP e TIFF</span></button><input id="fileInput" type="file" multiple accept="image/jpeg,image/png,image/webp,image/tiff,.tif,.tiff"><div class="row" style="margin-top:8px"><button class="small" id="folderButton">Abrir pasta</button><button class="small" id="newSeries">Nova série</button></div><input id="folderInput" type="file" webkitdirectory multiple><p class="meta" id="fileMeta">Nenhuma imagem carregada.</p><ol class="files" id="files"></ol><p class="hint" id="orderHint">Ordene os planos de foco em uma única direção. O modo Interpolado exige ordem correta e passos aproximadamente regulares. Arraste as miniaturas ou use as setas.</p></div>
 </div></details><details class="acc" id="acc_receita"><summary>Receita<span class="accState" id="state_receita"></span></summary><div class="accBody"><div class="section"><label class="field">Receita<select id="preset"><option value="balanced">Equilibrada</option><option value="detail">Detalhe máximo</option><option value="metallic">Cutícula metálica</option><option value="noisy">Série ruidosa</option><option value="smooth">Relevo contínuo</option><option value="thin">Estruturas finas</option><option value="custom">Personalizada</option></select></label><div class="recipeCard" id="recipeCard"><b id="recipeTitle"></b><span id="recipeText"></span></div><p class="hint">Mudar qualquer controle em <b>Personalizada</b> troca a receita para Personalizada, preservando os valores. O rótulo nunca deixa de corresponder ao que está configurado.</p><div class="recipeCard" style="margin-top:14px"><b>Comparar receitas</b><span>Marque as receitas que quer avaliar. Cada uma gera um resultado em prévia, selecionável no visualizador.</span><div id="compareList" style="margin-top:10px;display:grid;gap:6px"></div><p class="hint" id="compareEstimate" style="margin:10px 0 8px"></p><button id="compareRecipes" style="width:100%">Comparar receitas marcadas</button></div>
 <label class="field">Suavização das transições <output class="value" id="smoothVal">6</output><input id="smooth" type="range" min="0" max="20" value="6" title="Raio em pixels para uma imagem de 2048 pixels; ajustado à resolução."></label><span class="phint">Suaviza máscaras de seleção junto às bordas. Valores menores preservam transições estreitas; valores maiores podem reduzir emendas e também suavizar detalhes.</span><label class="field">Preferência por regiões nítidas <output class="value" id="selectivityVal">12</output><input id="selectivity" type="range" min="4" max="30" value="12"></label><span class="phint">Na fusão ponderada, valores maiores concentram o peso nas regiões mais nítidas. A Pirâmide máxima escolhe o maior sinal por escala. O modo Natural usa o mapa de camadas.</span>
-<label class="check"><input id="align" type="checkbox" checked>Alinhamento automático</label><span class="phint">Corrige deslocamentos entre planos. A busca usa várias resoluções e refinamento subpixel; correções sem melhora suficiente são rejeitadas. Verifique correspondências fracas antes de exportar.</span><label class="check"><input id="scale" type="checkbox" checked>Corrigir variação de escala</label><span class="phint">Compensa mudanças de magnificação entre planos. Deixe ligado quando houver variação de escala; desligue em séries previamente registradas.</span><label class="check"><input id="balance" type="checkbox">Equilibrar exposição</label><span class="phint">Opcional: estima um ganho de luminosidade entre planos vizinhos. Não corrige balanço de branco nem reflexos. Os ganhos ficam registrados.</span><label class="check"><input id="crop" type="checkbox" checked>Recortar a área comum</label><span class="phint">Ligado: corta as bordas sem dado em todas as camadas, garantindo imagem inteira válida. Desligado: preserva o enquadramento completo, com possíveis faixas incompletas nas bordas.</span>
+<h3 style="margin-top:16px">Alinhamento</h3><label class="check"><input id="align" type="checkbox" checked>Alinhamento automático</label><span class="phint">Corrige deslocamentos entre planos. A busca usa várias resoluções e refinamento subpixel; correções sem melhora suficiente são rejeitadas. Verifique correspondências fracas antes de exportar.</span><label class="check"><input id="robustAlign" type="checkbox" aria-describedby="robustAlignHint">Alinhamento robusto</label><span class="phint" id="robustAlignHint">Para fotos com maiores deslocamentos, como séries feitas com a câmera na mão. Inclui rotação, busca ampliada e verificação por regiões. Pode levar mais tempo; não corrige movimentos do inseto.</span><label class="check"><input id="scale" type="checkbox" checked>Corrigir variação de escala</label><span class="phint">Compensa mudanças de magnificação entre planos. Deixe ligado quando houver variação de escala; desligue em séries previamente registradas.</span><label class="check"><input id="balance" type="checkbox">Equilibrar exposição</label><span class="phint">Opcional: estima um ganho de luminosidade entre planos vizinhos. Não corrige balanço de branco nem reflexos. Os ganhos ficam registrados.</span><label class="check"><input id="crop" type="checkbox" checked>Recortar a área comum</label><span class="phint">Ligado: corta as bordas sem dado em todas as camadas, garantindo imagem inteira válida. Desligado: preserva o enquadramento completo, com possíveis faixas incompletas nas bordas.</span>
 </div></div></details><details class="acc" id="acc_acabamento"><summary>Acabamento<span class="accState" id="state_acabamento"></span></summary><div class="accBody"><div class="eyebrow" style="margin-top:14px">Acabamento</div><label class="field">Nitidez <output id="sharpenVal" class="value">0.8</output><input id="sharpen" type="range" min="0" max="2" step="0.05" value="0.8"></label><span class="phint">Acabamento separado da fusão. Zero desliga. Aumentar destaca bordas, mas pode realçar ruído e halos; confira a visualização “Acabamento”.</span><label class="field">Raio da nitidez (px) <output id="sharpenRadiusVal" class="value">2</output><input id="sharpenRadius" type="range" min="0.5" max="4" step="0.1" value="2"></label><span class="phint">Aumentar: realça estruturas maiores (contorno do corpo, nervuras da asa), dando impressão de mais contraste. Diminuir: realça só a textura fina (pontuações, cerdas), efeito mais discreto.</span><label class="check"><input id="stretch" type="checkbox" checked>Esticar níveis (ponto preto e branco)</label><span class="phint">Ligado: reposiciona o ponto preto e o branco, aumentando contraste e tornando as cores mais vivas. Desligado: mantém a tonalidade original da fusão.</span><label class="check"><input id="protectHighlights" type="checkbox" checked>Proteger altas luzes</label><span class="phint">Ligado: limita o quanto o esticamento pode estourar o branco — importante com fundo de papel claro. Desligado: contraste um pouco maior, com mais área saturada no fundo.</span><label class="field">Margem do esticamento<input id="stretchDelta" type="number" min="0" max="30" step="1" value="5"></label><span class="phint">Aumentar: corta mais das pontas do histograma — contraste mais forte, mais risco de perder detalhe nas sombras e nas altas luzes. Diminuir: esticamento mais conservador e fiel ao original.</span><label class="field">Limiar do realce <output id="sharpenThresholdVal" class="value">0.4</output><input id="sharpenThreshold" type="range" min="0" max="3" step="0.1" value="0.4"></label><span class="phint">Evita realçar variações fracas da luminância, inclusive ruído. Zero aplica realce a todas as variações.</span><button class="small" id="reapply">Reaplicar acabamento</button><p class="hint">Aplicado depois da fusão. Mudar estes valores não exige refazer o empilhamento.</p></div></details><details class="acc" id="acc_cor"><summary>Cor<span class="accState" id="state_cor"></span></summary><div class="accBody"><label class="check"><input id="colorOn" type="checkbox">Ativar realce de cor</label><span class="phint">Aplicado depois da fusão e reversível. Não refaz o empilhamento.</span><label class="field">Ponto branco do fundo <output id="whitePointVal" class="value">210</output><input id="whitePoint" type="range" min="160" max="245" step="1" value="210"></label><span class="phint">Leva o fundo ao tom alvo e neutraliza dominante de cor, canal a canal. Aumentar: fundo mais claro e limpo. Diminuir: preserva o tom original da iluminação.</span><label class="field">Saturação <output id="chromaGainVal" class="value">1.25</output><input id="chromaGain" type="range" min="1" max="1.8" step="0.05" value="1.25"></label><span class="phint">Reforça apenas onde já existe cor, preservando o fundo neutro. Aumentar: cutícula metálica mais viva. Acima de ~1,5 as cores deixam de ser fiéis.</span><label class="field">Supressão de franja <output id="fringeVal" class="value">0.7</output><input id="fringe" type="range" min="0" max="1" step="0.05" value="0.7"></label><span class="phint">Remove a franja magenta da aberração cromática lateral do estereoscópio, dessaturando-a em direção à cor dos vizinhos. Não repinta nem inventa cor. Aumentar: menos franja. Zero: desliga.</span><button class="small" id="applyColor">Aplicar realce de cor</button></div></details><details class="acc" id="acc_avancado"><summary>Personalizada<span class="accState" id="state_avancado"></span></summary><div class="accBody"><label class="field" id="methodField">Método de fusão<select id="method"><option value="natural">Natural · mapa de camadas</option><option value="detail">Pirâmide ponderada · transições suaves</option><option value="maximum" selected>Pirâmide máxima · detalhes finos</option><option value="interpolated">Interpolado · entre planos vizinhos</option></select></label><span class="phint">Só ajuste aqui se souber o que procura — as receitas já escolhem o método adequado. Comece pelos métodos de pirâmide. Natural e Interpolado permanecem disponíveis para comparação, mas podem produzir manchas quando o mapa de camadas é ambíguo. Confira cerdas, bordas e reflexos nas fotografias originais.</span><p class="hint" id="methodHint">Seleciona regiões em foco e suaviza as transições preservando bordas.</p><label class="check"><input id="rotation" type="checkbox">Corrigir pequena rotação</label><span class="phint">Ligado: o alinhamento também procura rotação. Só ajuda se a câmera girou entre as capturas; caso contrário adiciona busca e risco de reamostrar sem necessidade.</span><label class="field">Busca entre planos (% da largura)<input id="search" type="number" min="0.2" max="15" step="0.2" value="4"></label><span class="phint">Aumentar: tolera deslocamentos maiores entre planos, ao custo de tempo de busca e de mais chance de encontrar um casamento falso. Diminuir: busca mais rápida e segura quando as camadas já estão quase registradas.</span><label class="field">Raio de avaliação do foco <output id="focusRadiusVal" class="value">2</output><input id="focusRadius" type="range" min="1" max="8" value="2"></label><span class="phint">Vizinhança em pixels, referida a 2048 px no lado maior. Ajustado à resolução; independente da suavização das transições.</span>
 <label class="field">Alcance do detalhe<input id="spread" type="number" min="1" max="5" value="1"></label><span class="phint">Distância entre amostras do detector. 1 favorece detalhes estreitos; valores maiores podem ajudar em imagens suaves.</span>
 <label class="field">Limiar de detalhe <output id="focusFloorVal" class="value">0.4</output><input id="focusFloor" type="range" min="0" max="4" step="0.1" value="0.4"></label>
@@ -115,7 +115,7 @@ input[type=range]{height:44px}
 <p>O <b>acabamento</b> aplica realce de nitidez e, opcionalmente, esticamento de níveis com proteção das altas luzes. O <b>realce de cor</b> tem três etapas: ponto branco automático medido no fundo, saturação seletiva apenas onde já existe cor, e supressão de franja cromática. A franja magenta em bordas de alto contraste é aberração cromática lateral do estereoscópio, presente nas fotografias originais; o FocoLab a dessatura em direção à cor dos vizinhos, sem repintar nem inventar cor.</p>
 
 <h3>Alinhamento</h3>
-<p>Desligado por padrão. Ligue apenas se notar deslocamento entre as camadas na aba Comparar: cada correção reamostra o quadro inteiro e custa nitidez. Nas séries testadas, a correlação de fase em resolução plena não encontrou deslocamento mensurável.</p>
+<p><b>Alinhamento automático</b> corrige deslocamentos entre camadas; a opção de escala compensa mudanças de magnificação. Para séries já alinhadas, pode ser desligado.</p><p><b>Alinhamento robusto</b>, logo abaixo, é opcional e vem desmarcado. Ative para séries com maiores deslocamentos ou giros, como fotografias feitas com a câmera na mão. Inclui rotação de até 8°, busca inicial de pelo menos 12% da largura, ampliada até 25% quando necessário, refinamento subpixel e verificação em regiões com textura. A opção de escala continua sendo respeitada; quando ligada, permite razões de escala entre 1/1,15 e 1,15 por par. A busca indicada em Personalizada define o mínimo inicial. Se uma comparação falhar, tenta outras imagens registradas; se não houver correspondência confiável, interrompe e informa quais imagens revisar. Não corrige movimentos independentes de asas, pernas ou antenas.</p><p>Use fotografias originais com dimensões iguais. Confira os detalhes na aba Comparar e no Registro entre planos. O modo robusto preserva as proporções e não aplica deformações locais. O alinhamento é reutilizado ao trocar a receita ou a resolução; mudar o modo exige um novo alinhamento.</p>
 
 <h3>Desempenho</h3>
 <p>O orçamento de memória define o tamanho do bloco e é dividido entre os processos paralelos. <b>Ampla · 640 MB</b> libera quatro processos e foi o mais rápido nos testes com 15 imagens de 8,3 MP; <b>Econômica</b> usa um processo, para quando faltar memória. A linha de diagnóstico ao fim do processamento mostra blocos, processos, decodificações e aproveitamento do cache.</p>
@@ -590,6 +590,136 @@ function fitPair(ref,src,w,h,opt){
  const accepted=after>.75&&after-before>(opt.alignGain??.0002);
  return {T:accepted?[a,b,w/2+p[0]-a*w/2+b*h/2,h/2+p[1]-b*w/2-a*h/2]:identity(),before,after,accepted,shift:p.slice(0,2),scale:sc,angle:p[3],reason:accepted?'correction':after<.75?'weak-match':'negligible-gain'};
 }
+// Optional robust registration. The standard fitPair path remains unchanged.
+// All transforms map reference pixels to source pixels; no local deformation.
+const ROBUST_ALIGNMENT_VERSION=1;
+function robustPyramid(a,w,h){
+ const p=[{a:gauss(a,w,h,1),w,h}];
+ while(p.at(-1).w>144&&p.at(-1).h>80){const q=p.at(-1);p.push(down(q.a,q.w,q.h));}
+ return p.reverse();
+}
+function robustTransform(p,w,h){const a=Math.exp(p[2])*Math.cos(p[3]),b=Math.exp(p[2])*Math.sin(p[3]);return [a,b,w/2+p[0]-a*w/2+b*h/2,h/2+p[1]-b*w/2-a*h/2];}
+function robustScorer(ref,src,w,h){
+ const sx=ref.w/w,sy=ref.h/h,points=[],step=Math.max(1,Math.ceil(Math.sqrt(ref.w*ref.h/6500)));
+ for(let y=4;y<ref.h-4;y+=step)for(let x=4;x<ref.w-4;x+=step)points.push([x,y,ref.a[y*ref.w+x]]);
+ return p=>{
+  const T=robustTransform(p,w,h);let sa=0,sb=0,saa=0,sbb=0,sab=0,n=0;
+  for(const [x,y,u] of points){const xx=(T[0]*x/sx-T[1]*y/sy+T[2])*sx,yy=(T[1]*x/sx+T[0]*y/sy+T[3])*sy;
+   if(xx<3||yy<3||xx>src.w-4||yy>src.h-4)continue;
+   const v=sample(src.a,src.w,src.h,xx,yy);sa+=u;sb+=v;saa+=u*u;sbb+=v*v;sab+=u*v;n++;
+  }
+  if(n<Math.max(30,points.length*.55))return -1;
+  const va=saa-sa*sa/n,vb=sbb-sb*sb/n;
+  if(va/n<1e-7||vb/n<1e-7)return -1;
+  return (sab-sa*sb/n)/Math.sqrt(va*vb);
+ };
+}
+function robustLocalCheck(ref,src,w,h,p){
+ const T=robustTransform(p,w,h),scores=[],cells=[],nx=6,ny=4;
+ for(let gy=0;gy<ny;gy++)for(let gx=0;gx<nx;gx++){
+  const x0=Math.floor(gx*w/nx)+4,x1=Math.floor((gx+1)*w/nx)-4,y0=Math.floor(gy*h/ny)+4,y1=Math.floor((gy+1)*h/ny)-4;
+  const step=Math.max(1,Math.ceil(Math.sqrt((x1-x0)*(y1-y0)/350)));
+  let sa=0,sb=0,saa=0,sbb=0,sab=0,n=0,total=0;
+  for(let y=y0;y<y1;y+=step)for(let x=x0;x<x1;x+=step){total++;const xx=T[0]*x-T[1]*y+T[2],yy=T[1]*x+T[0]*y+T[3];
+   if(xx<3||yy<3||xx>w-4||yy>h-4)continue;
+   const u=ref[y*w+x],v=sample(src,w,h,xx,yy);sa+=u;sb+=v;saa+=u*u;sbb+=v*v;sab+=u*v;n++;
+  }
+  if(n<Math.max(20,total*.65))continue;
+  const va=saa-sa*sa/n,vb=sbb-sb*sb/n;
+  // Textureless background contributes no evidence of correct local registration.
+  if(va/n<2e-5||vb/n<2e-5)continue;
+  const corr=(sab-sa*sb/n)/Math.sqrt(va*vb);scores.push(corr);if(corr>.6)cells.push([gx,gy]);
+ }
+ scores.sort((a,b)=>a-b);
+ const median=scores.length?scores[Math.floor(scores.length/2)]:-1;
+ const supported=cells.length,coverage=supported/Math.max(1,scores.length);
+ const spatial=new Set(cells.map(c=>c[0])).size>=2&&new Set(cells.map(c=>c[1])).size>=2;
+ return {median,regions:scores.length,supported,coverage,spatial,ok:supported>=4&&coverage>=.5&&median>.6&&spatial};
+}
+function fitPairRobust(ref,src,w,h,opt,preparedRef,preparedSrc){
+ const rp=preparedRef||robustPyramid(ref,w,h),sp=preparedSrc||robustPyramid(src,w,h);
+ const logLimit=opt.scale?Math.log(1.15):0,angleLimit=8*Math.PI/180;
+ const initialBound=Math.min(.25,Math.max(.12,(opt.maxShift||0)/(opt.originalWidth||w)))*w;
+ const within=(p,bound)=>Math.abs(p[0])<=bound&&Math.abs(p[1])<=Math.min(bound,h*.3)&&Math.abs(p[2])<=logLimit&&Math.abs(p[3])<=angleLimit;
+ const optimize=(initial,level,bound)=>{
+  const q=rp[level],score=robustScorer(q,sp[level],w,h);let p=initial.slice(),best=score(p);
+  for(const d of (level===0?[2,1,.5,.2]:[1,.4,.15,.05]))for(let rep=0;rep<36;rep++){
+   let changed=false;const ds=[d*w/q.w,d*h/q.h,opt.scale?d/q.w*.6:0,d/q.w*.6];
+   for(let axis=0;axis<4;axis++)if(ds[axis]){let chosen=p,bs=best;
+    for(const sign of [-1,1]){const t=p.slice();t[axis]+=sign*ds[axis];if(!within(t,bound))continue;const v=score(t);if(v>bs+1e-9){bs=v;chosen=t;}}
+    if(chosen!==p){p=chosen;best=bs;changed=true;}
+   }
+   if(!changed)break;
+  }
+  return {p,score:best};
+ };
+ const search=bound=>{
+  const q=rp[0],score=robustScorer(q,sp[0],w,h),seeds=[];
+  const dx=4*w/q.w,dy=4*h/q.h;
+  const angles=[0,-4*Math.PI/180,4*Math.PI/180,-angleLimit,angleLimit],logs=opt.scale?[0,-.07,.07]:[0];
+  const keep=(p,s)=>{if(s<0)return;if(seeds.length===6&&s<=seeds.at(-1).score)return;
+   const near=seeds.findIndex(t=>Math.abs(t.p[0]-p[0])<dx&&Math.abs(t.p[1]-p[1])<dy&&Math.abs(t.p[3]-p[3])<.025&&Math.abs(t.p[2]-p[2])<.025);
+   if(near>=0){if(seeds[near].score>=s)return;seeds.splice(near,1);}seeds.push({p,score:s});seeds.sort((a,b)=>b.score-a.score);seeds.length=Math.min(6,seeds.length);
+  };
+  keep([0,0,0,0],score([0,0,0,0]));
+  const bx=Math.ceil(bound/dx),by=Math.ceil(Math.min(bound,h*.3)/dy);
+  for(const angle of angles)for(const log of logs)for(let iy=-by;iy<=by;iy++)for(let ix=-bx;ix<=bx;ix++){
+   const p=[clamp(ix*dx,-bound,bound),clamp(iy*dy,-Math.min(bound,h*.3),Math.min(bound,h*.3)),log,angle];keep(p,score(p));
+  }
+  let best={p:[0,0,0,0],score:-1};
+  for(const seed of seeds){const fit=optimize(seed.p,0,bound);if(fit.score>best.score)best=fit;}
+  for(let level=1;level<rp.length;level++)best=optimize(best.p,level,bound);
+  const fine=rp.at(-1),source=sp.at(-1),before=robustScorer(fine,source,w,h)([0,0,0,0]);
+  const local=robustLocalCheck(fine.a,source.a,w,h,best.p),edge=Math.abs(best.p[0])>bound-2*w/rp[0].w||Math.abs(best.p[1])>Math.min(bound,h*.3)-2*h/rp[0].h;
+  return {...best,before,local,edge,bound};
+ };
+ let fit=search(initialBound),attempts=1;
+ if(initialBound<w*.25&&(fit.score<.9||fit.edge||!fit.local.ok)){
+  const wide=search(w*.25);attempts++;
+  if((wide.local.ok&&!fit.local.ok)||(wide.local.ok===fit.local.ok&&wide.score>fit.score))fit=wide;
+ }
+ const improvement=fit.score-fit.before;
+ const negligible=improvement<=(opt.alignGain??.0002);
+ const fine=rp.at(-1),source=sp.at(-1);
+ const unchangedLocal=negligible?robustLocalCheck(fine.a,source.a,w,h,[0,0,0,0]):null;
+ const alreadyAligned=negligible&&fit.before>.9&&unchangedLocal.ok&&Math.hypot(fit.p[0],fit.p[1])<.5&&Math.abs(fit.p[2])<.0005&&Math.abs(fit.p[3])<.0005;
+ const accepted=fit.score>.8&&fit.local.ok&&!negligible&&!fit.edge;
+ const reliable=accepted||alreadyAligned,p=accepted?fit.p:[0,0,0,0];
+ return {T:robustTransform(p,w,h),before:fit.before,after:accepted?fit.score:fit.before,candidateScore:fit.score,accepted,reliable,
+  shift:p.slice(0,2),scale:Math.exp(p[2]),angle:p[3],reason:accepted?'correction':alreadyAligned?'already-aligned':fit.edge?'search-limit':'weak-match',
+  mode:'robust',version:ROBUST_ALIGNMENT_VERSION,local:alreadyAligned?unchangedLocal:fit.local,searchFraction:fit.bound/w,attempts,
+  limits:{rotationDegrees:8,scaleRatio:opt.scale?[1/1.15,1.15]:[1,1]}};
+}
+function registerRobustStack(desc,w,h,opt,names=[],progress=()=>{}){
+ const n=desc.length,ref=Math.floor(n/2),Ts=Array.from({length:n},identity),diagnostics=[];
+ const pyramids=desc.map(a=>robustPyramid(a,w,h)),registered=new Set([ref]),pending=new Set(),attempted=new Set();
+ const order=[];for(let d=1;d<n;d++)for(const i of [ref+d,ref-d])if(i>=0&&i<n)order.push(i);
+ const register=(i,candidates)=>{
+  for(const prev of candidates){const key=prev+':'+i;if(attempted.has(key))continue;attempted.add(key);
+   progress(`Alinhamento robusto · ${names[i]||'imagem '+(i+1)} ↔ ${names[prev]||'imagem '+(prev+1)}`,registered.size-1);
+   const fit=fitPairRobust(desc[prev],desc[i],w,h,opt,pyramids[prev],pyramids[i]);
+   if(!fit.reliable)continue;
+   Ts[i]=compose(fit.T,Ts[prev]);registered.add(i);
+   const gain=opt.balance?exposureRatio(desc[prev],desc[i],w,h,fit.T):1;
+   diagnostics.push({image:i,reference:prev,...fit,exposureRatio:gain,recovered:Math.abs(prev-i)!==1});return true;
+  }
+  return false;
+ };
+ for(const i of order){const near=[...registered].sort((a,b)=>Math.abs(a-i)-Math.abs(b-i)).slice(0,2);
+  if(!register(i,near))pending.add(i);
+ }
+ // Retry after more frames are registered; a failed pair never becomes a parent.
+ for(let pass=0;pass<2&&pending.size;pass++){
+  let changed=false;
+  for(const i of [...pending]){const near=[...registered].sort((a,b)=>Math.abs(a-i)-Math.abs(b-i)).slice(0,4);if(!near.includes(ref))near.push(ref);
+   if(register(i,near)){pending.delete(i);changed=true;}
+  }
+  if(!changed)break;
+ }
+ if(pending.size)throw Error('Alinhamento robusto sem correspondência confiável: '+[...pending].map(i=>names[i]||'imagem '+(i+1)).join(', ')+'. Verifique a sequência ou remova essas imagens e tente novamente. Nenhuma fusão foi gerada.');
+ return {Ts,diagnostics,ref};
+}
+
 function exposureRatio(ref,src,w,h,T){
  const ratios=[],a=gauss(ref,w,h,2),b=gauss(src,w,h,2);
  const step=Math.max(2,Math.floor(Math.sqrt(w*h/8000)));
@@ -618,6 +748,7 @@ let bandY0=0,bandCache=new Map(),bandRows=null,useBand=true,poolFiles=null;
 /* Recorta e guarda a faixa horizontal de linhas [rows.from, rows.to) para todas as
    origens. A margem cobre a moldura do bloco e o deslocamento maximo do alinhamento. */
 async function setupBand(plan,filesList,rows){
+ if(plan?.robustAlign)releaseBand();
  bandRows=null;
  if(!rows||!plan)return;
  const {crop,core,halo,scale,inputScale,W,H,maxShift}=plan;
@@ -625,10 +756,19 @@ async function setupBand(plan,filesList,rows){
  const yTop=crop.y+rows.from*core-halo, yBot=crop.y+rows.to*core+halo;
  const margin=Math.ceil(64+(maxShift||0)*scale);
  const sw=Math.round(W*inputScale), sh=Math.round(H*inputScale);
- const sy0=Math.max(0,Math.floor(yTop/pixelScale)-margin);
- const sy1=Math.min(sh,Math.ceil(yBot/pixelScale)+margin);
+ let sy0=Math.max(0,Math.floor(yTop/pixelScale)-margin);
+ let sy1=Math.min(sh,Math.ceil(yBot/pixelScale)+margin);
+ if(plan.robustAlign){
+  const grid=2**(plan.eff.levels-1),pad=halo+2*grid+4;
+  const left=(crop.x-pad)/scale,right=(crop.x+crop.w+pad)/scale;
+  const top=(crop.y+rows.from*core-pad)/scale,bottom=(crop.y+rows.to*core+pad)/scale;
+  let lo=Infinity,hi=-Infinity;
+  for(const T of plan.Ts)for(const x of [left,right])for(const y of [top,bottom]){const yy=(T[1]*x+T[0]*y+T[3])*inputScale;lo=Math.min(lo,yy);hi=Math.max(hi,yy);}
+  sy0=Math.max(0,Math.floor(lo)-4);sy1=Math.min(sh,Math.ceil(hi)+4);
+ }
+ if(sy1<=sy0)return;
  if(sy1-sy0>=sh)return;                 // faixa cobre tudo: nao ha o que economizar
- await prepareBand(filesList,sy0,sy1,sw);
+ try{await prepareBand(filesList,sy0,sy1,sw);}catch(error){if(plan.robustAlign)releaseBand();throw error;}
  bandRows=rows;
 }
 /* Cache por FAIXA. Antes o cache guardava a imagem INTEIRA, e uma origem de 8,3 MP
@@ -681,7 +821,12 @@ async function run(job){
  if(!Ts){Ts=Array.from({length:n},identity);
   if(opt.align||opt.balance){let dw=Math.round(W*Math.min(1,1024/Math.max(W,H))),dh=Math.round(H*dw/W),desc=[];
    for(let i=0;i<n;i++){notify(2+8*i/n,`Preparando alinhamento ${i+1} de ${n}`);desc.push(await descriptor(alignmentSource[i],dw,dh));}
+   if(opt.align&&opt.robustAlign){
+    const registered=registerRobustStack(desc,dw,dh,{...opt,originalWidth:W},job.names||[],(stage,count)=>notify(10+10*count/Math.max(1,n-1),stage));
+    Ts=registered.Ts;diagnostics=registered.diagnostics;
+   }else{
    for(let dir of [1,-1])for(let i=ref+dir;i>=0&&i<n;i+=dir){let prev=i-dir,fit=opt.align?fitPair(desc[prev],desc[i],dw,dh,{...opt,originalWidth:W}):{T:identity(),before:1,after:1,accepted:false,reason:'disabled'};Ts[i]=compose(fit.T,Ts[prev]);const gain=opt.balance?exposureRatio(desc[prev],desc[i],dw,dh,fit.T):1;diagnostics.push({image:i,reference:prev,...fit,exposureRatio:gain});notify(10+10*diagnostics.length/Math.max(1,n-1),`Alinhando ${(job.names||[])[i]||files[i].name||'imagem '+(i+1)}`);}
+   }
    const factor=W/dw;Ts=Ts.map(T=>[T[0],T[1],T[2]*factor,T[3]*factor]);
   }
  }
@@ -700,7 +845,7 @@ async function run(job){
   // Modo pool: o preparo (alinhamento, recorte, grade) e' inerentemente sequencial
   // e roda uma vez so'. Os blocos, que sao independentes, vao para os Workers do pool.
   releaseBitmapCache();
-  postMessage({type:'plan',plan:{Ts,scale,eff,exposureGains,crop,core,halo,grid,nx,ny,total,n,inputScale,W,H,maxShift:opt.maxShift||0},
+  postMessage({type:'plan',plan:{Ts,scale,eff,exposureGains,crop,core,halo,grid,nx,ny,total,n,inputScale,W,H,robustAlign:!!(opt.align&&opt.robustAlign),maxShift:opt.maxShift||0},
                seconds:(performance.now()-start)/1000,diagnostics,ref});
   return;
  }
@@ -767,8 +912,8 @@ self.onmessage=e=>{
 const $=id=>document.getElementById(id);
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 new Function($('tiffSource').textContent+'\nself.decodeTIFF=decodeTIFF;self.loadBitmap=loadBitmap;self.tiffIsTiff=tiffIsTiff;')();
-const defaults={colorOn:false,whitePoint:210,chromaGain:1.25,fringe:.7,multiScale:false,method:'maximum',smooth:3,selectivity:12,align:true,scale:true,crop:true,balance:false,rotation:false,search:4,metric:'sml',sigma:.6,spread:1,focusRadius:2,focusFloor:.4,confidenceMin:.03,islandSize:5,levels:4,detailStrength:1,limitHalo:true,depthSmooth:4,alignGain:.0002,detailGain:1,baseGain:1,brightness:1,sharpen:0,sharpenRadius:1,sharpenThreshold:.4,stretch:false,stretchDelta:5,protectHighlights:true,memory:640,previewSize:900,resolution:'1',quality:95};
-const APP_VERSION='1.1';
+const defaults={colorOn:false,whitePoint:210,chromaGain:1.25,fringe:.7,multiScale:false,method:'maximum',smooth:3,selectivity:12,align:true,robustAlign:false,scale:true,crop:true,balance:false,rotation:false,search:4,metric:'sml',sigma:.6,spread:1,focusRadius:2,focusFloor:.4,confidenceMin:.03,islandSize:5,levels:4,detailStrength:1,limitHalo:true,depthSmooth:4,alignGain:.0002,detailGain:1,baseGain:1,brightness:1,sharpen:0,sharpenRadius:1,sharpenThreshold:.4,stretch:false,stretchDelta:5,protectHighlights:true,memory:640,previewSize:900,resolution:'1',quality:95};
+const APP_VERSION='1.2';
 const POST_KEYS=['sharpen','sharpenRadius','sharpenThreshold','detailGain','baseGain','brightness','stretch','stretchDelta','protectHighlights','colorOn','whitePoint','chromaGain','fringe'];
 const OUTPUT_KEYS=['memory','previewSize','resolution','quality'];
 const FUSION_KEYS=Object.keys(defaults).filter(k=>!POST_KEYS.includes(k)&&!OUTPUT_KEYS.includes(k));
@@ -1009,7 +1154,7 @@ function markMethodRelevance(){
  }
 }
 /* ---------- Acordeao: uma secao aberta por vez ---------- */
-function refreshStates(){try{syncMirror();}catch{}
+function refreshStates(){syncAlignmentControls();try{syncMirror();}catch{}
 
  const set=(id,txt)=>{const e=$('state_'+id);if(e)e.textContent=txt;};
  set('imagens',files.length?files.length+(files.length===1?' imagem':' imagens'):'nenhuma');
@@ -1353,6 +1498,15 @@ function warn(message,error=false){$('notice').textContent=message;$('notice').c
 function targetWidth(final){if(!files.length)return 0;let W=files[0].w,H=files[0].h;if(!final)return Math.max(1,Math.round(W*Math.min(1,Number($('previewSize').value)/Math.max(W,H))));let v=$('resolution').value;return v==='custom'?Math.round(Math.max(1,Math.min(W,Number($('customWidth').value)||W))):Math.round(W*Number(v));}
 function estimate(){if(!files.length)return;let W=files[0].w,H=files[0].h,mp=W*H/1e6,n=files.length,tw=targetWidth(true),th=Math.round(H*tw/W);let text=`${n} imagens · ${mp.toFixed(1)} MP cada · final ${tw} × ${th} px antes do recorte.`;if(n*mp>120)text+=' Série de alta resolução: use a prévia e mantenha esta aba aberta.';const last=results.findLast(r=>r.kind==='preview'&&r.opt.method===$('method').value);if(last)text+=` Prévia medida: ${last.seconds.toFixed(1)} s. O tempo final também depende dos blocos e da decodificação.`;$('estimate').textContent=text;}
 function validate(){return files.length>=2&&files.length<65535&&files.every(f=>f.w===files[0].w&&f.h===files[0].h);}
+function syncAlignmentControls(){
+ const robust=$('robustAlign'),enabled=$('align').checked;
+ robust.disabled=busy||!enabled;
+ robust.closest('label').classList.toggle('disabledHint',!enabled);
+ const active=enabled&&robust.checked;
+ $('rotation').disabled=busy||active;
+ $('rotation').closest('label').classList.toggle('disabledHint',active);
+ $('rotation').title=active?'O alinhamento robusto já inclui rotação.':'';
+}
 function controls(){
  for(const id of ['preview','final'])$(id).disabled=busy||loading||!validate()||!window.Worker||!window.OffscreenCanvas||!window.createImageBitmap;
  for(const id of ['download','downloadDepth','downloadLog','downloadRaw','downloadConfidence','downloadDepthData'])$(id).disabled=busy||!selected;
@@ -1361,7 +1515,7 @@ function controls(){
  for(const id of ['drop','folderButton','newSeries','clearAll','defaults','fileInput','folderInput'])$(id).disabled=busy||loading;
  updateCompareEstimate();document.querySelectorAll('.sidebar input:not([type=file]),.sidebar select').forEach(e=>e.disabled=busy);
  $('resultSelect').disabled=busy&&!aiOperation;
- $('cancel').classList.toggle('hidden',!busy);$('alignmentDetails').disabled=!selected;syncMirror();
+ $('cancel').classList.toggle('hidden',!busy);$('alignmentDetails').disabled=!selected;syncAlignmentControls();syncMirror();
 }
 
 function renderFiles(){const list=$('files');list.replaceChildren();files.forEach((f,i)=>{let li=document.createElement('li');li.draggable=true;li.addEventListener('dragstart',e=>{internalDrag=true;e.dataTransfer.setData('text/plain',String(i));});li.addEventListener('dragend',()=>{internalDrag=false;});li.addEventListener('dragover',e=>e.preventDefault());li.addEventListener('drop',e=>{internalDrag=false;e.preventDefault();e.stopPropagation();let from=Number(e.dataTransfer.getData('text/plain'));if(Number.isInteger(from)&&from>=0&&from<files.length)moveFile(from,i);});let img=document.createElement('img');img.src=f.thumb;img.alt='';let text=document.createElement('div');text.className='filename';let name=document.createElement('strong');name.textContent=f.file.name;name.title=f.file.name;let dims=document.createElement('small');dims.textContent=`${i+1} · ${f.w} × ${f.h}`;text.append(name,dims);li.append(img,text);for(const [label,title,action,disabled] of [['↑','Mover para cima',()=>moveFile(i,i-1),i===0],['↓','Mover para baixo',()=>moveFile(i,i+1),i===files.length-1],['×','Remover imagem',()=>removeFile(i),false]]){let b=document.createElement('button');b.textContent=label;b.title=title;b.setAttribute('aria-label',title+' '+f.file.name);b.disabled=busy||disabled;b.onclick=action;li.append(b);}list.append(li);});
@@ -1479,7 +1633,7 @@ function snapshotForAI(r){
 }
 function finishedCanvas(r){return r.ai?r.aiSource.canvas:r.canvas;}
 
-function alignmentSignature(o){return JSON.stringify([files.map(f=>[f.file.name,f.file.size,f.file.lastModified]),o.align,o.scale,o.rotation,o.search,o.alignGain,o.balance]);}
+function alignmentSignature(o){return JSON.stringify([files.map(f=>[f.file.name,f.file.size,f.file.lastModified]),o.align,!!o.robustAlign,o.robustAlign?'robust-v1':'standard',o.scale,o.rotation,o.search,o.alignGain,o.balance]);}
 let lastPreviewSeconds=0,recipeQueue=[];
 function startRecipeQueue(keys){
  if(busy||loading)return;
@@ -1534,7 +1688,7 @@ async function handleDone(d,o,job){if(!pending)return;clearInterval(timer);lastP
   const aprov=total?Math.round(100*(ps.bitmapCacheHits|0)/total):0;
   $('perfNote').textContent=`${ps.tiles} blocos · ${ps.lanes||1} processo(s) · ${mem} MB`
    +` · ${ps.bitmapDecodes|0} decodificações de imagem, ${aprov}% de aproveitamento do cache`;
- }$('step3').classList.add('active');$('step4').classList.add('active');let weak=d.diagnostics.filter(q=>q.after<.9);if(weak.length)warn(`${weak.length} correspondência(s) com baixa correlação. Verifique o alinhamento e os contornos antes de exportar.`);if(queue.length)nextJob();else{busy=false;controls();renderFiles();estimate();updateCompareEstimate();if(recipeQueue.length)nextRecipe();}}
+ }$('step3').classList.add('active');$('step4').classList.add('active');let weak=d.diagnostics.filter(q=>q.after<.9||(q.mode==='robust'&&q.local.coverage<.75));if(weak.length)warn(`${weak.length} correspondência(s) com baixa correlação ou suporte local limitado. Verifique o alinhamento e os contornos antes de exportar.`);if(queue.length)nextJob();else{busy=false;controls();renderFiles();estimate();updateCompareEstimate();if(recipeQueue.length)nextRecipe();}}
 let tileLanes=1,poolJob=null,tileWorkers=[];
 /* Deteccao de memoria disponivel.
    Nao existe uma API unica e confiavel para isso no navegador:
@@ -1682,6 +1836,7 @@ function processingRecord(r,content='result',format='image/png',quality=null){
    resizedToSource:r.ai.returnedSize.width!==r.canvas.width||r.ai.returnedSize.height!==r.canvas.height,
    pixelLossPercent:r.ai.pixelLossPercent,specimenDifference:r.ai.diferenca,
    assessment:'Heuristic colour-based mask and average pixel difference; does not establish morphological preservation.'}:null,
+  alignment:{mode:base.opt.align?(base.opt.robustAlign?'robust':'standard'):'off',robustVersion:base.opt.align&&base.opt.robustAlign?1:null,rotationEnabled:!!(base.opt.align&&(base.opt.robustAlign||base.opt.rotation)),scaleEnabled:!!(base.opt.align&&base.opt.scale),localDeformation:false},
   referenceIndex:base.ref,transforms:base.Ts,alignmentDiagnostics:base.diagnostics,
   transformConvention:'[a,b,tx,ty]; sourceX=a*referenceX-b*referenceY+tx; sourceY=b*referenceX+a*referenceY+ty; original pixels',
   performanceStats:base.performanceStats,exposureGains:base.exposureGains,seconds:base.seconds,
@@ -1794,7 +1949,21 @@ function exportDepthData(){
  downloadBlob(new Blob([JSON.stringify(processingRecord(r,'depthData','application/octet-stream'),null,2)],{type:'application/json'}),name+'_registro.json');
 }
 
-function showAlignment(){if(!selected)return;let table=document.createElement('table'),head=document.createElement('tr');for(let s of ['Imagem','Δx / Δy (px)','Escala','Correlação']){let th=document.createElement('th');th.textContent=s;head.append(th);}table.append(head);selected.Ts.forEach((T,i)=>{let row=document.createElement('tr'),d=selected.diagnostics.find(d=>d.image===i),cx=selected.W/2,cy=selected.H/2,dx=T[0]*cx-T[1]*cy+T[2]-cx,dy=T[1]*cx+T[0]*cy+T[3]-cy;for(let v of [selected.files[i].name,dx.toFixed(2)+' / '+dy.toFixed(2),Math.hypot(T[0],T[1]).toFixed(5),d?d.after.toFixed(3)+(d.accepted?'':' · sem correção'):i===selected.ref?'Referência':'Desligado']){let td=document.createElement('td');td.textContent=v;row.append(td);}table.append(row);});$('alignmentTable').replaceChildren(table);$('alignDialog').showModal();}
+function showAlignment(){
+ if(!selected)return;
+ const table=document.createElement('table'),head=document.createElement('tr');
+ for(const label of ['Imagem','Δx / Δy (px)','Escala','Rotação','Correlação / estado']){const th=document.createElement('th');th.textContent=label;head.append(th);}table.append(head);
+ selected.Ts.forEach((T,i)=>{
+  const row=document.createElement('tr'),d=selected.diagnostics.find(d=>d.image===i),cx=selected.W/2,cy=selected.H/2,dx=T[0]*cx-T[1]*cy+T[2]-cx,dy=T[1]*cx+T[0]*cy+T[3]-cy;
+  let state=d?d.after.toFixed(3)+(d.reason==='already-aligned'?' · já alinhada':d.accepted?'':' · sem correção'):i===selected.ref?'Referência':'Desligado';
+  if(d?.mode==='robust')state+=' · robusto · '+d.local.supported+'/'+d.local.regions+' regiões'+(d.recovered?' · referência alternativa':'');
+  for(const v of [selected.files[i].name,dx.toFixed(2)+' / '+dy.toFixed(2),Math.hypot(T[0],T[1]).toFixed(5),(Math.atan2(T[1],T[0])*180/Math.PI).toFixed(3)+'°',state]){const td=document.createElement('td');td.textContent=v;row.append(td);}
+  if(d)row.title='Comparada com '+selected.files[d.reference].name;
+  table.append(row);
+ });
+ const note=document.createElement('p');note.className='hint';note.textContent=selected.opt.align?(selected.opt.robustAlign?'Modo robusto: deslocamento, rotação e escala opcional.':'Modo padrão.')+' As correlações são entre pares; a transformação é relativa à referência central.':'Alinhamento desligado.';
+ $('alignmentTable').replaceChildren(note,table);$('alignDialog').showModal();
+}
 function rawCanvas(r){if(r.fusedCanvas)return r.fusedCanvas;const c=document.createElement('canvas');c.width=r.canvas.width;c.height=r.canvas.height;c.getContext('2d').putImageData(r.fused,0,0);r.fusedCanvas=c;return c;}
 function comparisonResult(){return results.find(r=>r.id===$('compareResult').value);}
 function updateComparisonResults(){const sel=$('compareResult'),old=sel.value;sel.replaceChildren();for(const r of results)if(r!==selected&&selected&&r.canvas.width===selected.canvas.width&&r.canvas.height===selected.canvas.height&&JSON.stringify(r.crop)===JSON.stringify(selected.crop))sel.add(new Option(resultLabel(r),r.id));if([...sel.options].some(o=>o.value===old))sel.value=old;const other=$('compareSource').querySelector('option[value=result]');other.disabled=!sel.options.length;if(!sel.options.length&&$('compareSource').value==='result'){$('compareSource').value='original';$('compareResult').classList.add('hidden');$('originalSelect').classList.remove('hidden');}}
